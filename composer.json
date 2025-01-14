@@ -1,0 +1,14 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Crud\\": ""
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.67"
+  },
+  "require": {
+    "ext-mysqli": "*",
+    "ext-pdo": "*"
+  }
+}
