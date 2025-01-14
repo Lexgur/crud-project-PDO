@@ -1,11 +1,11 @@
 <?php
-namespace Crud\Controllers;
+namespace Crud\Controller;
 
 global $connection;
 use PDO;
 
-include('../Includes/header.php');
-include('../Controllers/dbcon.php');
+include('../Include/header.php');
+include('../Controller/dbcon.php');
 
 class search_students{
 
@@ -85,5 +85,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php
-include('../Includes/footer.php');
+include('../Include/footer.php');
 ?>

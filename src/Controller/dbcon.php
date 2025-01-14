@@ -1,4 +1,4 @@
-<?php namespace Crud\Controllers;
+<?php namespace Crud\Controller;
 use PDO;
 use PDOException;
 

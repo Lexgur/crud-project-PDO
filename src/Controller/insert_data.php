@@ -1,12 +1,12 @@
 <?php
-namespace Crud\Controllers;
+namespace Crud\Controller;
 
 global$connection;
 use PDO;
 use PDOException;
 
-include('../Includes/header.php');
-include('../Controllers/dbcon.php');
+include('../Include/header.php');
+include('../Controller/dbcon.php');
 
 class insert_data {
 

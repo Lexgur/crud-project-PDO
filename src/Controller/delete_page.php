@@ -1,9 +1,9 @@
-<?php namespace Crud\Controllers;
+<?php namespace Crud\Controller;
 global $connection;
 use PDO;
 
 
-include('../Controllers/dbcon.php');
+include('../Controller/dbcon.php');
 
 class delete_page {
 
@@ -28,4 +28,4 @@ if (isset($_GET['id'])) {
 } else {
     header('location:../../index.php?delete_msg=Invalid Request.');
 }
-?>
+

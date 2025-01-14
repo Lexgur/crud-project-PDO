@@ -3,14 +3,14 @@
 global $connection;
 
 use PDO;
-include('src/Includes/header.php');
-include('src/Controllers/dbcon.php');
+include('src/Include/header.php');
+include('src/Controller/dbcon.php');
 include('vendor/autoload.php');
 ?>
 
     <div class="box1">
         <h2>ALL STUDENTS</h2>
-        <a href="src/Controllers/search_students.php" class="btn btn-info">
+        <a href="src/Controller/search_students.php" class="btn btn-info">
             FIND STUDENT</a>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             ADD STUDENTS
@@ -41,9 +41,9 @@ include('vendor/autoload.php');
                     <td><?php echo $row['student_first_name']; ?></td>
                     <td><?php echo $row['student_last_name']; ?></td>
                     <td><?php echo $row['student_age']; ?></td>
-                    <td><a href="src/Controllers/update_page_1.php?id=<?php echo $row['id_student']; ?>" class="btn btn-success">
+                    <td><a href="src/Controller/update_page_1.php?id=<?php echo $row['id_student']; ?>" class="btn btn-success">
                             Update</a></td>
-                    <td><a href="src/Controllers/delete_page.php?id=<?php echo $row['id_student']; ?>" class="btn btn-danger">
+                    <td><a href="src/Controller/delete_page.php?id=<?php echo $row['id_student']; ?>" class="btn btn-danger">
                             Delete</a></td>
                 </tr>
                 <?php
@@ -78,7 +78,7 @@ if (isset($_GET['delete_msg'])) {
 ?>
 
     <!-- Modal -->
-    <form action="src/Controllers/insert_data.php" method="post">
+    <form action="src/Controller/insert_data.php" method="post">
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -116,4 +116,4 @@ if (isset($_GET['delete_msg'])) {
         </div>
     </form>
 
-<?php include('src/Includes/footer.php'); ?>
+<?php include('src/Include/footer.php'); ?>
