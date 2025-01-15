@@ -27,7 +27,7 @@ class CreateStudent
              return;
          }
 
-         $createStudentFormRequest = $_POST;
+        $createStudentFormRequest = $_POST;
 
          $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
          $statement->bindValue(':id_student', $_POST['id_student']);
@@ -38,14 +38,14 @@ class CreateStudent
          $result = $statement->execute();
          if ($result === true) {
              $this->template->render(__DIR__ . '/../../templates/create_student_success.php', [
-                 'string' => 'Student creation success!'
+                 'success' => 'Student creation success!'
              ]);
 
              return;
          }
 
          $this->template->render(__DIR__ . '/../../templates/create_student_error.php', [
-             'string' => 'Student creation failed!'
+             'error' => 'Student creation failed!'
          ]);
     }
 
