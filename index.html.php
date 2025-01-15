@@ -4,7 +4,7 @@ global $connection;
 
 use PDO;
 
-include('src/Include/header.php');
+include('src/Include/Header.php');
 include('src/Include/DatabaseConnection.php');
 include('vendor/autoload.php');
 ?>
@@ -119,4 +119,4 @@ if (isset($_GET['delete_msg'])) {
         </div>
     </form>
 
-    <?php include('src/Include/footer.php'); ?>
+    <?php include('src/Include/Footer.php'); ?>

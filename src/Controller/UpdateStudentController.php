@@ -6,7 +6,7 @@ global $connection;
 use PDO;
 
 
-include('../Include/header.php');
+include('../Include/Header.php');
 include('../Include/DatabaseConnection.php');
 
 class UpdateStudentController

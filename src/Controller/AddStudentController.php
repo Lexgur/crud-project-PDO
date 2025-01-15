@@ -6,7 +6,7 @@ global $connection;
 use PDO;
 use PDOException;
 
-include('../Include/header.php');
+include('../Include/Header.php');
 include('../Include/DatabaseConnection.php');
 
 class AddStudentController

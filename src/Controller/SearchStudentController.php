@@ -5,7 +5,7 @@ global $connection;
 
 use PDO;
 
-include('../Include/header.php');
+include('../Include/Header.php');
 include('../Include/DatabaseConnection.php');
 
 class SearchStudentController
@@ -87,5 +87,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php
-include('../Include/footer.php');
+include('../Include/Footer.php');
 ?>
