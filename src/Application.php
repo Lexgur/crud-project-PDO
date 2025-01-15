@@ -11,6 +11,7 @@ class Application
     private Connection $connection;
 
     private array $actions = [
+
         'create_student' => CreateStudent::class
     ];
 
