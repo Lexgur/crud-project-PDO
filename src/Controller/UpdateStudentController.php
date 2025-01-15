@@ -1,13 +1,17 @@
 <?php
-namespace Crud\Controller;
+namespace Crud\Command;
 
-global$connection;
+global $connection;
+
 use PDO;
 
-include('../Include/header.php');
-include('../Controller/dbcon.php');
 
-class update_page_1 {
+include('../Include/header.php');
+include('../Include/DatabaseConnection.php');
+
+class UpdateStudentController
+{
+
 }
 
 if (isset($_GET['id'])) {
@@ -22,7 +26,7 @@ if (isset($_GET['id'])) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            header("Location:../../index.php?error=Student not found.");
+            header("Location:../../index.html.php?error=Student not found.");
             exit;
         }
     } else {
@@ -30,7 +34,7 @@ if (isset($_GET['id'])) {
     }
 } else {
     // If no ID is provided, redirect with an error
-    header("Location:../../index.php?error=Student ID not found.");
+    header("Location:../../index.html.php?error=Student ID not found.");
     exit;
 }
 
@@ -40,7 +44,7 @@ if (isset($_POST["update_students"])) {
     $age = intval($_POST['age']); // Ensure `$age` is an integer
 
     if (empty($fname) || empty($lname) || $age <= 0) {
-        header("Location:../../update_page_1.php?id=$id&error=Invalid input data.");
+        header("Location:../../UpdateStudentController.php?id=$id&error=Invalid input data.");
         exit;
     }
 
@@ -58,7 +62,7 @@ if (isset($_POST["update_students"])) {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        header('Location:../../index.php?update_msg=Student updated.');
+        header('Location:../../index.html.php?update_msg=Student updated.');
         exit;
     } else {
         die("Query Failed: " . implode(", ", $stmt->errorInfo()));
@@ -66,22 +70,8 @@ if (isset($_POST["update_students"])) {
 }
 ?>
 
-<form action="update_page_1.php?id=<?php echo $id; ?>" method="post">
-    <div class="form-group">
-        <label for="f_name">First Name:</label>
-        <input type="text" name="f_name" class="form-control"
-               value="<?php echo htmlspecialchars($row['student_first_name']); ?>">
-    </div>
-    <div class="form-group">
-        <label for="l_name">Last Name:</label>
-        <input type="text" name="l_name" class="form-control"
-               value="<?php echo htmlspecialchars($row['student_last_name']); ?>">
-    </div>
-    <div class="form-group">
-        <label for="age">Age:</label>
-        <input type="number" name="age" class="form-control"
-               value="<?php echo htmlspecialchars($row['student_age']); ?>">
-    </div>
-    <input type="submit" class="btn btn-primary btn-success" name="update_students" value="UPDATE">
-</form>
+<?php
+include("../Form/StudentUpdate.html.php");
+?>
+
 

@@ -1,16 +1,17 @@
-<?php  namespace Crud;
+<?php namespace Crud;
 
 global $connection;
 
 use PDO;
+
 include('src/Include/header.php');
-include('src/Controller/dbcon.php');
+include('src/Include/DatabaseConnection.php');
 include('vendor/autoload.php');
 ?>
 
     <div class="box1">
         <h2>ALL STUDENTS</h2>
-        <a href="src/Controller/search_students.php" class="btn btn-info">
+        <a href="src/Controller/SearchStudentController.php" class="btn btn-info">
             FIND STUDENT</a>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             ADD STUDENTS
@@ -41,9 +42,11 @@ include('vendor/autoload.php');
                     <td><?php echo $row['student_first_name']; ?></td>
                     <td><?php echo $row['student_last_name']; ?></td>
                     <td><?php echo $row['student_age']; ?></td>
-                    <td><a href="src/Controller/update_page_1.php?id=<?php echo $row['id_student']; ?>" class="btn btn-success">
+                    <td><a href="src/Controller/UpdateStudentController.php?id=<?php echo $row['id_student']; ?>"
+                           class="btn btn-success">
                             Update</a></td>
-                    <td><a href="src/Controller/delete_page.php?id=<?php echo $row['id_student']; ?>" class="btn btn-danger">
+                    <td><a href="src/Controller/DeleteStudentController.php?id=<?php echo $row['id_student']; ?>"
+                           class="btn btn-danger">
                             Delete</a></td>
                 </tr>
                 <?php
@@ -53,32 +56,32 @@ include('vendor/autoload.php');
 
         </tbody>
     </table>
-<?php
+    <?php
 if (isset($_GET['message'])) {
     echo "<h6 class='why'>" . $_GET['message'] . "</h6>";
 }
 ?>
 
-<?php
+    <?php
 if (isset($_GET['msg'])) {
     echo "<h6 class='yes'>" . $_GET['msg'] . "</h6>";
 }
 ?>
 
-<?php
+    <?php
 if (isset($_GET['update_msg'])) {
     echo "<h6 class='yes'>" . $_GET['update_msg'] . "</h6>";
 }
 ?>
 
-<?php
+    <?php
 if (isset($_GET['delete_msg'])) {
     echo "<h6 class='why'>" . $_GET['delete_msg'] . "</h6>";
 }
 ?>
 
     <!-- Modal -->
-    <form action="src/Controller/insert_data.php" method="post">
+    <form action="src/Controller/AddStudentController.php" method="post">
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -116,4 +119,4 @@ if (isset($_GET['delete_msg'])) {
         </div>
     </form>
 
-<?php include('src/Include/footer.php'); ?>
+    <?php include('src/Include/footer.php'); ?>

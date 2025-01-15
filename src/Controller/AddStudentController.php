@@ -1,14 +1,16 @@
 <?php
-namespace Crud\Controller;
+namespace Crud\Command;
 
-global$connection;
+global $connection;
+
 use PDO;
 use PDOException;
 
 include('../Include/header.php');
-include('../Controller/dbcon.php');
+include('../Include/DatabaseConnection.php');
 
-class insert_data {
+class AddStudentController
+{
 
 }
 
@@ -20,7 +22,7 @@ if (isset($_POST['add_students'])) {
 
     // Validate inputs
     if (empty($fname)) {
-        header('location:../../index.php?message=Oh come on... Really?');
+        header('location:../../index.html.php?message=Oh come on... Really?');
         exit;
     }
 
@@ -37,7 +39,7 @@ if (isset($_POST['add_students'])) {
 
 
         if ($stmt->execute()) {
-            header('location:../../index.php?msg=Student has been added');
+            header('location:../../index.html.php?msg=Student has been added');
         } else {
             $errorInfo = $stmt->errorInfo();
             die("Query Failed: " . $errorInfo[2]);

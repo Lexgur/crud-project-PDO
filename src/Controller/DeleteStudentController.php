@@ -1,11 +1,14 @@
-<?php namespace Crud\Controller;
+<?php namespace Crud\Command;
 global $connection;
+
 use PDO;
+use PDOException;
 
 
-include('../Controller/dbcon.php');
+include('../Include/DatabaseConnection.php');
 
-class delete_page {
+class DeleteStudentController
+{
 
 }
 
@@ -18,14 +21,14 @@ if (isset($_GET['id'])) {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            header('location:../../index.php?delete_msg=You have deleted the record.');
+            header('location:../../index.html.php?delete_msg=You have deleted the record.');
         } else {
             die("Query Failed: " . implode(", ", $stmt->errorInfo()));
         }
-    } catch (\PDOException $e) {
+    } catch (PDOException $e) {
         die("Error: " . $e->getMessage());
     }
 } else {
-    header('location:../../index.php?delete_msg=Invalid Request.');
+    header('location:../../index.html.php?delete_msg=Invalid Request.');
 }
 

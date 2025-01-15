@@ -1,13 +1,15 @@
 <?php
-namespace Crud\Controller;
+namespace Crud\Command;
 
 global $connection;
+
 use PDO;
 
 include('../Include/header.php');
-include('../Controller/dbcon.php');
+include('../Include/DatabaseConnection.php');
 
-class search_students{
+class SearchStudentController
+{
 
 }
 
@@ -48,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <!-- Search Form -->
-    <form action="search_students.php" method="post">
+    <form action="SearchStudentController.php" method="post">
         <div class="form-group">
             <label for="l_name">Last Name:</label>
             <input type="text" name="l_name" class="form-control" placeholder="Enter last name">
