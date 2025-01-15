@@ -1,5 +1,5 @@
 <?php
-namespace Crud\Command;
+namespace Crud\Controller;
 
 global $connection;
 

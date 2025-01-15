@@ -1,4 +1,4 @@
-<?php namespace Crud\Command;
+<?php namespace Crud\Controller;
 global $connection;
 
 use PDO;
