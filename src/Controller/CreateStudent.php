@@ -19,7 +19,7 @@ class CreateStudent
 
     public function __invoke():void
     {
-         if (empty($_POST)) {
+         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              $this->template->render(__DIR__ . '/../../templates/create_student_form.php', [
                  'string' => 'Hello wod!'
              ]);
@@ -30,22 +30,22 @@ class CreateStudent
          $createStudentFormRequest = $_POST;
 
          $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
-         $statement->bindValue(':id_student', value: 21);
-         $statement->bindValue(':student_first_name', value: 'Dave');
-         $statement->bindValue(':student_last_name', value: 'Bigjhonson');
-         $statement->bindValue(':student_age', value: 17);
+         $statement->bindValue(':id_student', $_POST['id_student']);
+         $statement->bindValue(':student_first_name', $_POST['first_name']);
+         $statement->bindValue(':student_last_name', $_POST['last_name']);
+         $statement->bindValue(':student_age', $_POST['age']);
 
          $result = $statement->execute();
          if ($result === true) {
              $this->template->render(__DIR__ . '/../../templates/create_student_success.php', [
-                 'string' => 'Hello wo!'
+                 'string' => 'Student creation success!'
              ]);
 
              return;
          }
 
          $this->template->render(__DIR__ . '/../../templates/create_student_error.php', [
-             'string' => 'You failure!'
+             'string' => 'Student creation failed!'
          ]);
     }
 
