@@ -4,7 +4,7 @@ namespace Crud;
 
 class Template
 {
-    public function render(string $template, array $parameters): void
+    public function render(string $template, array $parameters = []): void
     {
         extract($parameters);
         ob_start();

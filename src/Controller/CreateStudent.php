@@ -12,6 +12,7 @@ class CreateStudent
     public function __construct(
         private \PDO $connection,
         private Template $template,
+
     )
     {
 
@@ -19,15 +20,12 @@ class CreateStudent
 
     public function __invoke():void
     {
-         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-             $this->template->render(__DIR__ . '/../../templates/create_student_form.php', [
-                 'string' => 'Hello wod!'
-             ]);
+
+         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+             $this->template->render(__DIR__ . '/../../templates/create_student_form.php');
 
              return;
          }
-
-        $createStudentFormRequest = $_POST;
 
          $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
          $statement->bindValue(':id_student', $_POST['id_student']);
@@ -37,14 +35,14 @@ class CreateStudent
 
          $result = $statement->execute();
          if ($result === true) {
-             $this->template->render(__DIR__ . '/../../templates/create_student_success.php', [
+             $this->template->render(__DIR__ . '/../../templates/create_student.php', [
                  'success' => 'Student creation success!'
              ]);
 
              return;
          }
 
-         $this->template->render(__DIR__ . '/../../templates/create_student_error.php', [
+         $this->template->render(__DIR__ . '/../../templates/create_student.php', [
              'error' => 'Student creation failed!'
          ]);
     }
