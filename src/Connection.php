@@ -1,4 +1,4 @@
-<?php namespace Crud;
+<?php declare(strict_types=1); namespace Crud;
 
 
 use PDO;
