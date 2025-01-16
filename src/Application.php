@@ -31,9 +31,9 @@ class Application
         //Dependencies
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
+        $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
         $connection = $this->connection->connect();
         $template = new Template();
-        $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
 
         $controller = $this->actions[$request['action']];
