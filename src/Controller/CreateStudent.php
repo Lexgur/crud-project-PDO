@@ -49,13 +49,16 @@ use PDO;
 
     public function validate(): bool
     {
-            if (filter_var('student_first_name', FILTER_VALIDATE_BOOL) === false) {
+        $min = 1;
+        $max = 99;
+
+            if (empty($_POST['first_name']) || !is_string($_POST['first_name'])) {
                 return false;
             }
-            if (filter_var('student_last_name', FILTER_VALIDATE_BOOL) === false) {
+            if (empty($_POST['last_name']) || !is_string($_POST['last_name'])) {
                 return false;
             }
-            if (filter_var('student_age', FILTER_VALIDATE_INT) === false) {
+            if (empty($_POST['age']) || filter_var($_POST['age'], FILTER_VALIDATE_INT, array("options" => array("min_range"=>$min, "max_range"=>$max))) === false) {
                 return false;
             }
         return true;
@@ -63,6 +66,10 @@ use PDO;
 
     public function save(): bool
     {
+        if(!$this->validate()){
+            return false;
+        }
+
         $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
         $statement->bindValue(':id_student', $_POST['id_student']);
         $statement->bindValue(':student_first_name', $_POST['first_name']);
