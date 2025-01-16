@@ -18,28 +18,29 @@ class Application
     public function __construct()
     {
 
+
+    }
+
+    public function run(): void
+    {
         global $config;
         $configPath = __DIR__ . '/../config.php';
         include $configPath;
-        $dbconfig = $config['db'];
 
-        $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
-        $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
-    }
-    public function run(): void
-    {
+
         //Dependencies
-
+        $dbconfig = $config['db'];
+        $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
         $connection = $this->connection->connect();
         $template = new Template();
+        $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
+        $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
 
-       $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
+        $controller = $this->actions[$request['action']];
 
-       $controller = $this->actions[$request['action']];
-
-       $controller = new $controller($connection, $template);
-       $controller();
-       var_dump($controller);
+        $controller = new $controller($connection, $template);
+        $controller();
+        var_dump($controller);
     }
 }
 
