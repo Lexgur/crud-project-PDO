@@ -49,14 +49,17 @@ use PDO;
 
     public function validate(): bool
     {
+        $name = trim('student_first_name');
+        $last_name = trim('student_last_name');
+        $age = 'student_age';
 
-            if (filter_var("student_first_name", FILTER_VALIDATE_BOOL) === false) {
+            if (filter_var($name, FILTER_VALIDATE_BOOL) === false) {
                 return false;
             }
-            if (filter_var("student_last_name", FILTER_VALIDATE_BOOL) === false) {
+            if (filter_var($last_name, FILTER_VALIDATE_BOOL) === false) {
                 return false;
             }
-            if (filter_var("student_age", FILTER_VALIDATE_INT) === false) {
+            if (filter_var($age, FILTER_VALIDATE_INT) === false) {
                 return false;
             }
         return true;
