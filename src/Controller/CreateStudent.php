@@ -49,7 +49,6 @@ use PDO;
 
     public function validate(): bool
     {
-
             if (filter_var('student_first_name', FILTER_VALIDATE_BOOL) === false) {
                 return false;
             }
