@@ -9,7 +9,7 @@ use Crud\Template;
 use http\Params;
 use PDO;
 
-#[AllowDynamicProperties] class CreateStudent
+class CreateStudent
 {
 
     public function __construct(
@@ -49,8 +49,6 @@ use PDO;
 
     public function validate(): bool
     {
-        $min = 1;
-        $max = 99;
 
             if (empty($_POST['first_name']) || !is_string($_POST['first_name'])) {
                 return false;
@@ -58,6 +56,10 @@ use PDO;
             if (empty($_POST['last_name']) || !is_string($_POST['last_name'])) {
                 return false;
             }
+
+            $min = 1;
+            $max = 99;
+
             if (empty($_POST['age']) || filter_var($_POST['age'], FILTER_VALIDATE_INT, array("options" => array("min_range"=>$min, "max_range"=>$max))) === false) {
                 return false;
             }
