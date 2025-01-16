@@ -17,7 +17,14 @@ class Application
 
     public function __construct()
     {
-        $this->connection = new Connection();
+
+        global $config;
+        $configPath = __DIR__ . '/../config.php';
+        include $configPath;
+        $dbconfig = $config['db'];
+
+        $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
+        $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
     }
     public function run(): void
     {
