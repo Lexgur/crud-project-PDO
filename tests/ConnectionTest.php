@@ -7,7 +7,7 @@ use Crud\Connection;
 
 class ConnectionTest extends TestCase
 {
-    public function testConnect(): void
+    function testConnect(): void
     {
         $dsn = 'mysql:host=localhost;dbname=crud_operation_test';
         $username = 'root';
@@ -19,7 +19,7 @@ class ConnectionTest extends TestCase
         $this->assertInstanceOf(PDO::class,$pdo);
     }
 
-    public function testReturnError(): void
+    function testReturnError(): void
     {
         $dsn = 'mysql:host=localhost;dbname=crud_operation_test';
         $username = 'root';
