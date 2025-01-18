@@ -25,7 +25,6 @@ class Application
 
     public function run(): void
     {
-        global $config;
         $configPath = __DIR__ . '/../config.php';
         include $configPath;
 
