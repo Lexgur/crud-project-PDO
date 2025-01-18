@@ -29,16 +29,16 @@ class CreateStudent
             $saves = $this->studentRepository->save($data);
 
             if ($validates && $saves) {
-                $this->template->render(__DIR__ . '/../../templates/create_student_form.php', [
+                $this->template->render('create_student_form.php', [
                     'success' => 'Student creation success!'
                 ]);
             } else {
-                $this->template->render(__DIR__ . '/../../templates/create_student_form.php', [
+                $this->template->render('create_student_form.php', [
                     'error' => 'Student creation failed!'
                 ]);
             }
         } else {
-            $this->template->render(__DIR__ . '/../../templates/create_student_form.php');
+            $this->template->render( 'create_student_form.php');
         }
     }
 }

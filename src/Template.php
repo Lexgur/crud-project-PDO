@@ -7,15 +7,16 @@ use AllowDynamicProperties;
 #[AllowDynamicProperties]
 class Template
 {
-    public function __construct()
+    public function __construct(
+
+        private readonly string $templatePath)
     {
-        $this->config = include __DIR__ . '/../config.php';
+
     }
     public function render(string $template, array $parameters = []): void
     {
-        $paths = $this->config['paths'];
 
-        $templatePath = $paths['templates'] . $template;
+        $templatePath = $this->templatePath . DIRECTORY_SEPARATOR . $template;
 
         if (file_exists($templatePath)) {
         extract($parameters);

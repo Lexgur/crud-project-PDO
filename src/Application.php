@@ -7,6 +7,7 @@ namespace Crud;
 use Crud\Controller\CreateStudent;
 use Crud\Repository\StudentRepository;
 use Crud\Validation\StudentValidator;
+use Crud\Template;
 
 class Application
 {
@@ -20,11 +21,11 @@ class Application
     public function __construct()
     {
 
-
     }
 
     public function run(): void
     {
+        global $config;
         $configPath = __DIR__ . '/../config.php';
         include $configPath;
 
@@ -32,10 +33,14 @@ class Application
         //Dependencies
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
+
         $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
         $connection = $this->connection->connect();
-        $template = new Template();
+
+        $template = new Template($config['templates']);
+
         $studentValidator = new StudentValidator();
+
         $studentRepository = new StudentRepository($connection);
 
         //Controller
@@ -43,8 +48,5 @@ class Application
         $controller = $this->actions[$request['action']];
         $controller = new $controller($studentValidator, $studentRepository, $template);
         $controller();
-        var_dump($controller);
     }
 }
-
-

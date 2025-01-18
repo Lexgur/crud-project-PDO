@@ -9,7 +9,5 @@ $config = [
         'username' => 'root',
         'password' => 'root123',
     ],
-    'paths' => [
-        'templates' =>  '/../templates',
-    ]
+        'templates' => __DIR__ . '\templates',
 ];
