@@ -11,21 +11,14 @@ use Crud\Validation\StudentValidator;
 class Application
 {
     private array $actions = [
-
         'create_student' => CreateStudent::class
     ];
-
-    public function __construct()
-    {
-
-    }
 
     public function run(): void
     {
         global $config;
         $configPath = __DIR__ . '/../config.php';
         include $configPath;
-
 
         //Dependencies
         $dbconfig = $config['db'];
