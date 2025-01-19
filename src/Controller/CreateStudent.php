@@ -19,7 +19,7 @@ class CreateStudent
     {
 
     }
-    public function __invoke(): void
+    public function __invoke(): string
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,16 +29,16 @@ class CreateStudent
             $saves = $this->studentRepository->save($data);
 
             if ($validates && $saves) {
-                $this->template->render('create_student_form.php', [
+                return $this->template->render('create_student_form.php', [
                     'success' => 'Student creation success!'
                 ]);
             } else {
-                $this->template->render('create_student_form.php', [
+                return $this->template->render('create_student_form.php', [
                     'error' => 'Student creation failed!'
                 ]);
             }
         } else {
-            $this->template->render( 'create_student_form.php');
+            return $this->template->render( 'create_student_form.php');
         }
     }
 }

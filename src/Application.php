@@ -7,12 +7,9 @@ namespace Crud;
 use Crud\Controller\CreateStudent;
 use Crud\Repository\StudentRepository;
 use Crud\Validation\StudentValidator;
-use Crud\Template;
 
 class Application
 {
-    private Connection $connection;
-
     private array $actions = [
 
         'create_student' => CreateStudent::class
@@ -34,8 +31,8 @@ class Application
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
 
-        $this->connection = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
-        $connection = $this->connection->connect();
+        $database = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
+        $connection = $database->connect();
 
         $template = new Template($config['templates']);
 
@@ -47,6 +44,7 @@ class Application
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
         $controller = $this->actions[$request['action']];
         $controller = new $controller($studentValidator, $studentRepository, $template);
-        $controller();
+
+        print $controller();
     }
 }
