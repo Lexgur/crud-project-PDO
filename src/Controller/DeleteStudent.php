@@ -7,7 +7,7 @@ use Crud\Template;
 class DeleteStudent
 {
     public function __construct(
-        private PDO     $connection,
+        private PDO      $connection,
         private Template $template,
 
     )

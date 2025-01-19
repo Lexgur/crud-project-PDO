@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use Crud\Template;
-
-//TODO problema - mano render funkcija neturetu leisti renderinti failo, kuris nera nurodytojo directory templates
+use PHPUnit\Framework\TestCase;
 
 class TemplateTest extends TestCase
 {
-    function testIfTemplateFileExistsRenderHtml() : void
+    function testIfTemplateFileExistsRenderHtml(): void
     {
         $templatePath = __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
         $template = new Template($templatePath);

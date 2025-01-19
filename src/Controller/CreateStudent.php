@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Validation\StudentValidator;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
+use Crud\Validation\StudentValidator;
 
 class CreateStudent
 {
@@ -19,6 +19,7 @@ class CreateStudent
     {
 
     }
+
     public function __invoke(): string
     {
 
@@ -38,7 +39,7 @@ class CreateStudent
                 ]);
             }
         } else {
-            return $this->template->render( 'create_student_form.php');
+            return $this->template->render('create_student_form.php');
         }
     }
 }

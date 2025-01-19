@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use Crud\Connection;
+use PHPUnit\Framework\TestCase;
 
 class ConnectionTest extends TestCase
 {
@@ -16,7 +16,7 @@ class ConnectionTest extends TestCase
         $connection = new Connection($dsn, $username, $password);
         $pdo = $connection->connect();
 
-        $this->assertInstanceOf(PDO::class,$pdo);
+        $this->assertInstanceOf(PDO::class, $pdo);
     }
 
     function testReturnError(): void
@@ -25,7 +25,7 @@ class ConnectionTest extends TestCase
         $username = 'root';
         $password = 'root222';
 
-        $connection = new Connection($dsn, $username,$password);
+        $connection = new Connection($dsn, $username, $password);
         $this->expectException(PDOException::class);
         $connection->connect();
     }
