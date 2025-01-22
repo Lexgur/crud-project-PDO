@@ -22,7 +22,7 @@ class StudentValidatorTest extends TestCase
         $this->assertTrue($validator->validate($data));
     }
 
-    function testIfGivenValuesAreEmpty(): void
+    function testIfGivenValuesAreNotAllowed(): void
     {
         $validator = new StudentValidator();
         $data = [
