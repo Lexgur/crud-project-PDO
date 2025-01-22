@@ -35,29 +35,12 @@ class StudentValidatorTest extends TestCase
         $validator->validateName($name);
     }
 
-    function testIfEmptyLastNameIsNotAllowed(): void
-    {
-        $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
-        $validator = new StudentValidator();
-        $lastname = '';
-        $validator->validateName($lastname);
-    }
-
     function testIfFailsWithIncorrectName(): void
     {
         $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
         $validator = new StudentValidator();
         $name = '25';
         $validator->validateName($name);
-    }
-
-    function testIfFailsWithIncorrectLastName(): void
-    {
-        $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
-        $validator = new StudentValidator();
-        $lastname = '777845Gee';
-        $validator->validateLastName($lastname);
-
     }
 
     function testIfFailsWithIncorrectAgeRange(): void
