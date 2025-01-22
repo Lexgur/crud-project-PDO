@@ -2,86 +2,79 @@
 
 declare(strict_types=1);
 
+use Crud\Exception\AgeIsEmptyOrExceedsTheRangeException;
+use Crud\Exception\NameOrLastnameContainsIncorrectCharactersException;
 use Crud\Validation\StudentValidator;
 use PHPUnit\Framework\TestCase;
 
 class StudentValidatorTest extends TestCase
 {
     /**
-     * @throws \Crud\Exception\NameOrLastnameContainsIncorrectCharactersException
-     * @throws \Crud\Exception\AgeIsEmptyOrExceedsTheRangeException
+     * @throws NameOrLastnameContainsIncorrectCharactersException
+     * @throws AgeIsEmptyOrExceedsTheRangeException
      */
     function testIfGivenValuesValidateCorrectly(): void
     {
         $validator = new StudentValidator();
+        $name = 'Jon';
+        $lastname = 'Snow';
+        $age = 25;
         $data = [
-            'first_name' => 'Jon',
-            'last_name' => 'Snow',
-            'age' => 25
+            'name' => $name,
+            'lastname' => $lastname,
+            'age' => $age,
         ];
         $this->assertTrue($validator->validate($data));
     }
 
-    function testIfGivenValuesAreNotAllowed(): void
+    function testIfEmptyNameIsNotAllowed(): void
     {
+        $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
         $validator = new StudentValidator();
-        $data = [
-            'first_name' => '',
-            'last_name' => '',
-            'age' => 25
-        ];
-        $this->assertFalse($validator->validate($data));
+        $name = '';
+        $validator->validateName($name);
+    }
+
+    function testIfEmptyLastNameIsNotAllowed(): void
+    {
+        $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
+        $validator = new StudentValidator();
+        $lastname = '';
+        $validator->validateName($lastname);
     }
 
     function testIfFailsWithIncorrectName(): void
     {
-        $this->expectException(\Crud\Exception\NameOrLastnameContainsIncorrectCharactersException::class);
+        $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
         $validator = new StudentValidator();
-        $data = [
-            'first_name' => '25',
-            'last_name' => 'Gee',
-            'age' => 25
-        ];
-        $validator->validate($data);
-
+        $name = '25';
+        $validator->validateName($name);
     }
 
     function testIfFailsWithIncorrectLastName(): void
     {
-        $this->expectException(\Crud\Exception\NameOrLastnameContainsIncorrectCharactersException::class);
+        $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
         $validator = new StudentValidator();
-        $data = [
-            'first_name' => 'Dave',
-            'last_name' => '22',
-            'age' => 25
-        ];
-        $validator->validate($data);
+        $lastname = '777845Gee';
+        $validator->validateLastName($lastname);
 
     }
 
     function testIfFailsWithIncorrectAgeRange(): void
     {
-        $this->expectException(\Crud\Exception\AgeIsEmptyOrExceedsTheRangeException::class);
+        $this->expectException(AgeIsEmptyOrExceedsTheRangeException::class);
         $validator = new StudentValidator();
-        $data = [
-            'first_name' => 'Dave',
-            'last_name' => 'Mave',
-            'age' => 110
-        ];
-        $validator->validate($data);
+        $age = 110;
+        $validator->validateAge($age);
 
     }
 
     function testIfFailsWithEmptyAge(): void
     {
-        $this->expectException(\Crud\Exception\AgeIsEmptyOrExceedsTheRangeException::class);
+        $this->expectException(AgeIsEmptyOrExceedsTheRangeException::class);
         $validator = new StudentValidator();
-        $data = [
-            'first_name' => 'Dave',
-            'last_name' => 'Mave',
-            'age' => ''
-        ];
-        $validator->validate($data);
+        $age = 0;
+        $validator->validateAge($age);
 
     }
 }

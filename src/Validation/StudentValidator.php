@@ -14,24 +14,38 @@ class StudentValidator
      */
     public function validate(array $data): bool
     {
+        $this->validateName($data['name']);
+        $this->validateLastName($data['lastname']);
+        $this->validateAge($data['age']);
 
-        if (empty($data['first_name']) || !is_string($data['first_name'])) {
-            return false;
-        }
-        if (empty($data['last_name']) || !is_string($data['last_name'])) {
-            return false;
-        }
-        $forbidden = "1234567890!@#$%^&*()_+=[]\{}|;:<>,.?/))";
-        if (strpbrk($data['first_name'], $forbidden) !== false || strpbrk($data['last_name'], $forbidden) !== false) {
-            throw new NameOrLastnameContainsIncorrectCharactersException('Name or Last Name is empty or incorrect characters');
-        }
-
-        $min = 1;
-        $max = 99;
-
-        if (empty($data['age']) || filter_var($data['age'], FILTER_VALIDATE_INT, array("options" => array("min_range" => $min, "max_range" => $max))) === false) {
-            throw new AgeIsEmptyOrExceedsTheRangeException('Age must be between 1-99 and not empty');
-        }
         return true;
     }
+
+    function validateName(string $name): void
+    {
+        if (empty($name)) {
+            throw new NameOrLastnameContainsIncorrectCharactersException('Name is empty');
+        }
+        if (preg_match('/[0-9!@#$%^&*()_+=\[\]\{}|;:<>,.?\/\\\\]/', $name)) {
+            throw new NameOrLastnameContainsIncorrectCharactersException('Name contains incorrect characters');
+        }
+    }
+
+    function validateLastName(string $lastname):void
+    {
+        if (empty($lastname)) {
+            throw new NameOrLastnameContainsIncorrectCharactersException('Last name is empty');
+        }
+        else if (preg_match('/[0-9!@#$%^&*()_+=\[\]\{}|;:<>,.?\/\\\\]/', $lastname)) {
+            throw new NameOrLastnameContainsIncorrectCharactersException('Last name contains incorrect characters');
+        }
+    }
+
+    function validateAge(int $age): void
+    {
+        if (empty($age) || $age > 99) {
+            throw new AgeIsEmptyOrExceedsTheRangeException('Age must be between 1-99 and not empty');
+        }
+    }
+
 }
