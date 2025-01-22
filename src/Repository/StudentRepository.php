@@ -3,7 +3,7 @@
 namespace Crud\Repository;
 
 use PDO;
-
+//TODO gali succedinti arba gali failinti issaugoti arba neissaugoti students, ne unikalus id
 class StudentRepository
 {
     public function __construct(
