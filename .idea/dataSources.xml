@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/crud_operation</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="crud-test.sqlite" group="files" uuid="e4eef1ab-a23e-4aa1-9e2a-4108620d5127">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:crud-test.sqlite</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
