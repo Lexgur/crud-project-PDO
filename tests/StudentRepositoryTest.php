@@ -11,10 +11,11 @@ class StudentRepositoryTest extends TestCase
 {
     function testIfSavesToDatabase(): void
     {
-        $dbh = new PDO('sqlite:crud-test.sqlite');
+        $this->expectException(StudentAlreadyExistsException::class);
+        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
         $data = [
-            'first_name' => 'Dave',
-            'last_name' => 'Maven',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'age'=> 18,
         ];
         $repository = new StudentRepository($dbh);
@@ -24,7 +25,7 @@ class StudentRepositoryTest extends TestCase
     function testIfFailsBecauseDuplicateNameAndLastName(): void
     {
         $this->expectException(StudentAlreadyExistsException::class);
-        $dbh = new PDO('sqlite:crud-test.sqlite');
+        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
         $data = [
             'first_name' => 'John',
             'last_name' => 'Doe',
