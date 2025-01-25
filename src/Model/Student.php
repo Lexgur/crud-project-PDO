@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Crud\Model;
 
-use Crud\Exception\ValueAskedIsEmptyOrIncorrectTypeException;
-
 class Student
 {
 
-    private int $id;
+    private ?int $id = null;
     private string $firstname;
     private string $lastname;
     private int $age;
