@@ -22,7 +22,7 @@ class StudentTest extends TestCase
         var_dump($id,$firstName,$lastName,$age);
     }
 
-    public function testIfEmptyValuesFailTheTest(): void
+    public function testIfWrongValuesFailTheTest(): void
     {
         $this->expectException(TypeError::class);
 
