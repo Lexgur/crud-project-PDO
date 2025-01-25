@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
                 student_age INTEGER NOT NULL
             )
         ");
-        sleep(1);
+
 
     }
     function testIfSavesToDatabase(): void
