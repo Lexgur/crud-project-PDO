@@ -34,7 +34,12 @@ class StudentRepository
 
 
         $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
-        $statement->execute()
+        $statement->bindValue(':id_student', $data['id_student']);
+        $statement->bindValue(':student_first_name', $data['first_name']);
+        $statement->bindValue(':student_last_name', $data['last_name']);
+        $statement->bindValue(':student_age', $data['age']);
+
+        $result = $statement->execute();
 
         return $result;
 
