@@ -49,11 +49,30 @@ use PHPUnit\Framework\TestCase;
         $repository->save($data);
     }
 
+    function testIfFetchesById(): void
+    {
+        $id = 1;
+        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
+        $repository = new StudentRepository($dbh);
+        $repository->fetchById($id);
+        $this->assertEquals($id, $id);
+    }
+
+    function testIfFailsWithIncorrectSearch(): void
+    {
+        $this->expectException(TypeError::class);
+        $id ='kamehameha';
+        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
+        $repository = new StudentRepository($dbh);
+        $repository->fetchById($id);
+    }
+
     public function tearDown(): void
     {
         $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
         $dbh->exec('DROP TABLE IF EXISTS students');
         $this->dbh = null;
     }
+
 
 }

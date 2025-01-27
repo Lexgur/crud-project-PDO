@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 namespace Crud\Repository;
-//TODO PDOStatement keliauja cia
-use Crud\Exception\StudentAlreadyExistsException;
+
+use Crud\Connection;
+use Crud\Model\Student;
 use PDO;
-use PDOException;
 
 class StudentRepository
 {
@@ -18,31 +18,49 @@ class StudentRepository
 
     }
 
-    public function save(array $data): bool
+    public function save(Student $student): Student
 
     {
-        $checkQuery = 'SELECT COUNT(*) FROM `students` WHERE `student_first_name` = :student_first_name AND `student_last_name` = :student_last_name';
-        $checkStatement = $this->connection->prepare($checkQuery);
-        $checkStatement->bindValue(':student_first_name', $data['first_name']);
-        $checkStatement->bindValue(':student_last_name', $data['last_name']);
-        $checkStatement->execute();
-        $exists = $checkStatement->fetchColumn() > 0;
-
-        if ($exists) {
-            throw new StudentAlreadyExistsException("Student {$data['first_name']} {$data['last_name']} already exists in the database.");
-        }
 
 
+
+        return $student;
+    }
+
+    public function insertNewStudent(Student $student) : Student
+    {
         $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
-        $statement->bindValue(':id_student', $data['id_student']);
-        $statement->bindValue(':student_first_name', $data['first_name']);
-        $statement->bindValue(':student_last_name', $data['last_name']);
-        $statement->bindValue(':student_age', $data['age']);
+        $statement->bindValue(':student_first_name', $student->getFirstName(), PDO::PARAM_STR_CHAR);
+        $statement->bindValue(':student_last_name', $student->getLastName(), PDO::PARAM_STR_CHAR);
+        $statement->bindValue(':student_age', $student->getAge(), PDO::PARAM_INT);
 
-        $result = $statement->execute();
+        $statement->execute();
 
-        return $result;
+        $this->connection->lastInsertId('students');
+
+        return $student;
+
 
     }
+
+    public function fetchById (int $id)
+    {
+        $statement = $this->connection->prepare('SELECT * FROM `students` WHERE `id_student`= ?');
+        $statement->execute([$id]);
+        return $statement->fetchObject(Student::class);
+    }
+
+//    public function updateStudent(Student $student) : Student
+//    {
+//        $statement = $this->connection->prepare('UPDATE `students` SET `student_first_name` = :student_first_name, `student_last_name` = :student_last_name, `student_age` = :student_age WHERE `id_student` = :id_student');
+//        $statement->bindValue(':id_student', $student->getId());
+//        $statement->bindValue(':student_first_name', $student->getFirstName());
+//        $statement->bindValue(':student_last_name', $student->getLastName());
+//        $statement->bindValue(':student_age', $student->getAge());
+//
+//        $statement->execute();
+//
+//        return $student;
+//    }
 
 }
