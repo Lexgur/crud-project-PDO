@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
-use Crud\Connection;
 use Crud\Model\Student;
 use PDO;
 
@@ -22,32 +21,30 @@ class StudentRepository
 
     {
 
-
-
         return $student;
     }
 
     public function insertNewStudent(Student $student) : Student
     {
-        $statement = $this->connection->prepare('INSERT INTO `students` (`id_student`, `student_first_name`, `student_last_name`, `student_age`) VALUES (:id_student, :student_first_name, :student_last_name, :student_age)');
-        $statement->bindValue(':student_first_name', $student->getFirstName(), PDO::PARAM_STR_CHAR);
-        $statement->bindValue(':student_last_name', $student->getLastName(), PDO::PARAM_STR_CHAR);
-        $statement->bindValue(':student_age', $student->getAge(), PDO::PARAM_INT);
+        $statement = $this->connection->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
+        $statement->bindValue(':firstname', $student->getFirstName());
+        $statement->bindValue(':lastname', $student->getLastName());
+        $statement->bindValue(':age', $student->getAge());
 
         $statement->execute();
 
-        $this->connection->lastInsertId('students');
+        $newId = (int) $this->connection->lastInsertId('students');
 
-        return $student;
-
+        return $this->fetchById($newId);
 
     }
 
     public function fetchById (int $id)
     {
-        $statement = $this->connection->prepare('SELECT * FROM `students` WHERE `id_student`= ?');
+        $statement = $this->connection->prepare('SELECT * FROM `students` WHERE `id`= ?');
         $statement->execute([$id]);
         return $statement->fetchObject(Student::class);
+
     }
 
 //    public function updateStudent(Student $student) : Student

@@ -16,10 +16,10 @@ class StudentFactory
     public static function create(array $data): Student
     {
         return new Student(
-            id: $data['id'],
             firstName: $data['name'],
             lastName: $data['lastname'],
             age: $data['age'],
+            id: $data['id'],
         );
     }
 }

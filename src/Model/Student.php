@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Crud\Model;
 
-class Student
+use AllowDynamicProperties;
+
+#[AllowDynamicProperties] class Student
 {
 
     private ?int $id = null;
@@ -14,15 +16,15 @@ class Student
 
 
 
-    public function __construct(int $id,string $firstName, string $lastName, int $age)
+    public function __construct(string $firstName, string $lastName, int $age, ?int $id = null)
 
     {
-        $this->id = $id;
         $this->firstname = $firstName;
         $this->lastname = $lastName;
         $this->age = $age;
+        $this->id = $id;
     }
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
