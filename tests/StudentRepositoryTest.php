@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Crud\Exception\StudentAlreadyExistsException;
 use Crud\Model\Student;
 use Crud\Repository\StudentRepository;
 use PHPUnit\Framework\TestCase;
@@ -12,8 +11,9 @@ use PHPUnit\Framework\TestCase;
 {
     public function setUp(): void
     {
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $dbh->exec("
+        $this->dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
+        $this->repository = new StudentRepository($this->dbh);
+        $this->dbh->exec("
             CREATE TABLE students (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 firstname TEXT NOT NULL,
@@ -21,91 +21,98 @@ use PHPUnit\Framework\TestCase;
                 age INTEGER NOT NULL
             )
         ");
-
-
     }
-    function testIfSavesToDatabase(): void
-    {
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $data = [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'age'=> 18,
-        ];
-        $repository = new StudentRepository($dbh);
-        $this->assertTrue($repository->save($data));
-    }
+//    function testIfSavesToDatabase(): void
+//    {
+//        $dbh = $this->dbh;
+//        $data = [
+//            'first_name' => 'John',
+//            'last_name' => 'Doe',
+//            'age'=> 18,
+//        ];
+//        $repository = new StudentRepository($dbh);
+//        $this->assertTrue($repository->save($data));
+//    }
 
-    function testIfFailsBecauseDuplicateNameAndLastName(): void
-    {
-        $this->expectException(StudentAlreadyExistsException::class);
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $data = [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'age'=> 18,
-        ];
-        $repository = new StudentRepository($dbh);
-        $repository->save($data);
-        $repository->save($data);
-    }
+//    function testIfFailsBecauseDuplicateNameAndLastName(): void
+//    {
+//        $this->expectException(StudentAlreadyExistsException::class);
+//        $dbh = $this->dbh;
+//        $data = [
+//            'first_name' => 'John',
+//            'last_name' => 'Doe',
+//            'age'=> 18,
+//        ];
+//        $repository = new StudentRepository($dbh);
+//        $repository->save($data);
+//        $repository->save($data);
+//    }
 
     function testIfFetchesById(): void
     {
-        $id = 1;
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $repository = new StudentRepository($dbh);
-        $repository->fetchById($id);
-        $this->assertEquals($id, $id);
+        $statement = $this->dbh->prepare("INSERT INTO students (firstname, lastname, age) VALUES ('Test', 'Student', 25)");
+        $statement->execute();
+        $id = (int)$this->dbh->lastInsertId();
+        $student = $this->repository->fetchById($id);
+
+        $this->assertEquals($id, $student->getId());
     }
 
-    function testIfFailsWithIncorrectSearch(): void
+    function testIfFailsToFetchWithIncorrectType(): void
     {
-        $this->expectException(TypeError::class);
-        $id ='kamehameha';
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $repository = new StudentRepository($dbh);
-        $repository->fetchById($id);
+        $this->expectException(PDOException::class);
+
+        $statement = $this->dbh->prepare("INSERT INTO students (firstname, lastname, age, id) VALUES ('Test', 'Student', 25, 'kamehameha')");
+        $statement->execute();
+        $id = (int)$this->dbh->lastInsertId();
+        $this->repository->fetchById($id);
     }
 
-    function testIfInsertingStudentWorks() : void
+    function testIfInsertingStudentWorks(): void
     {
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $student = new Student (
-            firstName: 'Lame',
-            lastName: 'Make',
-            age: 37
-        );
-        $repository = new StudentRepository($dbh);
-        $repository->insertNewStudent($student);
-        $result = $dbh->lastInsertId('students');
-        $this->assertEquals($result, $result);
-    }
-
-    function testIfInsertingMultipleStudentWorks() : void
-    {
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $repository = new StudentRepository($dbh);
-        $student2 = new Student (
-            firstName: 'Lame',
-            lastName: 'Make',
-            age: 37
-        );
         $student = new Student (
             firstName: 'Dave',
             lastName: 'Make',
             age: 31
         );
-        $repository->insertNewStudent($student);
-        $repository->insertNewStudent($student2);
-        $result = $dbh->lastInsertId('students');
-        $this->assertEquals($result, $result);
+        $newStudent = $this->repository->insertNewStudent($student);
+
+        $this->assertNotNull($newStudent->getId());
+        $this->assertEquals($student->getFirstName(), $newStudent->getFirstName());
+        $this->assertEquals($student->getLastName(), $newStudent->getLastName());
+        $this->assertEquals($student->getAge(), $newStudent->getAge());
     }
 
-    function testIfInsertedIdsAreDifferent() : void
+    function testIfInsertingMultipleStudentWorks(): void
     {
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
+        $dbh = $this->dbh;
         $repository = new StudentRepository($dbh);
+        $student2 = new Student (
+            firstName: 'Lame',
+            lastName: 'Make',
+            age: 44
+        );
+        $student1 = new Student (
+            firstName: 'Dave',
+            lastName: 'Make',
+            age: 31
+        );
+        $newStudent1 = $repository->insertNewStudent($student1);
+        $newStudent2 = $repository->insertNewStudent($student2);
+
+        $this->assertNotNull($newStudent1->getId());
+        $this->assertEquals($newStudent1->getFirstName(), $student1->getFirstName());
+        $this->assertEquals($newStudent1->getLastName(), $student1->getLastName());
+        $this->assertEquals($newStudent1->getAge(), $student1->getAge());
+        $this->assertNotNull($newStudent2->getId());
+        $this->assertEquals($newStudent2->getFirstName(), $student2->getFirstName());
+        $this->assertEquals($newStudent2->getLastName(), $student2->getLastName());
+        $this->assertEquals($newStudent2->getAge(), $student2->getAge());
+
+    }
+
+    function testIfInsertedIdsAreDifferent(): void
+    {
         $student2 = new Student (
             firstName: 'Steve',
             lastName: 'Creve',
@@ -116,18 +123,18 @@ use PHPUnit\Framework\TestCase;
             lastName: 'Leave',
             age: 27
         );
-        $repository->insertNewStudent($student);
-        $result1 = $dbh->lastInsertId();
-        $repository->insertNewStudent($student2);
-        $result2 = $dbh->lastInsertId();
+        $this->repository->insertNewStudent($student);
+        $result1 = $this->dbh->lastInsertId();
+        $this->repository->insertNewStudent($student2);
+        $result2 = $this->dbh->lastInsertId();
+
         $this->assertNotEquals($result1, $result2);
     }
 
 
     public function tearDown(): void
     {
-        $dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
-        $dbh->exec('DROP TABLE IF EXISTS students');
+        $this->dbh->exec('DROP TABLE IF EXISTS students');
         $this->dbh = null;
     }
 

@@ -33,18 +33,23 @@ class StudentRepository
 
         $statement->execute();
 
-        $newId = (int) $this->connection->lastInsertId('students');
+        $newId = (int) $this->connection->lastInsertId();
 
         return $this->fetchById($newId);
 
     }
 
-    public function fetchById (int $id)
+    public function fetchById (int $id) : Student
     {
-        $statement = $this->connection->prepare('SELECT * FROM `students` WHERE `id`= ?');
-        $statement->execute([$id]);
-        return $statement->fetchObject(Student::class);
-
+        $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
+        $statement->execute([':id' => $id]);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        return new Student(
+            firstName:  $row['firstname'],
+            lastName:  $row['lastname'],
+            age: (int) $row['age'],
+            id: (int) $row['id']
+        );
     }
 
 //    public function updateStudent(Student $student) : Student
