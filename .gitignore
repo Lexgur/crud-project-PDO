@@ -80,3 +80,4 @@ fabric.properties
 
 # *.iml
 # modules.xml
+/tests/database/
