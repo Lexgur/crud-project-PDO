@@ -3,6 +3,7 @@
 /vendor/*
 /config/app.php
 
+/tests/database/crud-test.sqlite
 /config.php
 /tmp/cache/models/*
 !/tmp/cache/models/empty
