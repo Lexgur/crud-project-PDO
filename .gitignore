@@ -1,26 +1,24 @@
 # CakePHP 3
-
 /vendor/*
 /config/app.php
 
-/tests/database/crud-test.sqlite
+/tests/*.sqlite
 /config.php
 /tmp/cache/models/*
-!/tmp/cache/models/empty
+!/tmp/cache/models/empty/
 /tmp/cache/persistent/*
-!/tmp/cache/persistent/empty
+!/tmp/cache/persistent/empty/
 /tmp/cache/views/*
-!/tmp/cache/views/empty
+!/tmp/cache/views/empty/
 /tmp/sessions/*
-!/tmp/sessions/empty
+!/tmp/sessions/empty/
 /tmp/tests/*
-!/tmp/tests/empty
+!/tmp/tests/empty/
 
 /logs/*
-!/logs/empty
+!/logs/empty/
 
 # CakePHP 2
-
 /app/tmp/*
 /app/Config/core.php
 /app/Config/database.php
@@ -46,7 +44,6 @@
 .idea/**/uiDesigner.xml
 .idea_modules/
 
-
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
@@ -57,14 +54,19 @@
 ## File-based project format:
 *.iws
 *.sqlite
-
+*.xml
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/php.xml
+/.idea/phpspec.xml
+/.idea/codeception.xml
+/.idea/crud-project-PDO.iml
 ## Plugin-specific files:
 
 # IntelliJ
 /out/
 
 # mpeltonen/sbt-idea plugin
-.idea_modules/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
@@ -80,4 +82,10 @@ fabric.properties
 
 # *.iml
 # modules.xml
-/tests/database/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor-specific files
+.vscode/

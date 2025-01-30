@@ -12,14 +12,12 @@ class StudentTest extends TestCase
         $firstName = "Dave";
         $lastName = "Bigjhonson";
         $age = 17;
-
         $student = new Student($id, $firstName, $lastName, $age);
 
         $this->assertEquals($id, $student->getId());
         $this->assertEquals($firstName, $student->getFirstName());
         $this->assertEquals($lastName, $student->getLastName());
         $this->assertEquals($age, $student->getAge());
-        var_dump($id,$firstName,$lastName,$age);
     }
 
     public function testIfWrongValuesFailTheTest(): void
@@ -30,7 +28,6 @@ class StudentTest extends TestCase
         $firstName = "";
         $lastName = "";
         $age = 12;
-
         $student = new Student($id, $firstName, $lastName, $age);
     }
 

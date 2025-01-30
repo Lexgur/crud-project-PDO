@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "d17faae4fc43b8bbb125e820d6cba996",
+  "content-hash": "22f37d4d43d60d23f0d384e8e96dae00",
   "packages": [],
   "packages-dev": [
     {
@@ -242,6 +242,64 @@
         "source": "https://github.com/phar-io/version/tree/3.2.1"
       },
       "time": "2022-02-21T01:04:05+00:00"
+    },
+    {
+      "name": "phpstan/phpstan",
+      "version": "2.1.2",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/phpstan/phpstan.git",
+        "reference": "7d08f569e582ade182a375c366cbd896eccadd3a"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7d08f569e582ade182a375c366cbd896eccadd3a",
+        "reference": "7d08f569e582ade182a375c366cbd896eccadd3a",
+        "shasum": ""
+      },
+      "require": {
+        "php": "^7.4|^8.0"
+      },
+      "conflict": {
+        "phpstan/phpstan-shim": "*"
+      },
+      "bin": [
+        "phpstan",
+        "phpstan.phar"
+      ],
+      "type": "library",
+      "autoload": {
+        "files": [
+          "bootstrap.php"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "description": "PHPStan - PHP Static Analysis Tool",
+      "keywords": [
+        "dev",
+        "static analysis"
+      ],
+      "support": {
+        "docs": "https://phpstan.org/user-guide/getting-started",
+        "forum": "https://github.com/phpstan/phpstan/discussions",
+        "issues": "https://github.com/phpstan/phpstan/issues",
+        "security": "https://github.com/phpstan/phpstan/security/policy",
+        "source": "https://github.com/phpstan/phpstan-src"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/ondrejmirtes",
+          "type": "github"
+        },
+        {
+          "url": "https://github.com/phpstan",
+          "type": "github"
+        }
+      ],
+      "time": "2025-01-21T14:54:06+00:00"
     },
     {
       "name": "phpunit/php-code-coverage",
@@ -568,16 +626,16 @@
     },
     {
       "name": "phpunit/phpunit",
-      "version": "11.5.3",
+      "version": "11.5.5",
       "source": {
         "type": "git",
         "url": "https://github.com/sebastianbergmann/phpunit.git",
-        "reference": "30e319e578a7b5da3543073e30002bf82042f701"
+        "reference": "b9a975972f580c0491f834eb0818ad2b32fd8bba"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/30e319e578a7b5da3543073e30002bf82042f701",
-        "reference": "30e319e578a7b5da3543073e30002bf82042f701",
+        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b9a975972f580c0491f834eb0818ad2b32fd8bba",
+        "reference": "b9a975972f580c0491f834eb0818ad2b32fd8bba",
         "shasum": ""
       },
       "require": {
@@ -649,7 +707,7 @@
       "support": {
         "issues": "https://github.com/sebastianbergmann/phpunit/issues",
         "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-        "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.3"
+        "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.5"
       },
       "funding": [
         {
@@ -665,7 +723,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-01-13T09:36:00+00:00"
+      "time": "2025-01-29T14:01:11+00:00"
     },
     {
       "name": "sebastian/cli-parser",
@@ -1701,7 +1759,9 @@
   "stability-flags": {},
   "prefer-stable": false,
   "prefer-lowest": false,
-  "platform": {},
+  "platform": {
+    "ext-pdo": "*"
+  },
   "platform-dev": {},
   "plugin-api-version": "2.6.0"
 }

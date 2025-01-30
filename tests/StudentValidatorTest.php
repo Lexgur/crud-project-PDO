@@ -9,10 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class StudentValidatorTest extends TestCase
 {
-    /**
-     * @throws NameOrLastnameContainsIncorrectCharactersException
-     * @throws AgeIsEmptyOrExceedsTheRangeException
-     */
     function testIfGivenValuesValidateCorrectly(): void
     {
         $validator = new StudentValidator();
@@ -24,12 +20,14 @@ class StudentValidatorTest extends TestCase
             'lastname' => $lastname,
             'age' => $age,
         ];
+
         $this->assertTrue($validator->validate($data));
     }
 
     function testIfEmptyNameIsNotAllowed(): void
     {
         $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
+
         $validator = new StudentValidator();
         $name = '';
         $validator->validateName($name);
@@ -38,6 +36,7 @@ class StudentValidatorTest extends TestCase
     function testIfFailsWithIncorrectName(): void
     {
         $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
+
         $validator = new StudentValidator();
         $name = '25';
         $validator->validateName($name);
@@ -46,6 +45,7 @@ class StudentValidatorTest extends TestCase
     function testIfFailsWithIncorrectAgeRange(): void
     {
         $this->expectException(AgeIsEmptyOrExceedsTheRangeException::class);
+
         $validator = new StudentValidator();
         $age = 110;
         $validator->validateAge($age);
@@ -55,6 +55,7 @@ class StudentValidatorTest extends TestCase
     function testIfFailsWithEmptyAge(): void
     {
         $this->expectException(AgeIsEmptyOrExceedsTheRangeException::class);
+
         $validator = new StudentValidator();
         $age = 0;
         $validator->validateAge($age);

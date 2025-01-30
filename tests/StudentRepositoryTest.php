@@ -6,12 +6,13 @@ use Crud\Model\Student;
 use Crud\Repository\StudentRepository;
 use PHPUnit\Framework\TestCase;
 
-#[AllowDynamicProperties] class StudentRepositoryTest extends TestCase
+class StudentRepositoryTest extends TestCase
 
 {
     public function setUp(): void
     {
-        $this->dbh = new PDO('sqlite:C:/xampp/htdocs/PhpstormProjects/crud-project-PDO/crud-test.sqlite');
+        $this->testDbPath = __DIR__ . '/crud-test.sqlite';
+        $this->dbh = new PDO('sqlite:' . $this->testDbPath);
         $this->repository = new StudentRepository($this->dbh);
         $this->dbh->exec("
             CREATE TABLE students (
@@ -22,31 +23,15 @@ use PHPUnit\Framework\TestCase;
             )
         ");
     }
-//    function testIfSavesToDatabase(): void
-//    {
-//        $dbh = $this->dbh;
-//        $data = [
-//            'first_name' => 'John',
-//            'last_name' => 'Doe',
-//            'age'=> 18,
-//        ];
-//        $repository = new StudentRepository($dbh);
-//        $this->assertTrue($repository->save($data));
-//    }
+    public function tearDown(): void
+    {
+        $this->dbh->exec('DROP TABLE IF EXISTS students');
+        $this->dbh = null;
 
-//    function testIfFailsBecauseDuplicateNameAndLastName(): void
-//    {
-//        $this->expectException(StudentAlreadyExistsException::class);
-//        $dbh = $this->dbh;
-//        $data = [
-//            'first_name' => 'John',
-//            'last_name' => 'Doe',
-//            'age'=> 18,
-//        ];
-//        $repository = new StudentRepository($dbh);
-//        $repository->save($data);
-//        $repository->save($data);
-//    }
+        if (file_exists($this->testDbPath)) {
+            unlink($this->testDbPath);
+        }
+    }
 
     function testIfFetchesById(): void
     {
@@ -85,8 +70,6 @@ use PHPUnit\Framework\TestCase;
 
     function testIfInsertingMultipleStudentWorks(): void
     {
-        $dbh = $this->dbh;
-        $repository = new StudentRepository($dbh);
         $student2 = new Student (
             firstName: 'Lame',
             lastName: 'Make',
@@ -97,8 +80,8 @@ use PHPUnit\Framework\TestCase;
             lastName: 'Make',
             age: 31
         );
-        $newStudent1 = $repository->insertNewStudent($student1);
-        $newStudent2 = $repository->insertNewStudent($student2);
+        $newStudent1 = $this->repository->insertNewStudent($student1);
+        $newStudent2 = $this->repository->insertNewStudent($student2);
 
         $this->assertNotNull($newStudent1->getId());
         $this->assertEquals($newStudent1->getFirstName(), $student1->getFirstName());
@@ -108,35 +91,25 @@ use PHPUnit\Framework\TestCase;
         $this->assertEquals($newStudent2->getFirstName(), $student2->getFirstName());
         $this->assertEquals($newStudent2->getLastName(), $student2->getLastName());
         $this->assertEquals($newStudent2->getAge(), $student2->getAge());
-
     }
 
     function testIfInsertedIdsAreDifferent(): void
     {
+        $student1 = new Student (
+            firstName: 'Greave',
+            lastName: 'Leave',
+            age: 27
+        );
+        $result1 = $this->repository->insertNewStudent($student1);
         $student2 = new Student (
             firstName: 'Steve',
             lastName: 'Creve',
             age: 26
         );
-        $student = new Student (
-            firstName: 'Greave',
-            lastName: 'Leave',
-            age: 27
-        );
-        $this->repository->insertNewStudent($student);
-        $result1 = $this->dbh->lastInsertId();
-        $this->repository->insertNewStudent($student2);
-        $result2 = $this->dbh->lastInsertId();
+        $result2 = $this->repository->insertNewStudent($student2);
 
-        $this->assertNotEquals($result1, $result2);
+        $this->assertNotEquals($result1->getId(), $result2->getId());
+        $this->assertNotEquals($result1->getFirstName(), $result2->getFirstName());
+        $this->assertNotEquals($result1->getLastName(), $result2->getLastName());
     }
-
-
-    public function tearDown(): void
-    {
-        $this->dbh->exec('DROP TABLE IF EXISTS students');
-        $this->dbh = null;
-    }
-
-
 }

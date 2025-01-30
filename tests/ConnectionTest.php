@@ -12,7 +12,6 @@ class ConnectionTest extends TestCase
         $dsn = 'mysql:host=localhost;dbname=crud_operation_test';
         $username = 'root';
         $password = 'root123';
-
         $connection = new Connection($dsn, $username, $password);
         $pdo = $connection->connect();
 
@@ -24,9 +23,10 @@ class ConnectionTest extends TestCase
         $dsn = 'mysql:host=localhost;dbname=crud_operation_test';
         $username = 'root';
         $password = 'root222';
-
         $connection = new Connection($dsn, $username, $password);
+
         $this->expectException(PDOException::class);
+
         $connection->connect();
     }
 }
