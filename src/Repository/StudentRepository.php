@@ -52,17 +52,17 @@ class StudentRepository
         );
     }
 
-//    public function updateStudent(Student $student) : Student
-//    {
-//        $statement = $this->connection->prepare('UPDATE `students` SET `student_first_name` = :student_first_name, `student_last_name` = :student_last_name, `student_age` = :student_age WHERE `id_student` = :id_student');
-//        $statement->bindValue(':id_student', $student->getId());
-//        $statement->bindValue(':student_first_name', $student->getFirstName());
-//        $statement->bindValue(':student_last_name', $student->getLastName());
-//        $statement->bindValue(':student_age', $student->getAge());
-//
-//        $statement->execute();
-//
-//        return $student;
-//    }
+    public function update(Student $student) : Student
+    {
+        $statement = $this->connection->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
+        $statement->bindValue(':firstname', $student->getFirstName());
+        $statement->bindValue(':lastname', $student->getLastName());
+        $statement->bindValue(':age', $student->getAge());
+        $statement->bindValue(':id', $student->getId());
+
+        $statement->execute();
+
+        return $this->fetchById($student->getId());
+    }
 
 }

@@ -104,6 +104,29 @@ class StudentRepositoryTest extends TestCase
         $this->assertNotEquals($result1->getLastName(), $result2->getLastName());
     }
 
+    function testIfStudentUpdateWorks(): void
+    {
+        $student = new Student (
+            firstName: 'Mike',
+            lastName: 'Hawk',
+            age: 18
+        );
+        $oldStudent = $this->repository->insert($student);
+
+        $updatedStudent = new Student(
+            firstName: 'Micheal',
+            lastName: 'Hawktuah',
+            age: 19,
+            id: 1
+        );
+        $updatedResult = $this->repository->update($updatedStudent);
+
+        $this->assertEquals($oldStudent->getId(), $updatedResult->getId());
+        $this->assertEquals('Micheal', $updatedResult->getFirstName());
+        $this->assertEquals('Hawktuah', $updatedResult->getLastName());
+        $this->assertEquals(19, $updatedResult->getAge());
+    }
+
     public function tearDown(): void
     {
         $this->dbh->exec('DROP TABLE IF EXISTS students');
