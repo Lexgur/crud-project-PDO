@@ -23,15 +23,6 @@ class StudentRepositoryTest extends TestCase
             )
         ");
     }
-    public function tearDown(): void
-    {
-        $this->dbh->exec('DROP TABLE IF EXISTS students');
-        $this->dbh = null;
-
-        if (file_exists($this->testDbPath)) {
-            unlink($this->testDbPath);
-        }
-    }
 
     function testIfFetchesById(): void
     {
@@ -111,5 +102,15 @@ class StudentRepositoryTest extends TestCase
         $this->assertNotEquals($result1->getId(), $result2->getId());
         $this->assertNotEquals($result1->getFirstName(), $result2->getFirstName());
         $this->assertNotEquals($result1->getLastName(), $result2->getLastName());
+    }
+
+    public function tearDown(): void
+    {
+        $this->dbh->exec('DROP TABLE IF EXISTS students');
+        $this->dbh = null;
+
+        if (file_exists($this->testDbPath)) {
+            unlink($this->testDbPath);
+        }
     }
 }

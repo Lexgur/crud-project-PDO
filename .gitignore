@@ -4,6 +4,7 @@
 
 
 /tests/crud-test.sqlite
+config.php
 *config.php
 *crud-test.sqlte
 /tmp/cache/models/*
