@@ -2,8 +2,10 @@
 /vendor/*
 /config/app.php
 
-/tests/*.sqlite
-/config.php
+
+/tests/crud-test.sqlite
+*config.php
+*crud-test.sqlte
 /tmp/cache/models/*
 !/tmp/cache/models/empty/
 /tmp/cache/persistent/*
@@ -34,7 +36,9 @@
 .idea/jsLibraryMappings.xml
 
 # Sensitive or high-churn files:
+.idea
 .idea/
+.idea/*
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.xml
@@ -43,6 +47,9 @@
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea_modules/
+.idea/phpspec.xml
+.idea/codeception.xml
+.idea/crud-project-PDO.iml
 
 # Gradle:
 .idea/**/gradle.xml
@@ -55,12 +62,11 @@
 *.iws
 *.sqlite
 *.xml
-/.idea/workspace.xml
-/.idea/tasks.xml
-/.idea/php.xml
-/.idea/phpspec.xml
-/.idea/codeception.xml
-/.idea/crud-project-PDO.iml
+
+
+
+
+
 ## Plugin-specific files:
 
 # IntelliJ

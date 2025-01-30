@@ -24,7 +24,7 @@ class StudentRepository
         return $student;
     }
 
-    public function insertNewStudent(Student $student) : Student
+    public function insert(Student $student) : Student
     {
         $statement = $this->connection->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
         $statement->bindValue(':firstname', $student->getFirstName());

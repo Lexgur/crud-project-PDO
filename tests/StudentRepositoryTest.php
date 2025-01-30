@@ -60,7 +60,7 @@ class StudentRepositoryTest extends TestCase
             lastName: 'Make',
             age: 31
         );
-        $newStudent = $this->repository->insertNewStudent($student);
+        $newStudent = $this->repository->insert($student);
 
         $this->assertNotNull($newStudent->getId());
         $this->assertEquals($student->getFirstName(), $newStudent->getFirstName());
@@ -80,8 +80,8 @@ class StudentRepositoryTest extends TestCase
             lastName: 'Make',
             age: 31
         );
-        $newStudent1 = $this->repository->insertNewStudent($student1);
-        $newStudent2 = $this->repository->insertNewStudent($student2);
+        $newStudent1 = $this->repository->insert($student1);
+        $newStudent2 = $this->repository->insert($student2);
 
         $this->assertNotNull($newStudent1->getId());
         $this->assertEquals($newStudent1->getFirstName(), $student1->getFirstName());
@@ -100,13 +100,13 @@ class StudentRepositoryTest extends TestCase
             lastName: 'Leave',
             age: 27
         );
-        $result1 = $this->repository->insertNewStudent($student1);
+        $result1 = $this->repository->insert($student1);
         $student2 = new Student (
             firstName: 'Steve',
             lastName: 'Creve',
             age: 26
         );
-        $result2 = $this->repository->insertNewStudent($student2);
+        $result2 = $this->repository->insert($student2);
 
         $this->assertNotEquals($result1->getId(), $result2->getId());
         $this->assertNotEquals($result1->getFirstName(), $result2->getFirstName());
