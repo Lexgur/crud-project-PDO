@@ -24,10 +24,6 @@ use AllowDynamicProperties;
         $this->age = $age;
         $this->id = $id;
     }
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
     public function getFirstName(): string
     {
         return $this->firstname;
@@ -41,5 +37,9 @@ use AllowDynamicProperties;
     public function getAge(): int
     {
         return $this->age;
+    }
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }

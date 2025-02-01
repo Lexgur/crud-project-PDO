@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crud\Factory;
 
 use Crud\Model\Student;
+use http\Exception\InvalidArgumentException;
 
 class StudentFactory
 {
@@ -15,12 +16,14 @@ class StudentFactory
 
     public static function create(array $data): Student
     {
-        return new Student(
-            firstName: $data['name'],
-            lastName: $data['lastname'],
-            age: $data['age'],
-            id: $data['id'],
-        );
-    }
+
+        $age = $data['age'] !==null ? (int)$data['age'] : null;
+
+            return new Student(
+                firstName: $data['name'],
+                lastName: $data['lastname'],
+                age: $age,
+                id: $data['id'] ?? null);
+        }
 }
 

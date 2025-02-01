@@ -3,11 +3,11 @@
 <form method='post'>
     <div>
         <label for="first_name">First name:</label>
-        <input type="text" id="first_name" name="first_name"><br><br>
+        <input type="text" id="first_name" name="name"><br><br>
     </div>
     <div>
         <label for="last_name">Last name:</label>
-        <input type="text" id="last_name" name="last_name"><br><br>
+        <input type="text" id="last_name" name="lastname"><br><br>
     </div>
     <div>
         <label for="age">Age:</label>

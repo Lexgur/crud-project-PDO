@@ -8,6 +8,7 @@ use Crud\Factory\StudentFactory;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
+
 //todo pirma padaryk CreateStudent
 
 //todo tada UpdateStudent
@@ -36,22 +37,18 @@ class CreateStudent
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $student = $this->studentFactory->create($data);
-            $validates = $this->studentValidator->validate($student);
 
-            if ($validates) {
-
+            if ($this->studentValidator->validate($student)) {
                 $this->studentRepository->save($student);
-
                 return $this->template->render('create_student_form.php', [
-                    'success' => "Sveikinu sukurus {$student->getFirstName()}!"
-                ]);
+                    'success' => "Sveikinu sukurus {$data['name']}!"]);
             } else {
                 return $this->template->render('create_student_form.php', [
-                    'error' => "Studento {$student->getFirstName()} sukurti nepavyko..."
-                ]);
+                    'error' => "Studento {$data['name']} sukurti nepavyko..."]);
             }
-        } else {
-            return $this->template->render('create_student_form.php');
         }
+
+        return $this->template->render('create_student_form.php', [
+        ]);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crud;
 
 use Crud\Controller\CreateStudent;
+use Crud\Factory\StudentFactory;
 use Crud\Repository\StudentRepository;
 use Crud\Validation\StudentValidator;
 
@@ -33,11 +34,14 @@ class Application
 
         $studentRepository = new StudentRepository($connection);
 
+        $studentFactory = new StudentFactory();
+
         //Controller
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
         $controller = $this->actions[$request['action']];
-        $controller = new $controller($studentValidator, $studentRepository, $template);
+        $controller = new $controller($studentValidator, $studentRepository, $template, $studentFactory);
 
         print $controller();
+
     }
 }
