@@ -2,7 +2,7 @@
 
 namespace Crud\Validation;
 
-
+use Crud\Model\Student;
 use Crud\Exception\AgeIsEmptyOrExceedsTheRangeException;
 use Crud\Exception\NameOrLastnameContainsIncorrectCharactersException;
 
@@ -12,21 +12,21 @@ class StudentValidator
      * @throws NameOrLastnameContainsIncorrectCharactersException
      * @throws AgeIsEmptyOrExceedsTheRangeException
      */
-    public function validate(array $data): bool
+    public function validate(Student $student): bool
     {
-        $this->validateName($data['name']);
-        $this->validateName($data['lastname']);
-        $this->validateAge($data['age']);
+        $this->validateName($student->getFirstName());
+        $this->validateName($student->getLastName());
+        $this->validateAge($student->getAge());
 
         return true;
     }
 
-    public function validateName(string $name): void
+    public function validateName($firstName): void
     {
-        if (empty($name)) {
+        if (empty($firstName)) {
             throw new NameOrLastnameContainsIncorrectCharactersException('Name or Last name is empty');
         }
-        if (preg_match('/[0-9!@#$%^&*()_+=\[\]\{}|;:<>,.?\/\\\\]/', $name)) {
+        if (preg_match('/[0-9!@#$%^&*()_+=\[\]\{}|;:<>,.?\/\\\\]/', $firstName)) {
             throw new NameOrLastnameContainsIncorrectCharactersException('Name or Last name contains incorrect characters');
         }
     }

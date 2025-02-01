@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Model\Student;
+use Crud\Factory\StudentFactory;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
+//todo pirma padaryk CreateStudent
 
+//todo tada UpdateStudent
+
+//todo tada  DeleteStudent
+
+//todo tada ViewStudent
+
+//todo tada ViewStudents
 class CreateStudent
 {
     public function __construct(
 
         protected StudentValidator $studentValidator,
         private StudentRepository  $studentRepository,
-        private Template           $template
+        private Template           $template,
+        private StudentFactory     $studentFactory
     )
     {
 
@@ -25,23 +34,20 @@ class CreateStudent
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $data = $_POST;
-            $validates = $this->studentValidator->validate($data);
+            $student = $this->studentFactory->create($data);
+            $validates = $this->studentValidator->validate($student);
+
             if ($validates) {
-                $student = new Student(
-                    firstName: $data['name'],
-                    lastName: $data['lastname'],
-                    age: (int)$data['age']
-                );
+
                 $this->studentRepository->save($student);
 
                 return $this->template->render('create_student_form.php', [
-                    'success' => 'Student creation success!'
+                    'success' => "Sveikinu sukurus {$student->getFirstName()}!"
                 ]);
             } else {
                 return $this->template->render('create_student_form.php', [
-                    'error' => 'Student creation failed!'
+                    'error' => "Studento {$student->getFirstName()} sukurti nepavyko..."
                 ]);
             }
         } else {

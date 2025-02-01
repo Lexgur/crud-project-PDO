@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Crud\Exception\AgeIsEmptyOrExceedsTheRangeException;
 use Crud\Exception\NameOrLastnameContainsIncorrectCharactersException;
+use Crud\Model\Student;
 use Crud\Validation\StudentValidator;
 use PHPUnit\Framework\TestCase;
 
@@ -12,16 +13,12 @@ class StudentValidatorTest extends TestCase
     function testIfGivenValuesValidateCorrectly(): void
     {
         $validator = new StudentValidator();
-        $name = 'Jon';
-        $lastname = 'Snow';
+        $firstName = 'Jon';
+        $lastName = 'Snow';
         $age = 25;
-        $data = [
-            'name' => $name,
-            'lastname' => $lastname,
-            'age' => $age,
-        ];
+        $student = new Student($firstName, $lastName, $age);
 
-        $this->assertTrue($validator->validate($data));
+        $this->assertTrue($validator->validate($student));
     }
 
     function testIfEmptyNameIsNotAllowed(): void
@@ -29,8 +26,8 @@ class StudentValidatorTest extends TestCase
         $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
 
         $validator = new StudentValidator();
-        $name = '';
-        $validator->validateName($name);
+        $firstName = '';
+        $validator->validateName($firstName);
     }
 
     function testIfFailsWithIncorrectName(): void
