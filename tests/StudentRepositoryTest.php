@@ -24,6 +24,42 @@ class StudentRepositoryTest extends TestCase
         ");
     }
 
+    function testIfSavesWhenIdIsNull(): void
+    {
+        $student = new Student (
+            firstName: 'John',
+            lastName: 'McGee',
+            age: 43
+        );
+        $savedStudent = $this->repository->save($student);
+
+        $this->assertNotNull($savedStudent->getId());
+        $this->assertEquals('John', $savedStudent->getFirstName());
+        $this->assertEquals('McGee', $savedStudent->getLastName());
+        $this->assertEquals(43, $savedStudent->getAge());
+    }
+
+    function testIfSaveUpdatesWhenIdIsNotNull(): void
+    {
+        $student = new Student (
+            firstName: 'John',
+            lastName: 'McGee',
+            age: 43,
+        );
+        $savedOldStudent = $this->repository->save($student);
+        $updatedStudent = new Student(
+            firstName: 'John',
+            lastName: 'McGee',
+            age: 44,
+            id: 1
+        );
+        $this->repository->save($updatedStudent);
+
+        $this->assertEquals($savedOldStudent->getId(), $updatedStudent->getId());
+        $this->assertEquals('John', $updatedStudent->getFirstName());
+        $this->assertEquals('McGee', $updatedStudent->getLastName());
+        $this->assertEquals(44, $updatedStudent->getAge());
+    }
     function testIfFetchesById(): void
     {
         $statement = $this->dbh->prepare("INSERT INTO students (firstname, lastname, age) VALUES ('Test', 'Student', 25)");

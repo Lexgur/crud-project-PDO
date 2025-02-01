@@ -20,8 +20,11 @@ class StudentRepository
     public function save(Student $student): Student
 
     {
-
-        return $student;
+        if ($student->getId() === null) {
+            return $this->insert($student);
+        } else {
+            return $this->update($student);
+        }
     }
 
     public function insert(Student $student) : Student

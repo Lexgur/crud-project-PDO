@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Model\Student;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
@@ -27,9 +28,14 @@ class CreateStudent
 
             $data = $_POST;
             $validates = $this->studentValidator->validate($data);
-            $saves = $this->studentRepository->save($data);
+            if ($validates) {
+                $student = new Student(
+                    firstName: $data['name'],
+                    lastName: $data['lastname'],
+                    age: (int)$data['age']
+                );
+                $this->studentRepository->save($student);
 
-            if ($validates && $saves) {
                 return $this->template->render('create_student_form.php', [
                     'success' => 'Student creation success!'
                 ]);
