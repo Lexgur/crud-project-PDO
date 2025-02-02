@@ -21,9 +21,13 @@ class StudentRepository
 
     {
         if ($student->getId() === null) {
-            return $this->insert($student);
+            $newStudent = $this->insert($student);
+
+            return $newStudent;
         } else {
-            return $this->update($student);
+            $updatedStudent = $this->update($student);
+
+            return $updatedStudent;
         }
     }
 
