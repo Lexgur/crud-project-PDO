@@ -9,15 +9,6 @@ use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
 
-//todo pirma padaryk CreateStudent
-
-//todo tada UpdateStudent
-
-//todo tada  DeleteStudent
-
-//todo tada ViewStudent
-
-//todo tada ViewStudents
 class CreateStudent
 {
     public function __construct(

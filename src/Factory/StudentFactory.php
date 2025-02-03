@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Crud\Factory;
 
 use Crud\Model\Student;
-use http\Exception\InvalidArgumentException;
 
 class StudentFactory
 {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crud;
 
 use Crud\Controller\CreateStudent;
+use Crud\Controller\DeleteStudent;
 use Crud\Factory\StudentFactory;
 use Crud\Repository\StudentRepository;
 use Crud\Validation\StudentValidator;
@@ -12,7 +13,9 @@ use Crud\Validation\StudentValidator;
 class Application
 {
     private array $actions = [
-        'create_student' => CreateStudent::class
+        'create_student' => CreateStudent::class,
+        'update_student' => DeleteStudent::class,
+        'delete_student' => DeleteStudent::class
     ];
 
     public function run(): void

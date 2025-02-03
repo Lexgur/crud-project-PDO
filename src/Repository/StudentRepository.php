@@ -46,16 +46,21 @@ class StudentRepository
 
     }
 
-    public function fetchById (int $id) : Student
+    public function fetchById (int $id) : ?Student
     {
         $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
         $statement->execute([':id' => $id]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            return null;
+        }
+
         return new Student(
-            firstName:  $row['firstname'],
-            lastName:  $row['lastname'],
-            age: (int) $row['age'],
-            id: (int) $row['id']
+            firstName:  $row['firstname'] ?? '',
+            lastName:  $row['lastname'] ?? '',
+            age: (int) $row['age'] ?? 0,
+            id: (int) $row['id'] ?? null
         );
     }
 
@@ -70,6 +75,13 @@ class StudentRepository
         $statement->execute();
 
         return $this->fetchById($student->getId());
+    }
+
+    public function delete(int $id) : void
+    {
+        $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
+        $statement->bindValue(':id', $id);
+        $statement->execute();
     }
 
 }

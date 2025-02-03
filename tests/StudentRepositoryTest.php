@@ -163,6 +163,21 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals(19, $updatedResult->getAge());
     }
 
+    function testIfDeleteWorks(): void
+    {
+        $student = new Student(
+            firstName: 'Micheal',
+            lastName: 'Hawktuah',
+            age: 19,
+            id: 1
+        );
+        $this->repository->insert($student);
+        $this->repository->delete(1);
+        $studentAfterDelete = $this->repository->fetchById(1);
+
+        $this->assertNull($studentAfterDelete);
+    }
+
     public function tearDown(): void
     {
         $this->dbh->exec('DROP TABLE IF EXISTS students');
