@@ -25,7 +25,6 @@ class DeleteStudent
             $student = $this->studentRepository->fetchById($studentId);
 
             if ($student) {
-
                 $this->studentRepository->delete($studentId);
                 return $this->template->render('delete_student_form.php', [
                     'success' => "{$student->getFirstName()} deleted successfully"
