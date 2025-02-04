@@ -22,13 +22,13 @@ class StudentRepository
     {
         if ($student->getId() === null) {
             return $this->insert($student);
-        } else  {
+        } else {
             return $this->update($student);
         }
     }
 
 
-    public function insert(Student $student) : Student
+    public function insert(Student $student): Student
     {
         $statement = $this->connection->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
         $statement->bindValue(':firstname', $student->getFirstName());
@@ -37,13 +37,13 @@ class StudentRepository
 
         $statement->execute();
 
-        $newId = (int) $this->connection->lastInsertId();
+        $newId = (int)$this->connection->lastInsertId();
 
         return $this->fetchById($newId);
 
     }
 
-    public function fetchById (int $id) : ?Student
+    public function fetchById(int $id): ?Student
     {
         $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
         $statement->execute([':id' => $id]);
@@ -53,14 +53,14 @@ class StudentRepository
             return null;
         }
         return new Student(
-            firstName:  $row['firstname'] ?? '',
-            lastName:  $row['lastname'] ?? '',
-            age: (int) $row['age'] ?? 0,
-            id: (int) $row['id'] ?? null
+            firstName: $row['firstname'] ?? '',
+            lastName: $row['lastname'] ?? '',
+            age: (int)$row['age'] ?? 0,
+            id: (int)$row['id'] ?? null
         );
     }
 
-    public function update(Student $student) : Student
+    public function update(Student $student): Student
     {
         $statement = $this->connection->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
         $statement->bindValue(':firstname', $student->getFirstName());
@@ -73,11 +73,29 @@ class StudentRepository
         return $this->fetchById($student->getId());
     }
 
-    public function delete(int $id) : void
+    public function delete(int $id): void
     {
         $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
         $statement->bindValue(':id', $id);
         $statement->execute();
+    }
+
+    public function viewStudents(): array
+    {
+        $statement = $this->connection->prepare('SELECT * FROM students');
+        $statement->execute();
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $students = [];
+        foreach ($rows as $row) {
+            $students[] = new Student(
+                firstName: $row['firstname'] ?? '',
+                lastName: $row['lastname'] ?? '',
+                age: (int) $row['age'] ?? 0,
+                id: (int) $row['id'] ?? null
+            );
+        }
+        return $students;
     }
 
 }

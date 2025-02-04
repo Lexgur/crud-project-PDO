@@ -176,6 +176,33 @@ class StudentRepositoryTest extends TestCase
         $this->assertNull($studentAfterDelete);
     }
 
+    function testIfViewAllStudentsWork(): void
+    {
+        $student = new Student(
+            firstName: 'Micheal',
+            lastName: 'Hawktuah',
+            age: 27,
+        );
+        $this->repository->save($student);
+        $student2 = new Student(
+            firstName: 'Cave',
+            lastName: 'Mave',
+            age: 19,
+        );
+        $this->repository->save($student2);
+        $result = $this->repository->viewStudents();
+
+        $this->assertCount(2, $result);
+
+        $this->assertEquals('Micheal', $result[0]->getFirstName());
+        $this->assertEquals('Hawktuah', $result[0]->getLastName());
+        $this->assertEquals(27, $result[0]->getAge());
+
+        $this->assertEquals('Cave', $result[1]->getFirstName());
+        $this->assertEquals('Mave', $result[1]->getLastName());
+        $this->assertEquals(19, $result[1]->getAge());
+    }
+
     public function tearDown(): void
     {
         $this->dbh->exec('DROP TABLE IF EXISTS students');

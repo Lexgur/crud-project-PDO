@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Crud\Controller;
 
 use Crud\Factory\StudentFactory;
-use Crud\Model\Student;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
@@ -17,7 +16,10 @@ class UpdateStudent
         private StudentRepository $studentRepository,
         private Template $template,
         private StudentFactory $studentFactory
-    ) {}
+    )
+    {
+
+    }
 
     public function __invoke(): string
     {
