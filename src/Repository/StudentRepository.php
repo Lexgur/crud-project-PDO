@@ -21,15 +21,12 @@ class StudentRepository
 
     {
         if ($student->getId() === null) {
-            $newStudent = $this->insert($student);
-
-            return $newStudent;
-        } else {
-            $updatedStudent = $this->update($student);
-
-            return $updatedStudent;
+            return $this->insert($student);
+        } else  {
+            return $this->update($student);
         }
     }
+
 
     public function insert(Student $student) : Student
     {
@@ -55,7 +52,6 @@ class StudentRepository
         if (!$row) {
             return null;
         }
-
         return new Student(
             firstName:  $row['firstname'] ?? '',
             lastName:  $row['lastname'] ?? '',
