@@ -147,20 +147,18 @@ class StudentRepositoryTest extends TestCase
             lastName: 'Hawk',
             age: 18
         );
-        $oldStudent = $this->repository->insert($student);
+        $insertedStudent = $this->repository->insert($student);
 
-        $updatedStudent = new Student(
-            firstName: 'Micheal',
-            lastName: 'Hawktuah',
-            age: 19,
-            id: 1
-        );
-        $updatedResult = $this->repository->update($updatedStudent);
+        $insertedStudent->setFirstName('Dave');
+        $insertedStudent->setLastName('Make');
+        $insertedStudent->setAge(28);
 
-        $this->assertEquals($oldStudent->getId(), $updatedResult->getId());
-        $this->assertEquals('Micheal', $updatedResult->getFirstName());
-        $this->assertEquals('Hawktuah', $updatedResult->getLastName());
-        $this->assertEquals(19, $updatedResult->getAge());
+        $this->repository->update($insertedStudent);
+
+        $this->assertEquals($insertedStudent->getId(), $insertedStudent->getId());
+        $this->assertEquals('Dave', $insertedStudent->getFirstName());
+        $this->assertEquals('Make', $insertedStudent->getLastName());
+        $this->assertEquals(28, $insertedStudent->getAge());
     }
 
     function testIfDeleteWorks(): void

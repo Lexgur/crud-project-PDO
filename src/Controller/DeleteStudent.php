@@ -20,7 +20,7 @@ class DeleteStudent
 
     public function __invoke(): string
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['_method'] === 'DELETE') {
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
 

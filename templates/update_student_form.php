@@ -1,21 +1,17 @@
 <html lang="en">
 <body>
 <form method='post'>
-    <div>
-        <label for="first_name">First name:</label>
-        <input type="text" id="first_name" name="name"><br><br>
-    </div>
-    <div>
-        <label for="last_name">Last name:</label>
-        <input type="text" id="last_name" name="lastname"><br><br>
-    </div>
-    <div>
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age"><br><br>
-    </div>
-    <div>
-        <input type="submit" value="Update student">
-    </div>
+    <input type="hidden" name="_method" value="PATCH">
+    <label>
+        <input type="text" name="name" value="Updated Name">
+    </label>
+    <label>
+        <input type="text" name="lastname" value="Updated Lastname">
+    </label>
+    <label>
+        <input type="number" name="age" value="20">
+    </label>
+    <button type="submit">Update Student</button>
 </form>
 </body>
 </html>

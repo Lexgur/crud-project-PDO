@@ -15,7 +15,6 @@ use AllowDynamicProperties;
     private int $age;
 
 
-
     public function __construct(string $firstName, string $lastName, int $age, ?int $id = null)
 
     {
@@ -24,9 +23,15 @@ use AllowDynamicProperties;
         $this->age = $age;
         $this->id = $id;
     }
+
     public function getFirstName(): string
     {
         return $this->firstname;
+    }
+
+    public function setFirstName(string $firstname): void
+    {
+        $this->firstname = $firstname;
     }
 
     public function getLastName(): string
@@ -34,10 +39,21 @@ use AllowDynamicProperties;
         return $this->lastname;
     }
 
+    public function setLastName(string $lastname): void
+    {
+        $this->lastname = $lastname;
+    }
+
     public function getAge(): int
     {
         return $this->age;
     }
+
+    public function setAge(int $age): void
+    {
+        $this->age = $age;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

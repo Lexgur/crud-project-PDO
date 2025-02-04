@@ -21,26 +21,24 @@ class UpdateStudent
 
     public function __invoke(): string
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_method'] ?? '') === 'PATCH') {
             $data = $_POST;
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
 
-            $updatedStudent = new Student(
-                $data['name'],
-                $data['lastname'],
-                (int)($data['age']),
-                $student->getId()
-            );
 
-            if ($this->studentValidator->validate($updatedStudent)) {
-                $this->studentRepository->update($updatedStudent);
+                $student->setFirstName($data['name']);
+                $student->setLastName($data['lastname']);
+                $student->setAge((int)$data['age']);
+
+            if ($this->studentValidator->validate($student)) {
+                $this->studentRepository->update($student);
                 return $this->template->render('update_student_form.php', [
-                    'success' => "{$updatedStudent->getFirstName()} updated successfully"
+                    'success' => "{$student->getFirstName()} updated successfully"
                 ]);
             } else {
                 return $this->template->render('update_student_form.php', [
-                    'error' => "{$updatedStudent->getFirstName()}was not updated"
+                    'error' => "{$student->getFirstName()}was not updated"
                 ]);
             }
         }
