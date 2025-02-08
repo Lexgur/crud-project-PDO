@@ -28,7 +28,6 @@ class UpdateStudent
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
 
-
                 $student->setFirstName($data['name']);
                 $student->setLastName($data['lastname']);
                 $student->setAge((int)$data['age']);
