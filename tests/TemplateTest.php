@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class TemplateTest extends TestCase
 {
-    function testIfTemplateFileExistsRenderHtml(): void
+    public function testIfTemplateFileExistsRenderHtml(): void
     {
         $templatePath = __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
         $template = new Template($templatePath);
@@ -16,7 +16,7 @@ class TemplateTest extends TestCase
         $this->assertEquals("Hello, world!", $result);
     }
 
-    function testIfTemplateDoesNotExistGetError(): void
+    public function testIfTemplateDoesNotExistGetError(): void
     {
         $this->expectException(\Crud\Exception\TemplateNotFoundException::class);
 
@@ -25,7 +25,7 @@ class TemplateTest extends TestCase
         $template->render('file_nonexistent.php');
     }
 
-    function testIfPathIsNotSafe(): void
+    public function testIfPathIsNotSafe(): void
     {
         $this->expectException(\Crud\Exception\IllegalTemplatePathException::class);
 

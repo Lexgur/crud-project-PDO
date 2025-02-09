@@ -12,14 +12,11 @@ class StudentRepository
 {
     public function __construct(
         protected PDO $connection
-    )
-
-    {
+    ) {
 
     }
 
     public function save(Student $student): Student
-
     {
         if ($student->getId() === null) {
             return $this->insert($student);
@@ -43,10 +40,10 @@ class StudentRepository
 
     }
 
-    public function fetchById(int $id): ?Student
+    public function fetchById(int $studentId): ?Student
     {
         $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
-        $statement->execute([':id' => $id]);
+        $statement->execute([':id' => $studentId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -68,10 +65,10 @@ class StudentRepository
         return $this->fetchById($student->getId());
     }
 
-    public function delete(int $id): bool
+    public function delete(int $studentId): bool
     {
         $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
-        $statement->bindValue(':id', $id);
+        $statement->bindValue(':id', $studentId);
         $statement->execute();
         return true;
     }

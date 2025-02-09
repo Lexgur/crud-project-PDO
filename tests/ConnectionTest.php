@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConnectionTest extends TestCase
 {
-    function testConnect(): void
+    public function testConnect(): void
     {
         $dsn = 'mysql:host=localhost;dbname=crud_operation_test';
         $username = 'root';
@@ -18,7 +18,7 @@ class ConnectionTest extends TestCase
         $this->assertInstanceOf(PDO::class, $pdo);
     }
 
-    function testReturnError(): void
+    public function testReturnError(): void
     {
         $dsn = 'mysql:host=localhost;dbname=crud_operation_test';
         $username = 'root';

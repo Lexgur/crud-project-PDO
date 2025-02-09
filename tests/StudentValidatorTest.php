@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class StudentValidatorTest extends TestCase
 {
-    function testIfGivenValuesValidateCorrectly(): void
+    public function testIfGivenValuesValidateCorrectly(): void
     {
         $validator = new StudentValidator();
         $firstName = 'Jon';
@@ -21,7 +21,7 @@ class StudentValidatorTest extends TestCase
         $this->assertTrue($validator->validate($student));
     }
 
-    function testIfEmptyNameIsNotAllowed(): void
+    public function testIfEmptyNameIsNotAllowed(): void
     {
         $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
 
@@ -30,7 +30,7 @@ class StudentValidatorTest extends TestCase
         $validator->validateName($firstName);
     }
 
-    function testIfFailsWithIncorrectName(): void
+    public function testIfFailsWithIncorrectName(): void
     {
         $this->expectException(NameOrLastnameContainsIncorrectCharactersException::class);
 
@@ -39,7 +39,7 @@ class StudentValidatorTest extends TestCase
         $validator->validateName($name);
     }
 
-    function testIfFailsWithIncorrectAgeRange(): void
+    public function testIfFailsWithIncorrectAgeRange(): void
     {
         $this->expectException(AgeIsEmptyOrExceedsTheRangeException::class);
 
@@ -49,7 +49,7 @@ class StudentValidatorTest extends TestCase
 
     }
 
-    function testIfFailsWithEmptyAge(): void
+    public function testIfFailsWithEmptyAge(): void
     {
         $this->expectException(AgeIsEmptyOrExceedsTheRangeException::class);
 

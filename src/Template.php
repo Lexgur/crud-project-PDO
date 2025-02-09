@@ -2,7 +2,6 @@
 
 namespace Crud;
 
-
 use Crud\Exception\IllegalTemplatePathException;
 use Crud\Exception\TemplateNotFoundException;
 

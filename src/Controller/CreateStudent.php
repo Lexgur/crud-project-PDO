@@ -12,13 +12,11 @@ use Crud\Validation\StudentValidator;
 class CreateStudent
 {
     public function __construct(
-
         protected StudentValidator $studentValidator,
-        private StudentRepository  $studentRepository,
-        private Template           $template,
-        private StudentFactory     $studentFactory
-    )
-    {
+        private StudentRepository $studentRepository,
+        private Template $template,
+        private StudentFactory $studentFactory
+    ) {
 
     }
 

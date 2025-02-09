@@ -18,11 +18,11 @@ class StudentFactory
         if ($data['age'] !== null) {
             $age = (int)$data['age'];
         }
-            return new Student(
-                firstName: $data['firstname'] ?? '',
-                lastName: $data['lastname'] ?? '',
-                age: $age,
-                id: $data['id'] ?? null);
-        }
+        return new Student(
+            firstName: $data['firstname'] ?? '',
+            lastName: $data['lastname'] ?? '',
+            age: $age,
+            id: $data['id'] ?? null
+        );
+    }
 }
-

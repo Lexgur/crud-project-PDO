@@ -24,11 +24,11 @@ class StudentTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $id = 'Steve';
+        $studentId = 'Steve';
         $firstName = "";
         $lastName = "";
         $age = 12;
-        $student = new Student($id, $firstName, $lastName, $age);
+        $student = new Student($studentId, $firstName, $lastName, $age);
     }
 
 }

@@ -16,8 +16,7 @@ class UpdateStudent
         private StudentRepository $studentRepository,
         private Template $template,
         private StudentFactory $studentFactory
-    )
-    {
+    ) {
 
     }
 
@@ -27,10 +26,9 @@ class UpdateStudent
             $data = $_POST;
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
-
-                $student->setFirstName($data['name']);
-                $student->setLastName($data['lastname']);
-                $student->setAge((int)$data['age']);
+            $student->setFirstName($data['name']);
+            $student->setLastName($data['lastname']);
+            $student->setAge((int)$data['age']);
 
             if ($this->studentValidator->validate($student)) {
                 $student = $this->studentRepository->save($student);

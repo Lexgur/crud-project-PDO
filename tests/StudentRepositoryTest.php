@@ -7,7 +7,6 @@ use Crud\Repository\StudentRepository;
 use PHPUnit\Framework\TestCase;
 
 class StudentRepositoryTest extends TestCase
-
 {
     public function setUp(): void
     {
@@ -24,9 +23,9 @@ class StudentRepositoryTest extends TestCase
         ");
     }
 
-    function testIfSaveInsertsNewStudent(): void
+    public function testIfSaveInsertsNewStudent(): void
     {
-        $student = new Student (
+        $student = new Student(
             firstName: 'John',
             lastName: 'McGee',
             age: 43
@@ -39,7 +38,7 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals(43, $savedStudent->getAge());
     }
 
-    function testIfSaveUpdatesTheStudent(): void
+    public function testIfSaveUpdatesTheStudent(): void
     {
         $student = new Student(
             firstName: 'Dave',
@@ -60,29 +59,29 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals(44, $updatedStudent->getAge());
     }
 
-    function testIfFetchesById(): void
+    public function testIfFetchesById(): void
     {
         $statement = $this->dbh->prepare("INSERT INTO students (firstname, lastname, age) VALUES ('Test', 'Student', 25)");
         $statement->execute();
-        $id = (int)$this->dbh->lastInsertId();
-        $student = $this->repository->fetchById($id);
+        $studentId = (int)$this->dbh->lastInsertId();
+        $student = $this->repository->fetchById($studentId);
 
-        $this->assertEquals($id, $student->getId());
+        $this->assertEquals($studentId, $student->getId());
     }
 
-    function testIfFailsToFetchWithIncorrectType(): void
+    public function testIfFailsToFetchWithIncorrectType(): void
     {
         $this->expectException(PDOException::class);
 
         $statement = $this->dbh->prepare("INSERT INTO students (firstname, lastname, age, id) VALUES ('Test', 'Student', 25, 'kamehameha')");
         $statement->execute();
-        $id = (int)$this->dbh->lastInsertId();
-        $this->repository->fetchById($id);
+        $studentId = (int)$this->dbh->lastInsertId();
+        $this->repository->fetchById($studentId);
     }
 
-    function testIfInsertingStudentWorks(): void
+    public function testIfInsertingStudentWorks(): void
     {
-        $student = new Student (
+        $student = new Student(
             firstName: 'Dave',
             lastName: 'Make',
             age: 31
@@ -95,14 +94,14 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals($student->getAge(), $newStudent->getAge());
     }
 
-    function testIfInsertingMultipleStudentWorks(): void
+    public function testIfInsertingMultipleStudentWorks(): void
     {
-        $student2 = new Student (
+        $student2 = new Student(
             firstName: 'Lame',
             lastName: 'Make',
             age: 44
         );
-        $student1 = new Student (
+        $student1 = new Student(
             firstName: 'Dave',
             lastName: 'Make',
             age: 31
@@ -114,21 +113,22 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals($newStudent1->getFirstName(), $student1->getFirstName());
         $this->assertEquals($newStudent1->getLastName(), $student1->getLastName());
         $this->assertEquals($newStudent1->getAge(), $student1->getAge());
+
         $this->assertNotNull($newStudent2->getId());
         $this->assertEquals($newStudent2->getFirstName(), $student2->getFirstName());
         $this->assertEquals($newStudent2->getLastName(), $student2->getLastName());
         $this->assertEquals($newStudent2->getAge(), $student2->getAge());
     }
 
-    function testIfInsertedIdsAreDifferent(): void
+    public function testIfInsertedIdsAreDifferent(): void
     {
-        $student1 = new Student (
+        $student1 = new Student(
             firstName: 'Greave',
             lastName: 'Leave',
             age: 27
         );
         $result1 = $this->repository->insert($student1);
-        $student2 = new Student (
+        $student2 = new Student(
             firstName: 'Steve',
             lastName: 'Creve',
             age: 26
@@ -140,9 +140,9 @@ class StudentRepositoryTest extends TestCase
         $this->assertNotEquals($result1->getLastName(), $result2->getLastName());
     }
 
-    function testIfStudentUpdateWorks(): void
+    public function testIfStudentUpdateWorks(): void
     {
-        $student = new Student (
+        $student = new Student(
             firstName: 'Mike',
             lastName: 'Hawk',
             age: 18
@@ -161,7 +161,7 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals(28, $updatedStudent->getAge());
     }
 
-    function testIfDeleteWorks(): void
+    public function testIfDeleteWorks(): void
     {
         $student = new Student(
             firstName: 'Micheal',
@@ -175,7 +175,7 @@ class StudentRepositoryTest extends TestCase
         $this->assertNull($studentAfterDelete);
     }
 
-    function testIfViewAllStudentsWork(): void
+    public function testIfViewAllStudentsWork(): void
     {
         $student = new Student(
             firstName: 'Micheal',

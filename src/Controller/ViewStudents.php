@@ -16,8 +16,7 @@ class ViewStudents
         private StudentRepository $studentRepository,
         private Template $template,
         private StudentFactory $studentFactory
-    )
-    {
+    ) {
 
     }
     public function __invoke(): void
