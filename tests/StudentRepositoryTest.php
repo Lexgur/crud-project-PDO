@@ -24,7 +24,7 @@ class StudentRepositoryTest extends TestCase
         ");
     }
 
-    function testIfSavesWhenIdIsNull(): void
+    function testIfSaveInsertsNewStudent(): void
     {
         $student = new Student (
             firstName: 'John',
@@ -39,7 +39,7 @@ class StudentRepositoryTest extends TestCase
         $this->assertEquals(43, $savedStudent->getAge());
     }
 
-    function testIfSaveUpdatesWorksOnAnExistingStudent(): void
+    function testIfSaveUpdatesTheStudent(): void
     {
         $student = new Student(
             firstName: 'Dave',
