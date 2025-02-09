@@ -1,4 +1,7 @@
 <html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
 <form method='post'>
     <div>
@@ -14,7 +17,7 @@
         <input type="number" id="age" name="age"><br><br>
     </div>
     <div>
-        <input type="submit" value="Create student">
+        <button class="add-btn" type="submit" value="Create student">CREATE</button>
     </div>
 </form>
 </body>

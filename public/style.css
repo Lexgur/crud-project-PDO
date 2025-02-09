@@ -2,6 +2,15 @@ body {
     font-family: 'DM Sans', sans-serif;
 }
 
+h1 {
+    font-family: 'DM Sans', sans-serif;
+    color: white;
+    background-color: #FFC857;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -18,12 +27,30 @@ th {
 
 button {
     padding: 5px 10px;
-    background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
 }
+.add-btn {
+    background-color: #2E4052;
+}
+.add-btn:hover {
+    background-color: #2E4052;
+}
+.dlt-btn {
+    background-color: #412234;
+}
+.dlt-btn:hover {
+    background-color: #200e1a;
+}
+.upd-btn {
+    background-color: #BDD9BF;
+}
+.upd-btn:hover {
+    background-color: #92d894;
+}
 
-button:hover {
-    background-color: #45a049;
+a {
+    text-decoration: none;
+    color: white;
 }

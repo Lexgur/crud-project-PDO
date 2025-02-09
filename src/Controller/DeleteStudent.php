@@ -26,7 +26,7 @@ class DeleteStudent
 
             if ($student) {
                 $this->studentRepository->delete($studentId);
-                echo "Student {$studentId} has been deleted! here is a link to create a new student: <a href='/index.php?action=create_student'>Create</a>'";
+                echo "Student {$studentId} has been deleted! here is a link to create a new student: <a class='add-btn' href='/index.php?action=create_student'>CREATE</a>'";
 
             } else {
                 return $this->template->render('delete_student_form.php', [

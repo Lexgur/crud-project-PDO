@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>View Students</title>
 </head>
 <body class="screen">
 <h1>Student List</h1>
-<button><a href="/index.php?action=create_student" target="_blank" rel="noopener">ADD</a></button>
+<button class="add-btn"><a href="/index.php?action=create_student" target="_blank" rel="noopener">ADD</a></button>
 <table border="1">
     <thead>
     <tr>
@@ -27,9 +28,9 @@
             <td><?=$student->getAge()?></td>
             <td><?=$student->getId()?></td>
             <td>
-                    <button><a href="/index.php?action=delete_student&id=<?=$student->getId()?>" target="_blank" rel="noopener">DELETE </a></button>
+                    <button class = "dlt-btn"><a href="/index.php?action=delete_student&id=<?=$student->getId()?>" target="_blank" rel="noopener">DELETE </a></button>
 
-                    <button><a href="/index.php?action=update_student&id=<?=$student->getId()?>" target="_blank" rel="noopener">UPDATE</a></button>
+                    <button class = "upd-btn"><a href="/index.php?action=update_student&id=<?=$student->getId()?>" target="_blank" rel="noopener">UPDATE</a></button>
             </td>
         </tr>
     <?php endforeach; ?>

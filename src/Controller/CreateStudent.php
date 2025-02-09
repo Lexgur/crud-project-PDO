@@ -31,7 +31,7 @@ class CreateStudent
 
             if ($this->studentValidator->validate($student)) {
                 $student = $this->studentRepository->save($student);
-                echo "Student {$student->getFirstName()} has been created! here is a link to update his profile: <a href='/index.php?action=update_student&id={$student->getId()}'>Update</a>'";
+                echo "Student {$student->getFirstName()} has been created! here is a link to update his profile: <a class='upd-btn' href='/index.php?action=update_student&id={$student->getId()}'>Update</a>'";
             } else {
                 return $this->template->render('create_student_form.php', [
                     'error' => "Studento {$student->getFirstName()} sukurti nepavyko..."]);

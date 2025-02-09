@@ -1,4 +1,7 @@
 <html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
 <form method='post'>
     <label>
@@ -10,7 +13,7 @@
     <label>
         <input type="number" name="age" value="updated age...">
     </label>
-    <button type="submit">Update Student</button>
+    <button class="upd-btn" type="submit">UPDATE</button>
 </form>
 </body>
 </html>
