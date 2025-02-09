@@ -4,36 +4,25 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Repository\StudentRepository;
-use Crud\Template;
-use Crud\Validation\StudentValidator;
-
-class DeleteStudent
+class DeleteStudent extends AbstractStudentController
 {
-    public function __construct(
-        protected StudentValidator $studentValidator,
-        private StudentRepository $studentRepository,
-        private Template $template,
-    ) {
-
-    }
 
     public function __invoke(): string
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->isPostRequest()) {
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
 
             if ($student) {
                 $this->studentRepository->delete($studentId);
-                echo "Student {$studentId} has been deleted! here is a link to create a new student: <a class='add-btn' href='/index.php?action=create_student'>CREATE</a>'";
+                echo "Student {$studentId} has been deleted! here is a link to create a new student: <button class='add-btn'><a href='/index.php?action=create_student'>CREATE</a></button>'";
 
             } else {
-                return $this->template->render('delete_student_form.php', [
+                return $this->render('delete_student_form.php', [
                     'error' => "Student not found, deletion failed"
                 ]);
             }
         }
-        return $this->template->render('delete_student_form.php');
+        return $this->render('delete_student_form.php');
     }
 }

@@ -4,23 +4,12 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Repository\StudentRepository;
-use Crud\Template;
-use Crud\Validation\StudentValidator;
-
-class ViewStudents
+class ViewStudents extends AbstractStudentController
 {
-    public function __construct(
-        protected StudentValidator $studentValidator,
-        private StudentRepository $studentRepository,
-        private Template $template,
-    ) {
-
-    }
     public function __invoke(): void
     {
         $students = $this->studentRepository->viewStudents();
 
-        echo $this->template->render('view_students.php', ['students' => $students]);
+        echo $this->render('view_students.php', ['students' => $students]);
     }
 }
