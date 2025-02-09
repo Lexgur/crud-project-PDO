@@ -34,22 +34,6 @@ abstract class AbstractStudentController
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
-
-    /**
-     * @throws NameOrLastnameContainsIncorrectCharactersException
-     * @throws AgeIsEmptyOrExceedsTheRangeException
-     */
-    protected function processStudent(Student $student, string $successMessage, string $errorTemplate): string
-    {
-        if ($this->studentValidator->validate($student)) {
-            $student = $this->studentRepository->save($student);
-            echo "{$successMessage} <link rel='stylesheet' href='style.css'> <button class='upd-btn'><a href='/index.php?action=update_student&id={$student->getId()}'>Update again</a></button>";
-            return '';
-        } else {
-            return $this->render($errorTemplate, ['error' => "{$student->getFirstName()} was not processed."]);
-        }
-    }
-
     /**
      * @throws TemplateNotFoundException
      * @throws IllegalTemplatePathException
