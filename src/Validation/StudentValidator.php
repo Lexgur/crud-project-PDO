@@ -21,7 +21,7 @@ class StudentValidator
         return true;
     }
 
-    public function validateName($firstName): void
+    public function validateName(string $firstName): void
     {
         if (empty($firstName)) {
             throw new NameOrLastnameContainsIncorrectCharactersException('Name or Last name is empty');

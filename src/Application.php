@@ -8,7 +8,6 @@ use Crud\Controller\CreateStudent;
 use Crud\Controller\DeleteStudent;
 use Crud\Controller\UpdateStudent;
 use Crud\Controller\ViewStudents;
-use Crud\Factory\StudentFactory;
 use Crud\Repository\StudentRepository;
 use Crud\Validation\StudentValidator;
 
@@ -39,8 +38,6 @@ class Application
         $studentValidator = new StudentValidator();
 
         $studentRepository = new StudentRepository($connection);
-
-        $studentFactory = new StudentFactory();
 
         //Controller
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
