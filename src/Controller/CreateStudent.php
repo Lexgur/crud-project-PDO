@@ -30,12 +30,11 @@ class CreateStudent
             $student = $this->studentFactory->create($data);
 
             if ($this->studentValidator->validate($student)) {
-                $this->studentRepository->save($student);
-                return $this->template->render('create_student_form.php', [
-                    'success' => "Sveikinu sukurus {$data['name']}!"]);
+                $student = $this->studentRepository->save($student);
+                echo "Student {$student->getFirstName()} has been created! here is a link to update his profile: <a href='/index.php?action=update_student&id={$student->getId()}'>Update</a>'";
             } else {
                 return $this->template->render('create_student_form.php', [
-                    'error' => "Studento {$data['name']} sukurti nepavyko..."]);
+                    'error' => "Studento {$student->getFirstName()} sukurti nepavyko..."]);
             }
         }
 

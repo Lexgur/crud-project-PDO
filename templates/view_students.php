@@ -7,7 +7,7 @@
 </head>
 <body class="screen">
 <h1>Student List</h1>
-<a href="index.php?action=create_student" target="_blank" rel="noopener"><button>ADD</button></a>
+<button><a href="/index.php?action=create_student" target="_blank" rel="noopener">ADD</a></button>
 <table border="1">
     <thead>
     <tr>
@@ -22,17 +22,14 @@
     <?php foreach ($students as $student): ?>
         <tr>
             <!-- Accessing object properties with getter methods -->
-            <td><?= htmlspecialchars($student->getFirstName()) ?></td>
-            <td><?= htmlspecialchars($student->getLastName()) ?></td>
-            <td><?= htmlspecialchars($student->getAge()) ?></td>
-            <td><?= htmlspecialchars($student->getId()) ?></td>
+            <td><?=$student->getFirstName()?></td>
+            <td><?=$student->getLastName()?></td>
+            <td><?=$student->getAge()?></td>
+            <td><?=$student->getId()?></td>
             <td>
-                <a href="index.php?action=delete_student&id=<?= htmlspecialchars($student->getId()) ?>" target="_blank" rel="noopener">
-                    <button>DELETE</button>
-                </a>
-                <a href="index.php?action=update_student&id=<?= htmlspecialchars($student->getId()) ?>" target="_blank" rel="noopener">
-                    <button>UPDATE</button>
-                </a>
+                    <button><a href="/index.php?action=delete_student&id=<?=$student->getId()?>" target="_blank" rel="noopener">DELETE </a></button>
+
+                    <button><a href="/index.php?action=update_student&id=<?=$student->getId()?>" target="_blank" rel="noopener">UPDATE</a></button>
             </td>
         </tr>
     <?php endforeach; ?>

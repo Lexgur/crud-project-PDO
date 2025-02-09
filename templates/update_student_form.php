@@ -1,7 +1,6 @@
 <html lang="en">
 <body>
 <form method='post'>
-    <input type="hidden" name="_method" value="PATCH">
     <label>
         <input type="text" name="name" value="Updated name...">
     </label>

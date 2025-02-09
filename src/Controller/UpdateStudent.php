@@ -23,7 +23,7 @@ class UpdateStudent
 
     public function __invoke(): string
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_method'] ?? '') === 'PATCH') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
@@ -33,10 +33,9 @@ class UpdateStudent
                 $student->setAge((int)$data['age']);
 
             if ($this->studentValidator->validate($student)) {
-                $this->studentRepository->update($student);
-                return $this->template->render('update_student_form.php', [
-                    'success' => "{$student->getFirstName()} updated successfully"
-                ]);
+                $student = $this->studentRepository->save($student);
+                echo "Student {$student->getFirstName()} has been updated! here is a link to update his profile again: <a href='/index.php?action=update_student&id={$student->getId()}'>Update</a>'
+or to delete it : <a href='/index.php?action=delete_student&id={$student->getId()}'>Delete</a>";
             } else {
                 return $this->template->render('update_student_form.php', [
                     'error' => "{$student->getFirstName()}was not updated"

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
+use Crud\Factory\StudentFactory;
 use Crud\Model\Student;
 use PDO;
 
@@ -51,12 +52,7 @@ class StudentRepository
         if (!$row) {
             return null;
         }
-        return new Student(
-            firstName: $row['firstname'] ?? '',
-            lastName: $row['lastname'] ?? '',
-            age: (int)$row['age'] ?? 0,
-            id: (int)$row['id'] ?? null
-        );
+        return StudentFactory::create($row);
     }
 
     public function update(Student $student): Student
@@ -72,11 +68,12 @@ class StudentRepository
         return $this->fetchById($student->getId());
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
         $statement->bindValue(':id', $id);
         $statement->execute();
+        return true;
     }
 
     public function viewStudents(): array
@@ -87,14 +84,8 @@ class StudentRepository
 
         $students = [];
         foreach ($rows as $row) {
-            $students[] = new Student(
-                firstName: $row['firstname'] ?? '',
-                lastName: $row['lastname'] ?? '',
-                age: (int) $row['age'] ?? 0,
-                id: (int) $row['id'] ?? null
-            );
+            $students[] = StudentFactory::create($row);
         }
         return $students;
     }
-
 }

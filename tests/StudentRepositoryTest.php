@@ -153,12 +153,12 @@ class StudentRepositoryTest extends TestCase
         $insertedStudent->setLastName('Make');
         $insertedStudent->setAge(28);
 
-        $this->repository->update($insertedStudent);
+        $updatedStudent = $this->repository->update($insertedStudent);
 
-        $this->assertEquals($insertedStudent->getId(), $insertedStudent->getId());
-        $this->assertEquals('Dave', $insertedStudent->getFirstName());
-        $this->assertEquals('Make', $insertedStudent->getLastName());
-        $this->assertEquals(28, $insertedStudent->getAge());
+        $this->assertEquals($insertedStudent->getId(), $updatedStudent->getId());
+        $this->assertEquals('Dave', $updatedStudent->getFirstName());
+        $this->assertEquals('Make', $updatedStudent->getLastName());
+        $this->assertEquals(28, $updatedStudent->getAge());
     }
 
     function testIfDeleteWorks(): void
@@ -166,12 +166,11 @@ class StudentRepositoryTest extends TestCase
         $student = new Student(
             firstName: 'Micheal',
             lastName: 'Hawktuah',
-            age: 19,
-            id: 1
+            age: 19
         );
-        $this->repository->insert($student);
-        $this->repository->delete(1);
-        $studentAfterDelete = $this->repository->fetchById(1);
+        $insertedStudent = $this->repository->insert($student);
+        $this->repository->delete($insertedStudent->getId());
+        $studentAfterDelete = $this->repository->fetchById($insertedStudent->getId());
 
         $this->assertNull($studentAfterDelete);
     }
@@ -183,33 +182,28 @@ class StudentRepositoryTest extends TestCase
             lastName: 'Hawktuah',
             age: 27,
         );
-        $this->repository->save($student);
+        $savedStudent1 = $this->repository->save($student);
         $student2 = new Student(
             firstName: 'Cave',
             lastName: 'Mave',
             age: 19,
         );
-        $this->repository->save($student2);
+        $savedStudent2 = $this->repository->save($student2);
         $result = $this->repository->viewStudents();
 
         $this->assertCount(2, $result);
 
-        $this->assertEquals('Micheal', $result[0]->getFirstName());
-        $this->assertEquals('Hawktuah', $result[0]->getLastName());
-        $this->assertEquals(27, $result[0]->getAge());
+        $this->assertEquals($savedStudent1->getFirstName(), $result[0]->getFirstName());
+        $this->assertEquals($savedStudent1->getLastName(), $result[0]->getLastName());
+        $this->assertEquals($savedStudent1->getAge(), $result[0]->getAge());
 
-        $this->assertEquals('Cave', $result[1]->getFirstName());
-        $this->assertEquals('Mave', $result[1]->getLastName());
-        $this->assertEquals(19, $result[1]->getAge());
+        $this->assertEquals($savedStudent2->getFirstName(), $result[1]->getFirstName());
+        $this->assertEquals($savedStudent2->getLastName(), $result[1]->getLastName());
+        $this->assertEquals($savedStudent2->getAge(), $result[1]->getAge());
     }
 
     public function tearDown(): void
     {
         $this->dbh->exec('DROP TABLE IF EXISTS students');
-        $this->dbh = null;
-
-        if (file_exists($this->testDbPath)) {
-            unlink($this->testDbPath);
-        }
     }
 }

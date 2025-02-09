@@ -26,7 +26,7 @@ class StudentValidator
         if (empty($firstName)) {
             throw new NameOrLastnameContainsIncorrectCharactersException('Name or Last name is empty');
         }
-        if (preg_match('/[0-9!@#$%^&*()_+=\[\]\{}|;:<>,.?\/\\\\]/', $firstName)) {
+        if (preg_match('/[^a-zA-Z\w+\-]/', $firstName)) {
             throw new NameOrLastnameContainsIncorrectCharactersException('Name or Last name contains incorrect characters');
         }
     }

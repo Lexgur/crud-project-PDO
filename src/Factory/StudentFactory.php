@@ -15,12 +15,12 @@ class StudentFactory
 
     public static function create(array $data): Student
     {
-
-        $age = $data['age'] !==null ? (int)$data['age'] : null;
-
+        if ($data['age'] !== null) {
+            $age = (int)$data['age'];
+        }
             return new Student(
-                firstName: $data['name'],
-                lastName: $data['lastname'],
+                firstName: $data['firstname'] ?? '',
+                lastName: $data['lastname'] ?? '',
                 age: $age,
                 id: $data['id'] ?? null);
         }

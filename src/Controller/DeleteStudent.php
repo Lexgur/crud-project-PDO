@@ -20,15 +20,14 @@ class DeleteStudent
 
     public function __invoke(): string
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['_method'] === 'DELETE') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $studentId = (int)($_GET['id']);
             $student = $this->studentRepository->fetchById($studentId);
 
             if ($student) {
                 $this->studentRepository->delete($studentId);
-                return $this->template->render('delete_student_form.php', [
-                    'success' => "{$student->getFirstName()} deleted successfully"
-                ]);
+                echo "Student {$studentId} has been deleted! here is a link to create a new student: <a href='/index.php?action=create_student'>Create</a>'";
+
             } else {
                 return $this->template->render('delete_student_form.php', [
                     'error' => "Student not found, deletion failed"
