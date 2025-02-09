@@ -45,7 +45,7 @@ class Application
         //Controller
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
         $controller = $this->actions[$request['action']];
-        $controller = new $controller($studentValidator, $studentRepository, $template, $studentFactory);
+        $controller = new $controller($studentValidator, $studentRepository, $template);
 
         print $controller();
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Factory\StudentFactory;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
@@ -15,7 +14,6 @@ class DeleteStudent
         protected StudentValidator $studentValidator,
         private StudentRepository $studentRepository,
         private Template $template,
-        private StudentFactory $studentFactory
     ) {
 
     }

@@ -15,7 +15,6 @@ class CreateStudent
         protected StudentValidator $studentValidator,
         private StudentRepository $studentRepository,
         private Template $template,
-        private StudentFactory $studentFactory
     ) {
 
     }
@@ -25,7 +24,7 @@ class CreateStudent
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
-            $student = $this->studentFactory->create($data);
+            $student = StudentFactory::create($data);
 
             if ($this->studentValidator->validate($student)) {
                 $student = $this->studentRepository->save($student);

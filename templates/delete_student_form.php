@@ -1,5 +1,6 @@
 <html lang="en">
 <head>
+    <title>Delete student</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>

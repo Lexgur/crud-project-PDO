@@ -1,5 +1,6 @@
 <html lang="en">
 <head>
+    <title>Update Student</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
