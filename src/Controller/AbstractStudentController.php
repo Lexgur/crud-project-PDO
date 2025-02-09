@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Exception\AgeIsEmptyOrExceedsTheRangeException;
 use Crud\Exception\IllegalTemplatePathException;
-use Crud\Exception\NameOrLastnameContainsIncorrectCharactersException;
 use Crud\Exception\TemplateNotFoundException;
-use Crud\Model\Student;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
