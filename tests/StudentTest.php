@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Crud\Model\Student;
 
 use PHPUnit\Framework\TestCase;
@@ -12,7 +14,7 @@ class StudentTest extends TestCase
         $firstName = "Dave";
         $lastName = "Bigjhonson";
         $age = 17;
-        $student = new Student($id, $firstName, $lastName, $age);
+        $student = new Student($firstName, $lastName, $age, $id);
 
         $this->assertEquals($id, $student->getId());
         $this->assertEquals($firstName, $student->getFirstName());

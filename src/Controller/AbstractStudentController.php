@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crud\Controller;
 
 use Crud\Exception\IllegalTemplatePathException;
+use Crud\Exception\InvalidRequestMethodException;
 use Crud\Exception\TemplateNotFoundException;
 use Crud\Repository\StudentRepository;
 use Crud\Template;
@@ -39,4 +40,8 @@ abstract class AbstractStudentController
     {
         return $this->template->render($template, $data);
     }
+
+    /**
+     * @throws InvalidRequestMethodException
+     */
 }
