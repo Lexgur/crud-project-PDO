@@ -1,5 +1,5 @@
 <?php
-//TODO User Factory, User Factory test, User validator, User validator test, User Repository, User repository Test, User CRUD controlleriai, User login, User register
+//TODO User Repository, User repository Test, User CRUD controlleriai, User login, User register
 declare(strict_types=1);
 
 use Crud\Model\User;
