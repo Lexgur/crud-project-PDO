@@ -7,9 +7,9 @@ namespace Crud\Model;
 class User
 {
     private ?int $userId = null;
-    private $userEmail;
-    private $userName;
-    private $userPassword;
+    private string $userEmail;
+    private string $userName;
+    private string $userPassword;
 
     public function __construct(string $userEmail, string $userName, string $userPassword, ?int $userId = null)
     {
