@@ -6,20 +6,17 @@ namespace Crud\Validation;
 
 use Crud\Exception\IncorrectEmailException;
 use Crud\Exception\IncorrectPasswordException;
-use Crud\Exception\IncorrectUserNameException;
 use Crud\Model\User;
 
 class UserValidator
 {
     /**
-     * @throws IncorrectUserNameException
      * @throws IncorrectPasswordException
      * @throws IncorrectEmailException
      */
     public function validate(User $user): bool
     {
         $this->validateEmail($user->getUserEmail());
-        $this->validateUserName($user->getUserName());
         $this->validatePassword($user->getUserPassword());
 
         return true;
@@ -32,16 +29,6 @@ class UserValidator
         }
         if (!filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
             throw new IncorrectEmailException('Invalid email format');
-        }
-    }
-
-    public function validateUserName(string $userName): void
-    {
-        if (empty($userName)) {
-            throw new IncorrectUserNameException('Username cannot be empty');
-        }
-        if (!preg_match("/^[a-zA-Z]+$/", $userName)) {
-            throw new IncorrectUserNameException('User name contains invalid characters');
         }
     }
 

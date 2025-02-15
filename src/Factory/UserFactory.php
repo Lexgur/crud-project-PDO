@@ -17,7 +17,6 @@ class UserFactory
     {
         return new User(
             userEmail: $data['email'] ?? '',
-            userName: $data['username'] ?? '',
             userPassword: $data['password'] ?? '',
             userId: $data['userid'] ?? null
         );
