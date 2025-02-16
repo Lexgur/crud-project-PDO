@@ -11,14 +11,12 @@ class UserFactoryTest extends TestCase
     {
         $user = new User(
             userEmail: "bigboss@gmail.com",
-            userName: "Kyle",
             userPassword: "incorrect",
             userId: 5
         );
 
         $this->assertNotNull($user->getUserId());
         $this->assertEquals('bigboss@gmail.com', $user->getUserEmail());
-        $this->assertEquals('Kyle', $user->getUserName());
         $this->assertEquals('incorrect', $user->getUserPassword());
         $this->assertEquals(5, $user->getUserId());
     }
@@ -29,7 +27,6 @@ class UserFactoryTest extends TestCase
 
         $user = new User(
             userEmail: 123,
-            userName: "Kyle",
             userPassword: 778,
             userId: 4
         );

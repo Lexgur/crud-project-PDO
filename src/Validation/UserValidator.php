@@ -40,10 +40,10 @@ class UserValidator
         if (!preg_match("/[0-9]/", $userPassword)) {
             throw new IncorrectPasswordException('Password must include at least one number');
         }
-        if (!preg_match("/[A-Z]/", $userPassword)) {
+        if (!preg_match("/\p{Lu}/u", $userPassword)) {
             throw new IncorrectPasswordException('Password must include at least one uppercase letter');
         }
-        if (!preg_match("/[a-z]/", $userPassword)) {
+        if (!preg_match("/\p{Ll}/u", $userPassword)) {
             throw new IncorrectPasswordException('Password must include at least one lowercase letter');
         }
     }
