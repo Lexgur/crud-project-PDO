@@ -18,7 +18,7 @@ class UserFactory
         return new User(
             userEmail: $data['email'] ?? '',
             userPassword: $data['password'] ?? '',
-            userId: $data['userid'] ?? null
+            userId: $data['user_id'] ?? null
         );
     }
 }
