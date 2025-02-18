@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Crud\Exception\IncorrectEmailException;
 use Crud\Model\User;
 use Crud\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,47 @@ class UserRepositoryTest extends TestCase
         $this->assertNotNull($insertedUser->getUserId());
         $this->assertEquals($user->getUserEmail(), $insertedUser->getUserEmail());
         $this->assertEquals($user->getUserPassword(), $insertedUser->getUserPassword());
+    }
+    public function testIfInsertingMultipleUsersWorkCorrectly(): void
+    {
+        $user1 = new User(
+            userEmail: 'test@test.com',
+            userPassword: 'tEst1799'
+        );
+        $insertedUser1 = $this->repository->insert($user1);
+        $user2 = new User(
+            userEmail: 'test2@test.com',
+            userPassword: 'Test1799'
+        );
+        $insertedUser2 = $this->repository->insert($user2);
+
+        $this->assertNotNull($insertedUser1->getUserId());
+        $this->assertEquals($insertedUser1->getUserEmail(), $user1->getUserEmail());
+        $this->assertEquals($insertedUser1->getUserPassword(), $user1->getUserPassword());
+
+        $this->assertNotNull($insertedUser2->getUserId());
+        $this->assertEquals($insertedUser2->getUserEmail(), $user2->getUserEmail());
+        $this->assertEquals($insertedUser2->getUserPassword(), $user2->getUserPassword());
+
+        $this->assertNotEquals($insertedUser1->getUserId(), $insertedUser2->getUserId());
+    }
+
+    public function testIfUpdateWorks():void
+    {
+        $user = new User(
+            userEmail: 'dave@gmail.com',
+            userPassword: '123Em778a'
+        );
+        $insertedUser = $this->repository->save($user);
+
+        $insertedUser->setUserEmail('davenowmarried@gmail.com');
+        $insertedUser->setUserPassword('newPassword123');
+
+        $updatedUser = $this->repository->save($insertedUser);
+
+        $this->assertNotNull($updatedUser->getUserId());
+        $this->assertEquals('davenowmarried@gmail.com', $updatedUser->getUserEmail());
+        $this->assertEquals('newPassword123', $updatedUser->getUserPassword());
     }
     public function tearDown(): void
     {

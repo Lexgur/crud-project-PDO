@@ -15,6 +15,15 @@ class UserRepository
     ) {
 
     }
+
+    public function save(User $user): User
+    {
+        if ($user->getUserId() === null){
+            return $this->insert($user);
+        } else {
+            return $this->update($user);
+        }
+    }
     public function insert(User $user): User
     {
         $statement = $this->connection->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
@@ -39,5 +48,17 @@ class UserRepository
             return null;
         }
         return UserFactory::create($row);
+    }
+
+    public function update(User $user): User
+    {
+        $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE user_id = :user_id');
+        $statement->bindValue(':email', $user->getUserEmail());
+        $statement->bindValue(':password', $user->getUserPassword());
+        $statement->bindValue(':user_id', $user->getUserId());
+
+        $statement->execute();
+
+        return $this->fetchById($user->getUserId());
     }
 }

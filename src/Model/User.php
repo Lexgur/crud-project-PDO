@@ -22,9 +22,19 @@ class User
         return $this->userEmail;
     }
 
+    public function setUserEmail(string $userEmail): void
+    {
+        $this->userEmail = $userEmail;
+    }
+
     public function getUserPassword(): string
     {
         return $this->userPassword;
+    }
+
+    public function setUserPassword(string $userPassword): void
+    {
+        $this->userPassword = $userPassword;
     }
 
     public function getUserId(): ?int
