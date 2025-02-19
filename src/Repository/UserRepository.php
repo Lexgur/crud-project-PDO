@@ -61,4 +61,13 @@ class UserRepository
 
         return $this->fetchById($user->getUserId());
     }
+
+    public function delete(int $userId): bool
+    {
+        $statement = $this->connection->prepare('DELETE FROM users WHERE user_id = :user_id');
+        $statement->bindValue(':user_id', $userId);
+        $statement->execute();
+
+        return true;
+    }
 }
