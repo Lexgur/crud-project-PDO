@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Crud\Exception\IncorrectEmailException;
 use Crud\Model\User;
 use Crud\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +21,7 @@ class UserRepositoryTest extends TestCase
     )
 ");
     }
+
     public function testIfFetchesById(): void
     {
         $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
@@ -31,6 +31,7 @@ class UserRepositoryTest extends TestCase
 
         $this->assertEquals($userId, $user->getUserId());
     }
+
     public function testIfInsertsNewUserWorks(): void
     {
         $user = new User(
@@ -43,6 +44,7 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($user->getUserEmail(), $insertedUser->getUserEmail());
         $this->assertEquals($user->getUserPassword(), $insertedUser->getUserPassword());
     }
+
     public function testIfInsertingMultipleUsersWorkCorrectly(): void
     {
         $user1 = new User(
@@ -67,7 +69,7 @@ class UserRepositoryTest extends TestCase
         $this->assertNotEquals($insertedUser1->getUserId(), $insertedUser2->getUserId());
     }
 
-    public function testIfUpdateWorks():void
+    public function testIfUpdateWorks(): void
     {
         $user = new User(
             userEmail: 'dave@gmail.com',
@@ -84,6 +86,20 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals('davenowmarried@gmail.com', $updatedUser->getUserEmail());
         $this->assertEquals('newPassword123', $updatedUser->getUserPassword());
     }
+
+    public function testIfDeleteWorks(): void
+    {
+        $user = new User(
+            userEmail: 'dave@gmail.com',
+            userPassword: '123Em778a'
+        );
+        $insertedUser = $this->repository->save($user);
+        $this->repository->delete($insertedUser->getUserId());
+        $userAfterDelete = $this->repository->fetchById($insertedUser->getUserId());
+
+        $this->assertNull($userAfterDelete);
+    }
+
     public function tearDown(): void
     {
         $this->dbh->exec('DROP TABLE IF EXISTS users');
