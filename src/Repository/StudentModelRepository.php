@@ -39,10 +39,10 @@ class StudentModelRepository implements ModelRepositoryInterface
 
     }
 
-    public function fetchById(int $id): ?object
+    public function fetchById(int $entityId): ?object
     {
         $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
-        $statement->execute([':id' => $id]);
+        $statement->execute([':id' => $entityId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -64,10 +64,10 @@ class StudentModelRepository implements ModelRepositoryInterface
         return $this->fetchById($entity->getId());
     }
 
-    public function delete(int $id): bool
+    public function delete(int $entityId): bool
     {
         $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
-        $statement->bindValue(':id', $id);
+        $statement->bindValue(':id', $entityId);
         $statement->execute();
         return true;
     }

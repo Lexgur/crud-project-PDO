@@ -14,6 +14,6 @@ interface ModelRepositoryInterface
 
     public function update(object $entity): object;
 
-    public function delete(int $id): bool;
+    public function delete(int $entityId): bool;
 
 }

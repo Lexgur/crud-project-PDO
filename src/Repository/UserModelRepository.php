@@ -17,7 +17,7 @@ class UserModelRepository implements ModelRepositoryInterface
 
     public function save(object $entity): object
     {
-        if ($entity->getUserId() === null){
+        if ($entity->getUserId() === null) {
             return $this->insert($entity);
         } else {
             return $this->update($entity);
@@ -37,10 +37,10 @@ class UserModelRepository implements ModelRepositoryInterface
 
     }
 
-    public function fetchById(int $id): ?object
+    public function fetchById(int $entityId): ?object
     {
         $statement = $this->connection->prepare('SELECT * FROM users WHERE user_id = :user_id');
-        $statement->execute(['user_id' => $id]);
+        $statement->execute(['user_id' => $entityId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -61,10 +61,10 @@ class UserModelRepository implements ModelRepositoryInterface
         return $this->fetchById($entity->getUserId());
     }
 
-    public function delete(int $id): bool
+    public function delete(int $entityId): bool
     {
         $statement = $this->connection->prepare('DELETE FROM users WHERE user_id = :user_id');
-        $statement->bindValue(':user_id', $id);
+        $statement->bindValue(':user_id', $entityId);
         $statement->execute();
 
         return true;
