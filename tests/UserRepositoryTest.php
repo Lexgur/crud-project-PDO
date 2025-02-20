@@ -22,6 +22,19 @@ class UserRepositoryTest extends TestCase
 ");
     }
 
+    public function testIfInsertingNewSavesUser(): void
+    {
+        $user = new User(
+            userEmail: 'dave@gmail.com',
+            userPassword: '123Em778a'
+        );
+        $insertedUser = $this->repository->insert($user);
+
+        $this->assertNotNull($insertedUser->getUserId());
+        $this->assertEquals($user->getUserEmail(), $insertedUser->getUserEmail());
+        $this->assertEquals($user->getUserPassword(), $insertedUser->getUserPassword());
+    }
+
     public function testIfFetchesById(): void
     {
         $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
@@ -30,6 +43,16 @@ class UserRepositoryTest extends TestCase
         $user = $this->repository->fetchById($userId);
 
         $this->assertEquals($userId, $user->getUserId());
+    }
+
+    public function testIfFailsToFetchWithIncorrectTypeId(): void
+    {
+        $this->expectException(PDOException::class);
+
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password, user_id) VALUES ('test@test.com', 'tesT12345', 'fail')");
+        $statement->execute();
+        $userId= (int)$this->dbh->lastInsertId();
+        $this->repository->fetchById($userId);
     }
 
     public function testIfInsertsNewUserWorks(): void
