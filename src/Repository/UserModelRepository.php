@@ -7,14 +7,8 @@ namespace Crud\Repository;
 use Crud\Factory\UserFactory;
 use PDO;
 
-class UserModelRepository implements ModelRepositoryInterface
+class UserModelRepository extends BaseRepositoryClass implements ModelRepositoryInterface
 {
-    public function __construct(
-        protected PDO $connection
-    ) {
-
-    }
-
     public function save(object $entity): object
     {
         if ($entity->getUserId() === null) {
