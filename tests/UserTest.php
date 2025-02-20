@@ -1,5 +1,5 @@
 <?php
-//TODO User CRUD controlleriai, User login, User register
+
 declare(strict_types=1);
 
 use Crud\Model\User;
