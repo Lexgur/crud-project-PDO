@@ -7,20 +7,20 @@ namespace Crud\Controller;
 use Crud\Exception\IllegalTemplatePathException;
 use Crud\Exception\InvalidRequestMethodException;
 use Crud\Exception\TemplateNotFoundException;
-use Crud\Repository\StudentRepository;
+use Crud\Repository\StudentModelRepository;
 use Crud\Template;
 use Crud\Validation\StudentValidator;
 
 abstract class AbstractStudentController
 {
     protected StudentValidator $studentValidator;
-    protected StudentRepository $studentRepository;
+    protected StudentModelRepository $studentRepository;
     protected Template $template;
 
     public function __construct(
-        StudentValidator  $studentValidator,
-        StudentRepository $studentRepository,
-        Template          $template,
+        StudentValidator       $studentValidator,
+        StudentModelRepository $studentRepository,
+        Template               $template,
     ) {
         $this->studentValidator = $studentValidator;
         $this->studentRepository = $studentRepository;

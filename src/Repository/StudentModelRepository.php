@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Crud\Repository;
 
 use Crud\Factory\StudentFactory;
-use Crud\Model\Student;
 use PDO;
 
-class StudentRepository
+class StudentModelRepository implements ModelRepositoryInterface
 {
     public function __construct(
         protected PDO $connection
@@ -16,21 +15,21 @@ class StudentRepository
 
     }
 
-    public function save(Student $student): Student
+    public function save(object $entity): object
     {
-        if ($student->getId() === null) {
-            return $this->insert($student);
+        if ($entity->getUserId() === null){
+            return $this->insert($entity);
         } else {
-            return $this->update($student);
+            return $this->update($entity);
         }
     }
 
-    public function insert(Student $student): Student
+    public function insert(object $entity): object
     {
         $statement = $this->connection->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
-        $statement->bindValue(':firstname', $student->getFirstName());
-        $statement->bindValue(':lastname', $student->getLastName());
-        $statement->bindValue(':age', $student->getAge());
+        $statement->bindValue(':firstname', $entity->getFirstName());
+        $statement->bindValue(':lastname', $entity->getLastName());
+        $statement->bindValue(':age', $entity->getAge());
 
         $statement->execute();
 
@@ -40,10 +39,10 @@ class StudentRepository
 
     }
 
-    public function fetchById(int $studentId): ?Student
+    public function fetchById(int $id): ?object
     {
         $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
-        $statement->execute([':id' => $studentId]);
+        $statement->execute([':id' => $id]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -52,23 +51,23 @@ class StudentRepository
         return StudentFactory::create($row);
     }
 
-    public function update(Student $student): Student
+    public function update(object $entity): object
     {
         $statement = $this->connection->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
-        $statement->bindValue(':firstname', $student->getFirstName());
-        $statement->bindValue(':lastname', $student->getLastName());
-        $statement->bindValue(':age', $student->getAge());
-        $statement->bindValue(':id', $student->getId());
+        $statement->bindValue(':firstname', $entity->getFirstName());
+        $statement->bindValue(':lastname', $entity->getLastName());
+        $statement->bindValue(':age', $entity->getAge());
+        $statement->bindValue(':id', $entity->getId());
 
         $statement->execute();
 
-        return $this->fetchById($student->getId());
+        return $this->fetchById($entity->getId());
     }
 
-    public function delete(int $studentId): bool
+    public function delete(int $id): bool
     {
         $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
-        $statement->bindValue(':id', $studentId);
+        $statement->bindValue(':id', $id);
         $statement->execute();
         return true;
     }

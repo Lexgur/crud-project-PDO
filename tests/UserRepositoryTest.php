@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Crud\Model\User;
-use Crud\Repository\UserRepository;
+use Crud\Repository\UserModelRepository;
 use PHPUnit\Framework\TestCase;
 
 class UserRepositoryTest extends TestCase
@@ -12,7 +12,7 @@ class UserRepositoryTest extends TestCase
     {
         $this->testDbPath = __DIR__ . '/crud-test.sqlite';
         $this->dbh = new PDO('sqlite:' . $this->testDbPath);
-        $this->repository = new UserRepository($this->dbh);
+        $this->repository = new UserModelRepository($this->dbh);
         $this->dbh->exec("
         CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,

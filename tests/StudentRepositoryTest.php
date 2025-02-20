@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Crud\Model\Student;
-use Crud\Repository\StudentRepository;
+use Crud\Repository\StudentModelRepository;
 use PHPUnit\Framework\TestCase;
 
 class StudentRepositoryTest extends TestCase
@@ -12,7 +12,7 @@ class StudentRepositoryTest extends TestCase
     {
         $this->testDbPath = __DIR__ . '/crud-test.sqlite';
         $this->dbh = new PDO('sqlite:' . $this->testDbPath);
-        $this->repository = new StudentRepository($this->dbh);
+        $this->repository = new StudentModelRepository($this->dbh);
         $this->dbh->exec("
             CREATE TABLE students (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

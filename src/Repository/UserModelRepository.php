@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Crud\Repository;
 
 use Crud\Factory\UserFactory;
-use Crud\Model\User;
 use PDO;
 
-class UserRepository
+class UserModelRepository implements ModelRepositoryInterface
 {
     public function __construct(
         protected PDO $connection
@@ -16,19 +15,19 @@ class UserRepository
 
     }
 
-    public function save(User $user): User
+    public function save(object $entity): object
     {
-        if ($user->getUserId() === null){
-            return $this->insert($user);
+        if ($entity->getUserId() === null){
+            return $this->insert($entity);
         } else {
-            return $this->update($user);
+            return $this->update($entity);
         }
     }
-    public function insert(User $user): User
+    public function insert(object $entity): object
     {
         $statement = $this->connection->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
-        $statement->bindValue(':email', $user->getUserEmail());
-        $statement->bindValue(':password', $user->getUserPassword());
+        $statement->bindValue(':email', $entity->getUserEmail());
+        $statement->bindValue(':password', $entity->getUserPassword());
 
         $statement->execute();
 
@@ -38,10 +37,10 @@ class UserRepository
 
     }
 
-    public function fetchById(int $userId): ?User
+    public function fetchById(int $id): ?object
     {
         $statement = $this->connection->prepare('SELECT * FROM users WHERE user_id = :user_id');
-        $statement->execute(['user_id' => $userId]);
+        $statement->execute(['user_id' => $id]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -50,22 +49,22 @@ class UserRepository
         return UserFactory::create($row);
     }
 
-    public function update(User $user): User
+    public function update(object $entity): object
     {
         $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE user_id = :user_id');
-        $statement->bindValue(':email', $user->getUserEmail());
-        $statement->bindValue(':password', $user->getUserPassword());
-        $statement->bindValue(':user_id', $user->getUserId());
+        $statement->bindValue(':email', $entity->getUserEmail());
+        $statement->bindValue(':password', $entity->getUserPassword());
+        $statement->bindValue(':user_id', $entity->getUserId());
 
         $statement->execute();
 
-        return $this->fetchById($user->getUserId());
+        return $this->fetchById($entity->getUserId());
     }
 
-    public function delete(int $userId): bool
+    public function delete(int $id): bool
     {
         $statement = $this->connection->prepare('DELETE FROM users WHERE user_id = :user_id');
-        $statement->bindValue(':user_id', $userId);
+        $statement->bindValue(':user_id', $id);
         $statement->execute();
 
         return true;

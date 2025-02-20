@@ -8,7 +8,7 @@ use Crud\Controller\CreateStudent;
 use Crud\Controller\DeleteStudent;
 use Crud\Controller\UpdateStudent;
 use Crud\Controller\ViewStudents;
-use Crud\Repository\StudentRepository;
+use Crud\Repository\StudentModelRepository;
 use Crud\Validation\StudentValidator;
 
 class Application
@@ -37,7 +37,7 @@ class Application
 
         $studentValidator = new StudentValidator();
 
-        $studentRepository = new StudentRepository($connection);
+        $studentRepository = new StudentModelRepository($connection);
 
         //Controller
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
