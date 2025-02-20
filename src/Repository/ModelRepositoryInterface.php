@@ -10,7 +10,7 @@ interface ModelRepositoryInterface
 
     public function insert(object $entity): object;
 
-    public function fetchById(int $id): ?object;
+    public function fetchById(int $entityId): ?object;
 
     public function update(object $entity): object;
 

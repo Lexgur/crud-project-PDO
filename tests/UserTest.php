@@ -27,6 +27,6 @@ class UserTest extends TestCase
         $userId = '11';
         $userEmail = "";
         $userPassword = 12;
-        $user = new User($userEmail,$userPassword, $userId);
+        $user = new User($userEmail, $userPassword, $userId);
     }
 }
