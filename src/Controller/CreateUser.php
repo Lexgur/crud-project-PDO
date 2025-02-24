@@ -15,15 +15,14 @@ class CreateUser extends AbstractUserController
             $user  = UserFactory::create($data);
 
             if ($this->userValidator->validate($user)) {
-                $student = $this->userRepository->save($user);
+                $user = $this->userRepository->save($user);
                 echo "Your user {$user->getUserEmail()} has been created! here is a link to update your profile: <a class='upd-btn' href='/index.php?action=update_student&id={$user->getUserId()}'>Update</a>'";
             } else {
-                return $this->render('create_student_form.php', [
-                    'error' => "Studento {$user->getUserEmail()} sukurti nepavyko..."]);
+                return $this->render('create_user_form.php', [
+                    'error' => "Vartotojo {$user->getUserEmail()} sukurti nepavyko..."]);
             }
         }
-
-        return $this->render('create_student_form.php', [
+        return $this->render('create_user_form.php', [
         ]);
     }
 
