@@ -13,6 +13,7 @@ use Crud\Repository\StudentModelRepository;
 use Crud\Repository\UserModelRepository;
 use Crud\Validation\StudentValidator;
 use Crud\Validation\UserValidator;
+use Exception;
 
 class Application
 {
@@ -30,29 +31,42 @@ class Application
         $configPath = __DIR__ . '/../config.php';
         include $configPath;
 
-        //Dependencies
+        // Database configuration
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
-
         $database = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
         $connection = $database->connect();
 
         $template = new Template($config['templates']);
 
         $studentValidator = new StudentValidator();
-
-        $studentRepository = new StudentModelRepository($connection);
-
         $userValidator = new UserValidator();
 
+        // Repositories
+        $studentRepository = new StudentModelRepository($connection);
         $userRepository = new UserModelRepository($connection);
 
-        //Controller
+        // Get action
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
-        $controller = $this->actions[$request['action']];
-        $controller = new $controller($studentValidator, $studentRepository, $template);
+        $action = $request['action'] ?? null;
+
+        $controllerClass = $this->actions[$action];
+
+        // Switch naudojamas tam kad pakeistu controlleri priklausomai nuo actiono
+        switch ($controllerClass) {
+            case CreateStudent::class:
+            case UpdateStudent::class:
+            case DeleteStudent::class:
+            case ViewStudents::class:
+                $controller = new $controllerClass($studentValidator, $studentRepository, $template);
+                break;
+            case CreateUser::class:
+                $controller = new $controllerClass($userValidator, $userRepository, $template);
+                break;
+            default:
+                throw new Exception("Controller not found for action: " . htmlspecialchars($action));
+        }
 
         print $controller();
-
     }
 }
