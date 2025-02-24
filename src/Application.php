@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Crud;
 
 use Crud\Controller\CreateStudent;
+use Crud\Controller\CreateUser;
 use Crud\Controller\DeleteStudent;
 use Crud\Controller\UpdateStudent;
 use Crud\Controller\ViewStudents;
 use Crud\Repository\StudentModelRepository;
+use Crud\Repository\UserModelRepository;
 use Crud\Validation\StudentValidator;
+use Crud\Validation\UserValidator;
 
 class Application
 {
@@ -17,7 +20,8 @@ class Application
         'create_student' => CreateStudent::class,
         'update_student' => UpdateStudent::class,
         'delete_student' => DeleteStudent::class,
-        'view_students' => ViewStudents::class
+        'view_students' => ViewStudents::class,
+        'create_user' => CreateUser::class
     ];
 
     public function run(): void
@@ -38,6 +42,10 @@ class Application
         $studentValidator = new StudentValidator();
 
         $studentRepository = new StudentModelRepository($connection);
+
+        $userValidator = new UserValidator();
+
+        $userRepository = new UserModelRepository($connection);
 
         //Controller
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);

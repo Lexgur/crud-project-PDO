@@ -14,7 +14,7 @@
         <input type="password" id="user_password" name="password" minlength="8" required><br><br>
     </div>
       <div>
-        <button class="add-btn" type="submit" value="Sign in">REGISTER</button>
+        <button class="add-btn" type="submit" value="Create user">REGISTER</button>
     </div>
 </form>
 </body>
