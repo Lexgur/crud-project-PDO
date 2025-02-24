@@ -11,7 +11,7 @@ class StudentModelRepository extends BaseRepositoryClass implements ModelReposit
 {
     public function save(object $entity): object
     {
-        if ($entity->getUserId() === null){
+        if ($entity->getId() === null){
             return $this->insert($entity);
         } else {
             return $this->update($entity);

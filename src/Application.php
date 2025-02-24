@@ -8,6 +8,7 @@ use Crud\Controller\CreateStudent;
 use Crud\Controller\CreateUser;
 use Crud\Controller\DeleteStudent;
 use Crud\Controller\UpdateStudent;
+use Crud\Controller\UpdateUser;
 use Crud\Controller\ViewStudents;
 use Crud\Repository\StudentModelRepository;
 use Crud\Repository\UserModelRepository;
@@ -22,7 +23,8 @@ class Application
         'update_student' => UpdateStudent::class,
         'delete_student' => DeleteStudent::class,
         'view_students' => ViewStudents::class,
-        'create_user' => CreateUser::class
+        'create_user' => CreateUser::class,
+        'update_user' => UpdateUser::class
     ];
 
     public function run(): void
@@ -39,6 +41,7 @@ class Application
 
         $template = new Template($config['templates']);
 
+        // Validators
         $studentValidator = new StudentValidator();
         $userValidator = new UserValidator();
 
@@ -55,7 +58,7 @@ class Application
         // Switch naudojamas tam kad pakeistu controlleri priklausomai nuo actiono
         $controller = match ($controllerClass) {
             CreateStudent::class, UpdateStudent::class, DeleteStudent::class, ViewStudents::class => new $controllerClass($studentValidator, $studentRepository, $template),
-            CreateUser::class => new $controllerClass($userValidator, $userRepository, $template),
+            CreateUser::class, UpdateUser::class => new $controllerClass($userValidator, $userRepository, $template),
             default => throw new Exception("Controller not found for action: " . htmlspecialchars($action)),
         };
 

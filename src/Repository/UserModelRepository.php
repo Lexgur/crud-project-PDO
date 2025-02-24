@@ -33,8 +33,8 @@ class UserModelRepository extends BaseRepositoryClass implements ModelRepository
 
     public function fetchById(int $entityId): ?object
     {
-        $statement = $this->connection->prepare('SELECT * FROM users WHERE user_id = :user_id');
-        $statement->execute(['user_id' => $entityId]);
+        $statement = $this->connection->prepare('SELECT * FROM users WHERE id = :id');
+        $statement->execute([':id' => $entityId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -45,10 +45,10 @@ class UserModelRepository extends BaseRepositoryClass implements ModelRepository
 
     public function update(object $entity): object
     {
-        $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE user_id = :user_id');
+        $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE id = :id');
         $statement->bindValue(':email', $entity->getUserEmail());
         $statement->bindValue(':password', $entity->getUserPassword());
-        $statement->bindValue(':user_id', $entity->getUserId());
+        $statement->bindValue(':id', $entity->getUserId());
 
         $statement->execute();
 
@@ -57,8 +57,8 @@ class UserModelRepository extends BaseRepositoryClass implements ModelRepository
 
     public function delete(int $entityId): bool
     {
-        $statement = $this->connection->prepare('DELETE FROM users WHERE user_id = :user_id');
-        $statement->bindValue(':user_id', $entityId);
+        $statement = $this->connection->prepare('DELETE FROM users WHERE id = :id');
+        $statement->bindValue(':id', $entityId);
         $statement->execute();
 
         return true;

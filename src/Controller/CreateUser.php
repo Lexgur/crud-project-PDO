@@ -16,7 +16,7 @@ class CreateUser extends AbstractUserController
 
             if ($this->userValidator->validate($user)) {
                 $user = $this->userRepository->save($user);
-                echo "Your user {$user->getUserEmail()} has been created! here is a link to update your profile: <a class='upd-btn' href='/index.php?action=update_student&id={$user->getUserId()}'>Update</a>'";
+                echo "Your user {$user->getUserEmail()} has been created! here is a link to update your profile: <a class='upd-btn' href='/index.php?action=update_user&id={$user->getUserId()}'>Update</a>'";
             } else {
                 return $this->render('create_user_form.php', [
                     'error' => "Vartotojo {$user->getUserEmail()} sukurti nepavyko..."]);

@@ -20,8 +20,7 @@ abstract class AbstractUserController
         UserValidator $userValidator,
         UserModelRepository $userRepository,
         Template $template,
-    )
-    {
+    ) {
         $this->userValidator = $userValidator;
         $this->userRepository = $userRepository;
         $this->template = $template;
