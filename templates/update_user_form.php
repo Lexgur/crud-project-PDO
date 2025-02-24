@@ -9,7 +9,7 @@
         <input type="text" name="email" value="Enter new or old email">
     </label>
     <label>
-        <input type="password" name="password" value="Enter new password here">
+        <input type="password" name="password" value="">
     </label>
     <button class="upd-btn" type="submit">UPDATE</button>
 </form>
