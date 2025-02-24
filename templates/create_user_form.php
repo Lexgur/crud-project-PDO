@@ -10,7 +10,7 @@
         <input type="text" id="user_email" name="email"><br><br>
     </div>
     <div>
-        <label for="user_password">Last name:</label>
+        <label for="user_password">Password:</label>
         <input type="password" id="user_password" name="password" minlength="8" required><br><br>
     </div>
       <div>
