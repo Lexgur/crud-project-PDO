@@ -8,9 +8,10 @@ use PDO;
 
 class BaseRepositoryClass
 {
-    public function __construct(
-        protected PDO $connection
-    ) {
+    protected PDO $connection;
 
+    public function __construct(PDO $pdo)
+    {
+        $this->connection = $pdo;
     }
 }

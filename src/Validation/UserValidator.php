@@ -7,9 +7,15 @@ namespace Crud\Validation;
 use Crud\Exception\IncorrectEmailException;
 use Crud\Exception\IncorrectPasswordException;
 use Crud\Model\User;
+use Crud\Repository\BaseRepositoryClass;
+use PDO;
 
-class UserValidator
+class UserValidator extends BaseRepositoryClass
 {
+    public function __construct(PDO $pdo)
+    {
+        parent::__construct($pdo);
+    }
     /**
      * @throws IncorrectPasswordException
      * @throws IncorrectEmailException
@@ -29,6 +35,14 @@ class UserValidator
         }
         if (!filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
             throw new IncorrectEmailException('Invalid email format');
+        }
+
+        $statement = $this->connection->prepare('SELECT * FROM users WHERE email = :email');
+        $statement->execute([':email' => $userEmail]);
+        $emailExists = (bool) $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($emailExists) {
+            throw new IncorrectEmailException('Email is already in use');
         }
     }
 

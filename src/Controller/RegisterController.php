@@ -1,12 +1,12 @@
 <?php
-//TODO User login, User register
+
 declare(strict_types=1);
 
 namespace Crud\Controller;
 
 use Crud\Factory\UserFactory;
 
-class CreateUser extends AbstractUserController
+class RegisterController extends AbstractUserController
 {
     public function __invoke(): string
     {
