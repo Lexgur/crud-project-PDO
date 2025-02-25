@@ -49,7 +49,7 @@ class Application
 
         // Validators
         $studentValidator = new StudentValidator();
-        $userValidator = new UserValidator();
+        $userValidator = new UserValidator($connection);
 
         // Repositories
         $studentRepository = new StudentModelRepository($connection);
