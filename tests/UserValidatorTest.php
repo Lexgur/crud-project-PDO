@@ -7,26 +7,29 @@ use Crud\Exception\IncorrectPasswordException;
 use Crud\Validation\UserValidator;
 use PHPUnit\Framework\TestCase;
 use Crud\Model\User;
+use Crud\Repository\UserModelRepository;
 
 class UserValidatorTest extends TestCase
 {
-    private PDO $pdo;
+    private PDO $dbh;
     private UserValidator $validator;
+    private UserModelRepository $repository;
 
     protected function setUp(): void
     {
-        $this->pdo = new PDO('sqlite::memory:');
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->testDbPath = __DIR__ . '/crud-test.sqlite';
+        $this->dbh = new PDO('sqlite:' . $this->testDbPath);
+        $this->repository = new UserModelRepository($this->dbh);
+        $this->dbh->exec("
+        CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL,
+        password TEXT NOT NULL
+    )
+");
 
-        $this->pdo->exec("
-            CREATE TABLE users (
-                id INTEGER PRIMARY KEY,
-                email TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL
-            )
-        ");
-
-        $this->validator = new UserValidator($this->pdo);
+        // Pass the repository to the UserValidator constructor
+        $this->validator = new UserValidator($this->repository);
     }
 
     public function testIfGivenValuesValidateCorrectly(): void
@@ -57,6 +60,7 @@ class UserValidatorTest extends TestCase
         $user = new User($userEmail, $password);
         $this->validator->validate($user);
     }
+
     public function testIfDuplicateEmailsAreNotAllowed(): void
     {
         $this->expectException(IncorrectEmailException::class);
@@ -65,7 +69,7 @@ class UserValidatorTest extends TestCase
         $password = 'daviD789A';
         $user = new User($userEmail, $password);
 
-        $statement = $this->pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
         $statement->execute([':email' => $userEmail, ':password' => $password]);
 
         $this->assertTrue($this->validator->validate($user));
@@ -76,6 +80,7 @@ class UserValidatorTest extends TestCase
 
         $this->validator->validate($user2);
     }
+
     public function testIfFailsWithShortPassword(): void
     {
         $this->expectException(IncorrectPasswordException::class);
@@ -115,8 +120,9 @@ class UserValidatorTest extends TestCase
         $user = new User($userEmail, $password);
         $this->validator->validate($user);
     }
+
     public function tearDown(): void
     {
-        $this->pdo->exec('DROP TABLE IF EXISTS users');
+        $this->dbh->exec('DROP TABLE IF EXISTS users');
     }
 }

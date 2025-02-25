@@ -15,7 +15,7 @@ class UserRepositoryTest extends TestCase
         $this->repository = new UserModelRepository($this->dbh);
         $this->dbh->exec("
         CREATE TABLE IF NOT EXISTS users (
-        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT NOT NULL,
         password TEXT NOT NULL
     )
@@ -44,12 +44,24 @@ class UserRepositoryTest extends TestCase
 
         $this->assertEquals($userId, $user->getUserId());
     }
+    public function testIfFindByEmail(): void
+    {
+        $user = new User(
+            userEmail: 'dave@gmail.com',
+            userPassword: '123Em778a'
+        );
+        $insertedUser = $this->repository->insert($user);
+        $userEmail = $insertedUser->getUserEmail();
+        $fetchedUser = $this->repository->findByEmail($userEmail);
+
+        $this->assertEquals($fetchedUser->getUserEmail(), $userEmail);
+    }
 
     public function testIfFailsToFetchWithIncorrectTypeId(): void
     {
         $this->expectException(PDOException::class);
 
-        $statement = $this->dbh->prepare("INSERT INTO users (email, password, user_id) VALUES ('test@test.com', 'tesT12345', 'fail')");
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
         $statement->execute();
         $userId= (int)$this->dbh->lastInsertId();
         $this->repository->fetchById($userId);

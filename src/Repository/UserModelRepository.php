@@ -43,6 +43,18 @@ class UserModelRepository extends BaseRepositoryClass implements ModelRepository
         return UserFactory::create($row);
     }
 
+    public function findByEmail(string $userEmail): ?object
+    {
+        $statement = $this->connection->prepare('SELECT * FROM users WHERE email = :email');
+        $statement->execute([':email' => $userEmail]);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            return null;
+        }
+        return UserFactory::create($row);
+    }
+
     public function update(object $entity): object
     {
         $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE id = :id');
