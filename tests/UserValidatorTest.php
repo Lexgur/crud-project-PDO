@@ -81,6 +81,26 @@ class UserValidatorTest extends TestCase
         $this->validator->validate($user2);
     }
 
+    public function testIfOneCanValidateWithSameIdAndEmail(): void
+    {
+        $userEmail = 'david.jones@gmail.com';
+        $password = 'daviD789A';
+        $userId = 1;
+        $user = new User($userEmail, $password, $userId);
+
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $statement->execute([':email' => $userEmail, ':password' => $password]);
+
+        $this->assertTrue($this->validator->validate($user));
+
+        $userEmail2 = 'david.jones@gmail.com';
+        $password2 = 'daviD789A';
+        $userId2 = 1;
+        $user2 = new User($userEmail2, $password2, $userId2);
+
+        $this->validator->validate($user2);
+    }
+
     public function testIfFailsWithShortPassword(): void
     {
         $this->expectException(IncorrectPasswordException::class);

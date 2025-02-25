@@ -25,6 +25,7 @@ class UserValidator
     public function validate(User $user): bool
     {
         $this->validateEmail($user->getUserEmail());
+        $this->validateIfEmailDoesNotExist($user->getUserEmail(), $user->getUserId());
         $this->validatePassword($user->getUserPassword());
 
         return true;
@@ -38,9 +39,13 @@ class UserValidator
         if (!filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
             throw new IncorrectEmailException('Invalid email format');
         }
+    }
 
+    public function validateIfEmailDoesNotExist(string $userEmail, ?int $userId = null): void
+    {
         $existingUser = $this->repository->findByEmail($userEmail);
-        if ($existingUser !== null) {
+
+        if ($existingUser !== null && $existingUser->getUserId() !== $userId) {
             throw new IncorrectEmailException('Email is already in use');
         }
     }
