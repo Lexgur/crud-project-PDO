@@ -140,6 +140,39 @@ class UserValidatorTest extends TestCase
         $user = new User($userEmail, $password);
         $this->validator->validate($user);
     }
+    public function testIfFindsByEmailAndChecksPasswordCorrectly(): void
+    {
+        $userEmail = 'david.jones@gmail.com';
+        $password = 'test123Test';
+        $user = new User($userEmail, $password);
+
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $statement->execute([':email' => $userEmail, ':password' => $password]);
+
+        $existingUser = $this->repository->findByEmail($userEmail);
+        $checkedPassword = $this->validator->passwordExists($password, $userEmail);
+
+        $this->assertNotNull($existingUser, 'User should exist in the database');
+        $this->assertTrue($checkedPassword);
+    }
+
+    public function testIfFindsByEmailAndChecksPasswordWithIncorrectPassword(): void
+    {
+        $this->expectException(IncorrectPasswordException::class);
+
+        $userEmail = 'david.jones@gmail.com';
+        $password = 'test123Test';
+        $user = new User($userEmail, $password);
+        $passwordWrong = 'test321Test';
+
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $statement->execute([':email' => $userEmail, ':password' => $password]);
+
+        $existingUser = $this->repository->findByEmail($userEmail);
+        $checkedPassword = $this->validator->passwordExists($passwordWrong, $userEmail);
+    }
+
+
 
     public function tearDown(): void
     {

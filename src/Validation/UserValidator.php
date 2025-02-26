@@ -65,4 +65,20 @@ class UserValidator
             throw new IncorrectPasswordException('Password must include at least one lowercase letter');
         }
     }
+
+    public function passwordExists(string $userPassword, string $userEmail): bool
+    {
+        $existingUser = $this->repository->findByEmail($userEmail);
+
+        if ($existingUser === null) {
+            throw new IncorrectEmailException('No user found with this email');
+        }
+
+        if ($existingUser->getUserPassword() !== $userPassword) {
+            throw new IncorrectPasswordException('Password does not match');
+        }
+
+        return true;
+    }
+
 }
