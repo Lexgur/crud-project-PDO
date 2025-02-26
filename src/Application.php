@@ -8,6 +8,7 @@ use Crud\Controller\CreateStudent;
 use Crud\Controller\CreateUser;
 use Crud\Controller\DeleteStudent;
 use Crud\Controller\DeleteUser;
+use Crud\Controller\LoginController;
 use Crud\Controller\RegisterController;
 use Crud\Controller\UpdateStudent;
 use Crud\Controller\UpdateUser;
@@ -31,6 +32,7 @@ class Application
         'delete_user' => DeleteUser::class,
         'view_user' => ViewUser::class,
         'register_user' => RegisterController::class,
+        'login_user' => LoginController::class,
     ];
 
     public function run(): void
@@ -64,7 +66,7 @@ class Application
         // Switch naudojamas tam kad pakeistu controlleri priklausomai nuo actiono
         $controller = match ($controllerClass) {
             CreateStudent::class, UpdateStudent::class, DeleteStudent::class, ViewStudents::class => new $controllerClass($studentValidator, $studentRepository, $template),
-            CreateUser::class, UpdateUser::class, DeleteUser::class, ViewUser::class, RegisterController::class => new $controllerClass($userValidator, $userRepository, $template),
+            CreateUser::class, UpdateUser::class, DeleteUser::class, ViewUser::class, RegisterController::class, LoginController::class => new $controllerClass($userValidator, $userRepository, $template),
             default => throw new Exception("Controller not found for action: " . htmlspecialchars($action)),
         };
 
