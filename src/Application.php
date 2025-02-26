@@ -51,11 +51,11 @@ class Application
 
         // Validators
         $studentValidator = new StudentValidator();
-        $userValidator = new UserValidator($connection);
 
         // Repositories
         $studentRepository = new StudentModelRepository($connection);
         $userRepository = new UserModelRepository($connection);
+        $userValidator = new UserValidator($userRepository);
 
         // Get action
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);

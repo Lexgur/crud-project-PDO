@@ -45,10 +45,12 @@ $userEmail = $_SESSION['userEmail'];
     </style>
 </head>
 <body>
-<!--<div class="container">-->
-<!--    <h1>Sveiki, --><?php //echo htmlspecialchars($userEmail); ?><!--!</h1>-->
-<!--    <p>Sveiki atvykę į valdymo skydelį.</p>-->
-<!--    <a href="logout.php">Atsijungti</a>-->
-<!--</div>-->
+
+<div class="container">
+    <h1>Sveiki, <?php echo htmlspecialchars($userEmail); ?>!</h1>
+    <p>Sveiki atvykę į valdymo skydelį.</p>
+    <a href='logout_user.php'>Atsijungti</a>
+</div>
+
 </body>
 </html>
