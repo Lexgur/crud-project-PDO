@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Service\PasswordHasher;
+
 class UpdateUser extends AbstractUserController
 {
     public function __invoke(): string
     {
         if ($this->isPostRequest()) {
             $data = $_POST;
+            $data['password'] = PasswordHasher::hash($data['password']);
             $userId = (int)($_GET['id']);
             $user = $this->userRepository->fetchById($userId);
             $user->setUserEmail($data['email']);

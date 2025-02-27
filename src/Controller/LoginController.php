@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Service\PasswordHasher;
+
 class LoginController extends AbstractUserController
 {
     public function __invoke(string $userEmail = ''): string
     {
         if ($this->isPostRequest()) {
             $userEmail = $_POST['email'] ?? '';
+            $password = $_POST['password'];
 
-            if (empty($userEmail)) {
+            if (empty($userEmail) || empty($password)) {
                 return $this->render('login_user_form.php', [
-                    'error' => "El. pašto adresas privalomas prisijungimui."
+                    'error' => "El. pašto adresas ir slaptazodis privalomas prisijungimui."
                 ]);
             }
 
@@ -25,7 +28,7 @@ class LoginController extends AbstractUserController
                 ]);
             }
 
-            if ($this->userValidator->passwordExists($existingUser->getUserPassword(), $existingUser->getUserEmail())) {
+            if (PasswordHasher::verify($password, $existingUser->getPassword())) {
                 session_start();
                 $_SESSION['userEmail'] = $existingUser->getUserEmail();
 

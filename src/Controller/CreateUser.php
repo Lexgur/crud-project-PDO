@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crud\Controller;
 
 use Crud\Factory\UserFactory;
+use Crud\Service\PasswordHasher;
 
 class CreateUser extends AbstractUserController
 {
@@ -12,6 +13,7 @@ class CreateUser extends AbstractUserController
     {
         if ($this->isPostRequest()) {
             $data = $_POST;
+            $data['password'] = PasswordHasher::hash($data['password']);
             $user  = UserFactory::create($data);
 
             if ($this->userValidator->validate($user)) {
