@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Service\PasswordHasher;
+use Crud\Service\PasswordVerifier;
 
 class LoginController extends AbstractUserController
 {
@@ -28,7 +28,7 @@ class LoginController extends AbstractUserController
                 ]);
             }
 
-            if (PasswordHasher::verify($password, $existingUser->getPassword())) {
+            if (PasswordVerifier::verify($password, $existingUser->getPassword())) {
                 session_start();
                 $_SESSION['userEmail'] = $existingUser->getUserEmail();
 
