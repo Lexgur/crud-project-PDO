@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Crud\Service;
 
 use Crud\Exception\IncorrectPasswordException;
+use Crud\Validation\PasswordValidator;
 
 class PasswordHasher
 {
     public static function hash(string $password): string
     {
-        if (empty($password)) {
-            throw new IncorrectPasswordException('Password is empty');
-        } else {
+        if (!empty($password) && PasswordValidator::validate($password)) {
             return password_hash($password, PASSWORD_DEFAULT);
+        } else {
+            throw new IncorrectPasswordException('Password is empty');
         }
     }
 }

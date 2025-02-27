@@ -101,45 +101,6 @@ class UserValidatorTest extends TestCase
         $this->validator->validate($user2);
     }
 
-    public function testIfFailsWithShortPassword(): void
-    {
-        $this->expectException(IncorrectPasswordException::class);
-
-        $userEmail = 'david.jones@gmail.com';
-        $password = 'daviD77';
-        $user = new User($userEmail, $password);
-        $this->validator->validate($user);
-    }
-
-    public function testIfFailsWithPasswordWithoutNumbers(): void
-    {
-        $this->expectException(IncorrectPasswordException::class);
-
-        $userEmail = 'david.jones@gmail.com';
-        $password = 'justapassword';
-        $user = new User($userEmail, $password);
-        $this->validator->validate($user);
-    }
-
-    public function testIfFailsWithPasswordWithoutUppercaseLetters(): void
-    {
-        $this->expectException(IncorrectPasswordException::class);
-
-        $userEmail = 'david.jones@gmail.com';
-        $password = 'password17774';
-        $user = new User($userEmail, $password);
-        $this->validator->validate($user);
-    }
-
-    public function testIfFailsWithPasswordWithoutLowercaseLetters(): void
-    {
-        $this->expectException(IncorrectPasswordException::class);
-
-        $userEmail = 'david.jones@gmail.com';
-        $password = 'PASSWORD17774';
-        $user = new User($userEmail, $password);
-        $this->validator->validate($user);
-    }
     public function testIfFindsByEmailAndChecksPasswordCorrectly(): void
     {
         $userEmail = 'david.jones@gmail.com';
