@@ -6,6 +6,7 @@ namespace Crud\Repository;
 
 interface ModelRepositoryInterface
 {
+    public function save(object $entity): object;
     public function insert(object $entity): object;
 
     public function fetchById(int $entityId): ?object;
