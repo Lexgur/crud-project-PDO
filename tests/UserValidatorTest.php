@@ -35,8 +35,8 @@ class UserValidatorTest extends TestCase
     public function testIfGivenValuesValidateCorrectly(): void
     {
         $userEmail = 'david.jones@gmail.com';
-        $password = 'daviD789A';
-        $user = new User($userEmail, $password);
+        $userPassword = 'password123Szzz';
+        $user = new User($userEmail, $userPassword);
 
         $this->assertTrue($this->validator->validate($user));
     }

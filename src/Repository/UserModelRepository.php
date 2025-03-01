@@ -22,16 +22,18 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
     }
     public function insert(User $user): User
     {
-        $statement = $this->connection->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
-        $statement->bindValue(':email', $user->getUserEmail());
-        $statement->bindValue(':password', $user->getUserPassword());
+        try {
+            $statement = $this->connection->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
+            $statement->bindValue(':email', $user->getUserEmail());
+            $statement->bindValue(':password', $user->getUserPassword());
+            $statement->execute();
+        } catch (\PDOException $e) {
 
-        $statement->execute();
+            throw new \Exception('Error inserting user: ' . $e->getMessage());
+        }
 
         $newId = (int)$this->connection->lastInsertId();
-
         return $this->fetchById($newId);
-
     }
 
     public function fetchById(int $userId): ?User
@@ -53,7 +55,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            throw new IncorrectEmailException('Email does not exist');
+            return null;
         }
         return UserFactory::create($row);
     }
@@ -61,13 +63,17 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
 
     public function update(User $user): User
     {
+        try {
         $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE id = :id');
         $statement->bindValue(':email', $user->getUserEmail());
         $statement->bindValue(':password', $user->getUserPassword());
         $statement->bindValue(':id', $user->getUserId());
 
         $statement->execute();
+        } catch (\PDOException $e) {
 
+            throw new \Exception('Error inserting user: ' . $e->getMessage());
+        }
         return $this->fetchById($user->getUserId());
     }
 
