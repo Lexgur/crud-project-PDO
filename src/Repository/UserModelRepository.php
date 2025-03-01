@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
+use Crud\Exception\IncorrectEmailException;
+use Crud\Exception\IncorrectIdException;
 use Crud\Factory\UserFactory;
 use PDO;
 
-class UserModelRepository extends BaseRepositoryClass implements ModelRepositoryInterface
+class UserModelRepository extends BaseRepositoryClass implements UserModelInterface
 {
     public function save(object $entity): object
     {
@@ -38,7 +40,7 @@ class UserModelRepository extends BaseRepositoryClass implements ModelRepository
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            return null;
+            throw new IncorrectIdException('Asked id does not exist');
         }
         return UserFactory::create($row);
     }
@@ -50,7 +52,7 @@ class UserModelRepository extends BaseRepositoryClass implements ModelRepository
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            return null;
+            throw new IncorrectEmailException('Email does not exist');
         }
         return UserFactory::create($row);
     }

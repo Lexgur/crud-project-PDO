@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Exception\IncorrectEmailException;
+use Crud\Exception\IncorrectIdException;
+use Crud\Exception\IncorrectPasswordException;
 use Crud\Service\PasswordHasher;
+use Crud\Validation\PasswordValidator;
 
 class UpdateUser extends AbstractUserController
 {
@@ -12,22 +16,24 @@ class UpdateUser extends AbstractUserController
     {
         if ($this->isPostRequest()) {
             $data = $_POST;
-            $data['password'] = PasswordHasher::hash($data['password']);
-            $userId = (int)($_GET['id']);
-            $user = $this->userRepository->fetchById($userId);
-            $user->setUserEmail($data['email']);
-            $user->setUserPassword($data['password']);
+            $password = $data['password'];
 
-            if ($this->userValidator->validate($user)) {
+            try {
+                PasswordValidator::validate($password);
+                PasswordHasher::hash($password);
+                $userId = (int)($_GET['id']);
+                $user = $this->userRepository->fetchById($userId);
+                $user->setUserEmail($data['email']);
+                $user->setUserPassword($password);
+                $this->userValidator->validate($user);
                 $user = $this->userRepository->save($user);
                 echo "Your user {$user->getUserEmail()} has been updated! here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>'";
-            } else {
+            } catch (IncorrectPasswordException|IncorrectEmailException|IncorrectIdException $e) {
                 return $this->render('update_user_form.php', [
-                    'error' => "Vartotojo {$user->getUserEmail()} atnaujinti nepavyko..."]);
+                    'error' => $e->getMessage()
+                ]);
             }
         }
-        return $this->render('update_user_form.php', [
-        ]);
+        return $this->render('update_user_form.php');
     }
-
 }

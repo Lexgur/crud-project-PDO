@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Exception\IncorrectIdException;
+
 class DeleteStudent extends AbstractStudentController
 {
 
@@ -11,15 +13,15 @@ class DeleteStudent extends AbstractStudentController
     {
         if ($this->isPostRequest()) {
             $studentId = (int)($_GET['id']);
-            $student = $this->studentRepository->fetchById($studentId);
 
-            if ($student) {
+            try {
+                $this->studentRepository->fetchById($studentId);
                 $this->studentRepository->delete($studentId);
                 echo "Student {$studentId} has been deleted! here is a link to create a new student: <button class='add-btn'><a href='/index.php?action=create_student'>CREATE</a></button>'";
 
-            } else {
+            } catch (IncorrectIdException $e) {
                 return $this->render('delete_student_form.php', [
-                    'error' => "Student not found, deletion failed"
+                    'error' => $e->getMessage()
                 ]);
             }
         }

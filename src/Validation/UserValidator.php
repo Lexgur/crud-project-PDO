@@ -19,7 +19,6 @@ class UserValidator
     }
 
     /**
-     * @throws IncorrectPasswordException
      * @throws IncorrectEmailException
      */
     public function validate(User $user): bool

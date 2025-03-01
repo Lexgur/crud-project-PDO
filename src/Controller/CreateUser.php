@@ -1,11 +1,14 @@
 <?php
-//TODO User login, User register
+
 declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Exception\IncorrectEmailException;
+use Crud\Exception\IncorrectPasswordException;
 use Crud\Factory\UserFactory;
 use Crud\Service\PasswordHasher;
+use Crud\Validation\PasswordValidator;
 
 class CreateUser extends AbstractUserController
 {
@@ -13,19 +16,21 @@ class CreateUser extends AbstractUserController
     {
         if ($this->isPostRequest()) {
             $data = $_POST;
-            $data['password'] = PasswordHasher::hash($data['password']);
-            $user  = UserFactory::create($data);
 
-            if ($this->userValidator->validate($user)) {
+            try {
+                PasswordValidator::validate($data['password']);
+                $user = UserFactory::create($data);
+                $password = $user->getUserPassword();
+                PasswordHasher::hash($password);
+                $this->userValidator->validate($user);
                 $user = $this->userRepository->save($user);
                 echo "Your user {$user->getUserEmail()} has been created! here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>'";
-            } else {
+            } catch (IncorrectPasswordException|IncorrectEmailException $e) {
                 return $this->render('create_user_form.php', [
-                    'error' => "Vartotojo {$user->getUserEmail()} sukurti nepavyko..."]);
+                    'error' => $e->getMessage()
+                ]);
             }
         }
-        return $this->render('create_user_form.php', [
-        ]);
+        return $this->render('create_user_form.php');
     }
-
 }

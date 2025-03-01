@@ -11,7 +11,7 @@ class PasswordHasher
 {
     public static function hash(string $password): string
     {
-        if (!empty($password) && PasswordValidator::validate($password)) {
+        if (!empty($password)) {
             return password_hash($password, PASSWORD_DEFAULT);
         } else {
             throw new IncorrectPasswordException('Password is empty');

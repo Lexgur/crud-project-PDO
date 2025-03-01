@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
+use Crud\Exception\IncorrectIdException;
 use Crud\Factory\StudentFactory;
+use Crud\Model\Student;
 use PDO;
 
-class StudentModelRepository extends BaseRepositoryClass implements ModelRepositoryInterface
+class StudentModelRepository extends BaseRepositoryClass implements BaseModelInterface
 {
-    public function save(object $entity): object
+    public function save(Student $student): Student
     {
-        if ($entity->getId() === null) {
-            return $this->insert($entity);
+        if ($student->getId() === null) {
+            return $this->insert($student);
         } else {
-            return $this->update($entity);
+            return $this->update($student);
         }
     }
 
-    public function insert(object $entity): object
+    public function insert(Student $student): Student
     {
         $statement = $this->connection->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
-        $statement->bindValue(':firstname', $entity->getFirstName());
-        $statement->bindValue(':lastname', $entity->getLastName());
-        $statement->bindValue(':age', $entity->getAge());
+        $statement->bindValue(':firstname', $student->getFirstName());
+        $statement->bindValue(':lastname', $student->getLastName());
+        $statement->bindValue(':age', $student->getAge());
 
         $statement->execute();
 
@@ -33,35 +35,35 @@ class StudentModelRepository extends BaseRepositoryClass implements ModelReposit
 
     }
 
-    public function fetchById(int $entityId): ?object
+    public function fetchById(int $studentId): ?Student
     {
         $statement = $this->connection->prepare('SELECT * FROM students WHERE id = :id');
-        $statement->execute([':id' => $entityId]);
+        $statement->execute([':id' => $studentId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            return null;
+            throw new IncorrectIdException('Asked id does not exist');
         }
         return StudentFactory::create($row);
     }
 
-    public function update(object $entity): object
+    public function update(Student $student): Student
     {
         $statement = $this->connection->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
-        $statement->bindValue(':firstname', $entity->getFirstName());
-        $statement->bindValue(':lastname', $entity->getLastName());
-        $statement->bindValue(':age', $entity->getAge());
-        $statement->bindValue(':id', $entity->getId());
+        $statement->bindValue(':firstname', $student->getFirstName());
+        $statement->bindValue(':lastname', $student->getLastName());
+        $statement->bindValue(':age', $student->getAge());
+        $statement->bindValue(':id', $student->getId());
 
         $statement->execute();
 
-        return $this->fetchById($entity->getId());
+        return $this->fetchById($student->getId());
     }
 
-    public function delete(int $entityId): bool
+    public function delete(int $studentId): bool
     {
         $statement = $this->connection->prepare('DELETE FROM students WHERE id = :id');
-        $statement->bindValue(':id', $entityId);
+        $statement->bindValue(':id', $studentId);
         $statement->execute();
         return true;
     }

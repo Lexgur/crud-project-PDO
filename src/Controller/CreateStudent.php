@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Exception\AgeIsEmptyOrExceedsTheRangeException;
+use Crud\Exception\IncorrectUserNameException;
+use Crud\Exception\NameOrLastnameContainsIncorrectCharactersException;
 use Crud\Factory\StudentFactory;
 
 class CreateStudent extends AbstractStudentController
@@ -14,19 +17,19 @@ class CreateStudent extends AbstractStudentController
 
         if ($this->isPostRequest()) {
             $data = $_POST;
-            $student = StudentFactory::create($data);
 
-            if ($this->studentValidator->validate($student)) {
+            try {
+                $student = StudentFactory::create($data);
+                $this->studentValidator->validate($student);
                 $student = $this->studentRepository->save($student);
                 echo "Student {$student->getFirstName()} has been created! here is a link to update his profile: <a class='upd-btn' href='/index.php?action=update_student&id={$student->getId()}'>Update</a>'";
-            } else {
+
+            } catch (NameOrLastnameContainsIncorrectCharactersException | AgeIsEmptyOrExceedsTheRangeException $e) {
                 return $this->render('create_student_form.php', [
-                    'error' => "Studento {$student->getFirstName()} sukurti nepavyko..."]);
+                    'error' => $e->getMessage()
+                    ]);
             }
         }
-
-        return $this->render('create_student_form.php', [
-        ]);
+        return $this->render('create_student_form.php');
     }
 }
-
