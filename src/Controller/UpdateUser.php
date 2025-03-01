@@ -27,9 +27,7 @@ class UpdateUser extends AbstractUserController
                 $this->userValidator->validate($user);
                 $hashedPassword = PasswordHasher::hash($password);
                 $user->setUserPassword($hashedPassword);
-
                 $user = $this->userRepository->save($user);
-
                 echo "Your user {$user->getUserEmail()} has been updated! Here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>";
             } catch (IncorrectPasswordException|IncorrectEmailException|IncorrectIdException $e) {
                 return $this->render('update_user_form.php', [
