@@ -10,18 +10,19 @@ use Crud\Factory\UserFactory;
 use Crud\Service\PasswordHasher;
 use Crud\Validation\PasswordValidator;
 
-class CreateUser extends AbstractUserController
+class RegisterController extends AbstractUserController
 {
     public function __invoke(): string
     {
         if ($this->isPostRequest()) {
             $data = $_POST;
+            $password = $data['password'];
 
             try {
-                PasswordValidator::validate($data['password']);
+                PasswordValidator::validate($password);
+                $hashedPassword = PasswordHasher::hash($password);
+                $data['password'] = $hashedPassword;
                 $user = UserFactory::create($data);
-                $password = $user->getUserPassword();
-                PasswordHasher::hash($password);
                 $this->userValidator->validate($user);
                 $user = $this->userRepository->save($user);
                 echo "Your user {$user->getUserEmail()} has been created! here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>'";
