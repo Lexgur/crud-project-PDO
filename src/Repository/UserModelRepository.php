@@ -46,7 +46,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
         return UserFactory::create($row);
     }
 
-    public function findByEmail(User $userEmail): ?User
+    public function findByEmail(string $userEmail): ?User
     {
         $statement = $this->connection->prepare('SELECT * FROM users WHERE email = :email');
         $statement->execute([':email' => $userEmail]);
@@ -57,6 +57,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
         }
         return UserFactory::create($row);
     }
+
 
     public function update(User $user): User
     {

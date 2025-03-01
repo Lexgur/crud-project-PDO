@@ -13,7 +13,7 @@ interface UserModelInterface
 
     public function fetchById(int $userId): ?User;
 
-    public function findByEmail(User $userEmail): ?User;
+    public function findByEmail(string $userEmail): ?User;
 
     public function update(User $user): User;
 

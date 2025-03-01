@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Crud\Exception\IncorrectIdException;
 use Crud\Model\Student;
 use Crud\Repository\StudentModelRepository;
 use PHPUnit\Framework\TestCase;
@@ -163,12 +164,14 @@ class StudentRepositoryTest extends TestCase
 
     public function testIfDeleteWorks(): void
     {
+        $this->expectException(IncorrectIdException::class);
+
         $student = new Student(
             firstName: 'Micheal',
             lastName: 'Hawktuah',
             age: 19
         );
-        $insertedStudent = $this->repository->insert($student);
+        $insertedStudent = $this->repository->save($student);
         $this->repository->delete($insertedStudent->getId());
         $studentAfterDelete = $this->repository->fetchById($insertedStudent->getId());
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Crud\Exception\IncorrectIdException;
 use Crud\Model\User;
 use Crud\Repository\UserModelRepository;
 use PHPUnit\Framework\TestCase;
@@ -46,15 +47,12 @@ class UserRepositoryTest extends TestCase
     }
     public function testIfFindByEmail(): void
     {
-        $user = new User(
-            userEmail: 'dave@gmail.com',
-            userPassword: '123Em778a'
-        );
-        $insertedUser = $this->repository->insert($user);
-        $userEmail = $insertedUser->getUserEmail();
-        $fetchedUser = $this->repository->findByEmail($userEmail);
+        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
+        $statement->execute();
 
-        $this->assertEquals($fetchedUser->getUserEmail(), $userEmail);
+        $user = $this->repository->findByEmail('Test@test.com');
+
+        $this->assertEquals($user->getUserEmail(), 'Test@test.com');
     }
 
     public function testIfFailsToFetchWithIncorrectTypeId(): void
@@ -124,6 +122,8 @@ class UserRepositoryTest extends TestCase
 
     public function testIfDeleteWorks(): void
     {
+        $this->expectException(IncorrectIdException::class);
+
         $user = new User(
             userEmail: 'dave@gmail.com',
             userPassword: '123Em778a'
