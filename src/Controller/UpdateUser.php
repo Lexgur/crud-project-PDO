@@ -17,17 +17,17 @@ class UpdateUser extends AbstractUserController
         if ($this->isPostRequest()) {
             $data = $_POST;
             $password = $data['password'];
+            $email = $data['email'];
 
             try {
                 $userId = (int)($_GET['id']);
                 $user = $this->userRepository->fetchById($userId);
-                $user->setUserEmail($data['email']);
+                $user->setUserEmail($email);
                 PasswordValidator::validate($password);
-
+                $this->userValidator->validate($user);
                 $hashedPassword = PasswordHasher::hash($password);
                 $user->setUserPassword($hashedPassword);
 
-                $this->userValidator->validate($user);
                 $user = $this->userRepository->save($user);
 
                 echo "Your user {$user->getUserEmail()} has been updated! Here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>";
