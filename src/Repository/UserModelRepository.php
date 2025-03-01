@@ -7,23 +7,24 @@ namespace Crud\Repository;
 use Crud\Exception\IncorrectEmailException;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\UserFactory;
+use Crud\Model\User;
 use PDO;
 
 class UserModelRepository extends BaseRepositoryClass implements UserModelInterface
 {
-    public function save(object $entity): object
+    public function save(User $user): User
     {
-        if ($entity->getUserId() === null) {
-            return $this->insert($entity);
+        if ($user->getUserId() === null) {
+            return $this->insert($user);
         } else {
-            return $this->update($entity);
+            return $this->update($user);
         }
     }
-    public function insert(object $entity): object
+    public function insert(User $user): User
     {
         $statement = $this->connection->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
-        $statement->bindValue(':email', $entity->getUserEmail());
-        $statement->bindValue(':password', $entity->getUserPassword());
+        $statement->bindValue(':email', $user->getUserEmail());
+        $statement->bindValue(':password', $user->getUserPassword());
 
         $statement->execute();
 
@@ -33,10 +34,10 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
 
     }
 
-    public function fetchById(int $entityId): ?object
+    public function fetchById(int $userId): ?User
     {
         $statement = $this->connection->prepare('SELECT * FROM users WHERE id = :id');
-        $statement->execute([':id' => $entityId]);
+        $statement->execute([':id' => $userId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
@@ -45,7 +46,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
         return UserFactory::create($row);
     }
 
-    public function findByEmail(string $userEmail): ?object
+    public function findByEmail(User $userEmail): ?User
     {
         $statement = $this->connection->prepare('SELECT * FROM users WHERE email = :email');
         $statement->execute([':email' => $userEmail]);
@@ -57,28 +58,28 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
         return UserFactory::create($row);
     }
 
-    public function update(object $entity): object
+    public function update(User $user): User
     {
         $statement = $this->connection->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE id = :id');
-        $statement->bindValue(':email', $entity->getUserEmail());
-        $statement->bindValue(':password', $entity->getUserPassword());
-        $statement->bindValue(':id', $entity->getUserId());
+        $statement->bindValue(':email', $user->getUserEmail());
+        $statement->bindValue(':password', $user->getUserPassword());
+        $statement->bindValue(':id', $user->getUserId());
 
         $statement->execute();
 
-        return $this->fetchById($entity->getUserId());
+        return $this->fetchById($user->getUserId());
     }
 
-    public function delete(int $entityId): bool
+    public function delete(int $userId): bool
     {
         $statement = $this->connection->prepare('DELETE FROM users WHERE id = :id');
-        $statement->bindValue(':id', $entityId);
+        $statement->bindValue(':id', $userId);
         $statement->execute();
 
         return true;
     }
 
-    public function viewUser(int $userId): ?object
+    public function viewUser(int $userId): ?User
     {
         $statement = $this->connection->prepare('SELECT * FROM users WHERE id = :id');
         $statement->execute([':id' => $userId]);

@@ -9,7 +9,7 @@ use Crud\Factory\StudentFactory;
 use Crud\Model\Student;
 use PDO;
 
-class StudentModelRepository extends BaseRepositoryClass implements BaseModelInterface
+class StudentModelRepository extends BaseRepositoryClass implements StudentModelInterface
 {
     public function save(Student $student): Student
     {
