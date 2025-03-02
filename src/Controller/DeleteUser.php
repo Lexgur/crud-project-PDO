@@ -15,12 +15,14 @@ class DeleteUser extends AbstractUserController
             $userId = (int)($_GET['id']);
 
             try {
+
                 $this->userRepository->fetchById($userId);
                 $this->userRepository->delete($userId);
+
                 echo "User {$userId} has been deleted! here is a link to create a new student: <button class='add-btn'><a href='/index.php?action=create_user'>CREATE</a></button>'";
-            } catch (IncorrectIdException $e) {
+            } catch (\Throwable $throwable) {
                 return $this->render('delete_user_form.php', [
-                    'error' => $e->getMessage()
+                    'error' => $throwable->getMessage()
                 ]);
             }
         }

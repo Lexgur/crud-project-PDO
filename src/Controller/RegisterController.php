@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Exception\IncorrectEmailException;
-use Crud\Exception\IncorrectPasswordException;
 use Crud\Factory\UserFactory;
 use Crud\Service\PasswordHasher;
 use Crud\Validation\PasswordValidator;
@@ -19,17 +17,23 @@ class RegisterController extends AbstractUserController
             $password = $data['password'];
 
             try {
+
                 PasswordValidator::validate($password);
+
                 $user = UserFactory::create($data);
                 $this->userValidator->validate($user);
+
                 $userPassword = $user->getUserPassword();
                 $hashedPassword = PasswordHasher::hash($userPassword);
                 $user->setUserPassword($hashedPassword);
+
                 $user = $this->userRepository->save($user);
+
                 echo "Your user {$user->getUserEmail()} has been created! here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>'";
-            } catch (IncorrectPasswordException|IncorrectEmailException $e) {
+
+            } catch (\Throwable $throwable) {
                 return $this->render('create_user_form.php', [
-                    'error' => $e->getMessage()
+                    'error' => $throwable->getMessage()
                 ]);
             }
         }

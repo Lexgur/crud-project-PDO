@@ -18,19 +18,25 @@ class LoginController extends AbstractUserController
         if ($this->isPostRequest()) {
             $userEmail = $_POST['email'] ?? '';
             $password = $_POST['password'];
+
             try {
+
                 PasswordValidator::validate($password);
                 $hashedPassword = PasswordHasher::hash($password);
+
                 $existingUser = $this->userRepository->findByEmail($userEmail);
+
                 PasswordVerifier::verify($password, $hashedPassword);
+
                 session_start();
                 $_SESSION['userEmail'] = $existingUser->getUserEmail();
+
                 return $this->render('dashboard.php', [
                     'message' => "Sveiki sugrįžę, {$existingUser->getUserEmail()}!"
                 ]);
-            } catch (IncorrectEmailException|IncorrectPasswordException|TemplateNotFoundException $e) {
+            } catch (\Throwable $throwable) {
                 return $this->render('create_user_form.php', [
-                    'error' => $e->getMessage()
+                    'error' => $throwable->getMessage()
                 ]);
             }
         }
