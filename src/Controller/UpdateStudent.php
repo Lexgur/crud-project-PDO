@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Exception\AgeIsEmptyOrExceedsTheRangeException;
-use Crud\Exception\IncorrectIdException;
-use Crud\Exception\NameOrLastnameContainsIncorrectCharactersException;
-
 class UpdateStudent extends AbstractStudentController
 {
     public function __invoke(): string

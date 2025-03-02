@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Exception\IncorrectIdException;
-
 class DeleteStudent extends AbstractStudentController
 {
 

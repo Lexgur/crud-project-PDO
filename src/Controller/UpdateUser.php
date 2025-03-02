@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
-use Crud\Exception\IncorrectEmailException;
-use Crud\Exception\IncorrectIdException;
-use Crud\Exception\IncorrectPasswordException;
 use Crud\Service\PasswordHasher;
 use Crud\Validation\PasswordValidator;
 
