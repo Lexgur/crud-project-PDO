@@ -15,42 +15,30 @@ $userEmail = $_SESSION['userEmail'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            margin: 0;
-            padding: 50px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-        }
-        a {
-            text-decoration: none;
-            color: white;
-            background: #007bff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-top: 15px;
-        }
-        a:hover {
-            background: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="container">
+<div class="dashboard-container">
     <h1>Sveiki, <?php echo htmlspecialchars($userEmail); ?>!</h1>
-    <p>Sveiki atvykę į valdymo skydelį.</p>
-    <a href='logout_user.php'>Atsijungti</a>
-</div>
+    <p class="welcome-text">Sveiki atvykę į valdymo skydelį.</p>
 
+    <!-- Navigation Buttons -->
+    <div class="dashboard-actions">
+        <button class="add-btn">
+            <a href="/index.php?action=view_students" target="_blank" rel="noopener">Peržiūrėti studentus</a>
+        </button>
+        <button class="upd-btn">
+            <a href="/index.php?action=update_user&id=<?php echo htmlspecialchars($_SESSION['userId'] ?? ''); ?>" target="_blank" rel="noopener">Atnaujinti profilį</a>
+        </button>
+        <button class="dlt-btn">
+            <a href="logout_user.php">Atsijungti</a>
+        </button>
+    </div>
+
+    <!-- Fancy Decorative Element -->
+    <div class="dashboard-footer">
+        <p>Valdymo skydelis © <?php echo date('Y'); ?></p>
+    </div>
+</div>
 </body>
 </html>
