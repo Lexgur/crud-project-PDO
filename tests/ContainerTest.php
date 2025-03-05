@@ -28,6 +28,8 @@ class ContainerTest extends TestCase
         return [
             [ServiceWithNoDependencies::class],
             [ServiceWithSingleDependency::class],
+            [ServiceWithMultipleDependencies::class],
+            [ServiceWithMultipleDependantDependencies::class],
         ];
     }
 }
@@ -49,6 +51,32 @@ readonly class ServiceWithSingleDependency
     )
     {
 
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+readonly class ServiceWithMultipleDependencies {
+    public function __construct(
+        private ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
+        private ServiceWithNoDependencies $serviceWithNoDependenciesSecond,
+    ) {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+
+readonly class ServiceWithMultipleDependantDependencies {
+    public function __construct(
+        private ServiceWithNoDependencies       $serviceWithNoDependenciesFirst,
+        private ServiceWithSingleDependency     $serviceWithSingleDependency,
+        private ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+    ) {
     }
 
     public function isInitialized(): bool
