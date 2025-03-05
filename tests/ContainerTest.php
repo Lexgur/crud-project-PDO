@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Crud\DependencyInjection\Container;
-use Crud\Service\ServiceWithNoDependencies;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +27,32 @@ class ContainerTest extends TestCase
     {
         return [
             [ServiceWithNoDependencies::class],
+            [ServiceWithSingleDependency::class],
         ];
+    }
+}
+class ServiceWithNoDependencies
+{
+    public function __construct()
+    {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+readonly class ServiceWithSingleDependency
+{
+    public function __construct(
+        private ServiceWithNoDependencies $serviceWithNoDependencies
+    )
+    {
+
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
     }
 }
