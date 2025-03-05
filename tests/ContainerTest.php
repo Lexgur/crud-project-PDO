@@ -30,9 +30,11 @@ class ContainerTest extends TestCase
             [ServiceWithSingleDependency::class],
             [ServiceWithMultipleDependencies::class],
             [ServiceWithMultipleDependantDependencies::class],
+            [ServiceWithMultipleDependenciesExtendingAbstractService::class],
         ];
     }
 }
+
 class ServiceWithNoDependencies
 {
     public function __construct()
@@ -44,6 +46,7 @@ class ServiceWithNoDependencies
         return true;
     }
 }
+
 readonly class ServiceWithSingleDependency
 {
     public function __construct(
@@ -58,10 +61,41 @@ readonly class ServiceWithSingleDependency
         return true;
     }
 }
-readonly class ServiceWithMultipleDependencies {
+
+readonly class ServiceWithMultipleDependencies
+{
     public function __construct(
         private ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
         private ServiceWithNoDependencies $serviceWithNoDependenciesSecond,
+    )
+    {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+
+readonly class ServiceWithMultipleDependantDependencies
+{
+    public function __construct(
+        private ServiceWithNoDependencies       $serviceWithNoDependenciesFirst,
+        private ServiceWithSingleDependency     $serviceWithSingleDependency,
+        private ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+    )
+    {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+
+abstract class AbstractServiceWithSingleDependency {
+    public function __construct(
+        private readonly ServiceWithNoDependencies $serviceWithNoDependencies
     ) {
     }
 
@@ -71,12 +105,14 @@ readonly class ServiceWithMultipleDependencies {
     }
 }
 
-readonly class ServiceWithMultipleDependantDependencies {
+class ServiceWithMultipleDependenciesExtendingAbstractService extends AbstractServiceWithSingleDependency {
     public function __construct(
-        private ServiceWithNoDependencies       $serviceWithNoDependenciesFirst,
-        private ServiceWithSingleDependency     $serviceWithSingleDependency,
-        private ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+        private readonly ServiceWithNoDependencies $serviceWithNoDependencies,
+        private readonly ServiceWithSingleDependency $serviceWithSingleDependency,
+        private readonly ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+        private readonly ServiceWithMultipleDependantDependencies $serviceWithMultipleDependenciesSecond,
     ) {
+        parent::__construct($serviceWithNoDependencies);
     }
 
     public function isInitialized(): bool
