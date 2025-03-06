@@ -23,7 +23,6 @@ class Container
             $constructor = $reflection->getConstructor();
 
             if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
-
                 try {
                     $this->services[$id] = $reflection->newInstance();
                 } catch (\ReflectionException $e) {
