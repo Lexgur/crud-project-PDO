@@ -24,7 +24,10 @@ class Container
 
             if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
 
-                $this->services[$id] = $reflection->newInstance();
+                try {
+                    $this->services[$id] = $reflection->newInstance();
+                } catch (\ReflectionException $e) {
+                }
             } else {
 
                 $parameters = [];
@@ -38,7 +41,10 @@ class Container
                         throw new \InvalidArgumentException("Cannot resolve parameter '{$parameter->getName()}' for '$id'.");
                     }
                 }
-                $this->services[$id] = $reflection->newInstanceArgs($parameters);
+                try {
+                    $this->services[$id] = $reflection->newInstanceArgs($parameters);
+                } catch (\ReflectionException $e) {
+                }
             }
         }
 
