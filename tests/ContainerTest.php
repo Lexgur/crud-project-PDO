@@ -36,6 +36,32 @@ class ContainerTest extends TestCase
         $this->assertInstanceOf(ServiceWithSingleDependency::class, $service);
         $this->assertTrue($service->isInitialized());
     }
+
+    public function testGetServiceWithMultipleDependencies(): void
+    {
+        $service = $this->container->get('ServiceWithMultipleDependencies');
+
+        $this->assertInstanceOf(ServiceWithMultipleDependencies::class, $service);
+        $this->assertTrue($service->isInitialized());
+    }
+
+    public function testGetServiceWithMultipleDependantDependencies(): void
+    {
+        $service = $this->container->get('ServiceWithMultipleDependantDependencies');
+
+        $this->assertInstanceOf(ServiceWithMultipleDependantDependencies::class, $service);
+        $this->assertTrue($service->isInitialized());
+    }
+
+    public function testGetServiceWithMultipleDependenciesExtendingAbstractService(): void
+    {
+        $service = $this->container->get('ServiceWithMultipleDependenciesExtendingAbstractService');
+
+        $this->assertInstanceOf(ServiceWithMultipleDependenciesExtendingAbstractService::class, $service);
+        $this->assertTrue($service->isInitialized());
+
+        print_r($service);
+    }
 }
 
 class ServiceWithNoDependencies
@@ -48,12 +74,66 @@ class ServiceWithNoDependencies
         return true;
     }
 }
-//TODO ServiceWithSIngleDependency neveikia
+
 class ServiceWithSingleDependency
 {
     public function __construct(
         private readonly ServiceWithNoDependencies $serviceWithNoDependencies
     ) {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+
+class ServiceWithMultipleDependencies {
+    public function __construct(
+        private readonly ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
+        private readonly ServiceWithNoDependencies $serviceWithNoDependenciesSecond,
+    ) {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+
+class ServiceWithMultipleDependantDependencies {
+    public function __construct(
+        private readonly ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
+        private readonly ServiceWithSingleDependency $serviceWithSingleDependency,
+        private readonly ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+    ) {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+abstract class AbstractServiceWithSingleDependency {
+    public function __construct(
+        private readonly ServiceWithNoDependencies $serviceWithNoDependencies
+    ) {
+    }
+
+    public function isInitialized(): bool
+    {
+        return true;
+    }
+}
+
+class ServiceWithMultipleDependenciesExtendingAbstractService extends AbstractServiceWithSingleDependency {
+    public function __construct(
+        private readonly ServiceWithNoDependencies $serviceWithNoDependencies,
+        private readonly ServiceWithSingleDependency $serviceWithSingleDependency,
+        private readonly ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+        private readonly ServiceWithMultipleDependantDependencies $serviceWithMultipleDependenciesSecond,
+    ) {
+        parent::__construct($serviceWithNoDependencies);
     }
 
     public function isInitialized(): bool
