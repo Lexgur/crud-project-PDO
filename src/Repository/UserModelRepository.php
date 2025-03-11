@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
-use Crud\Exception\IncorrectEmailException;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\UserFactory;
 use Crud\Model\User;

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Crud\DependencyInjection;
 
+use Crud\Template;
+use PDO;
 use ReflectionClass;
 use ReflectionException;
 
 class Container
 {
     private array $services = [];
+    private array $config;
 
     public function has(string $id): bool
     {
@@ -34,26 +37,54 @@ class Container
             return $this->services[$id];
         }
 
+        if ($id === Template::class) {
+            global $config;
+            $templatePath = $config['templates'];
+
+            return new Template($templatePath);
+        }
+
+        if ($id === PDO::class) {
+            global $config; // Assuming $config is global and includes your DB configuration
+            $dsn = "mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}";
+            $username = $config['db']['username'];
+            $password = $config['db']['password'];
+            return new PDO($dsn, $username, $password);
+        }
+
         try {
             $reflectionClass = new ReflectionClass($id);
             $constructor = $reflectionClass->getConstructor();
 
-            if ($constructor === null) {
 
+            if ($constructor === null) {
                 $instance = new $id();
             } else {
+
                 $parameters = $constructor->getParameters();
                 $dependencies = [];
 
                 foreach ($parameters as $parameter) {
                     $type = $parameter->getType();
 
-                    if (($type === null) || $type->isBuiltin()) {
-                        throw new ReflectionException("Cannot resolve parameter: " . $parameter->getName());
-                    }
+                    if ($type === null || $type->isBuiltin()) {
 
-                    $dependencyClass = $type->getName();
-                    $dependencies[] = $this->get($dependencyClass);
+                        if ($parameter->isOptional()) {
+                            $dependencies[] = $parameter->getDefaultValue();
+                        } else {
+                            throw new ReflectionException("Cannot resolve parameter: " . $parameter->getName());
+                        }
+                    } else {
+
+                        $dependencyClass = $type->getName();
+
+
+                        if ($dependencyClass === 'string' && $parameter->getName() === 'templatePath') {
+                            $dependencies[] = $GLOBALS['config']['templates'];
+                        } else {
+                            $dependencies[] = $this->get($dependencyClass);
+                        }
+                    }
                 }
 
                 $instance = $reflectionClass->newInstanceArgs($dependencies);

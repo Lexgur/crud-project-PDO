@@ -34,14 +34,16 @@ class Application
 
     /**
      * @throws \ReflectionException
+     * @throws Exception
      */
     public function run(): void
     {
         global $config;
         $configPath = __DIR__ . '/../config.php';
-        include $configPath;
+        $config = include $configPath;
 
-        // Database configuration
+
+        //Database
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
         $database = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
@@ -49,14 +51,11 @@ class Application
 
         $template = new Template($config['templates']);
 
-        // Containerio panaudojimas
         $container = new Container();
 
-        // Get action
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
         $action = $request['action'] ?? null;
 
-        // controllerClass sukurimas
         $controllerClass = $this->actions[$action] ?? null;
         if ($controllerClass === null) {
             throw new Exception("Controller not found for action: " . htmlspecialchars($action));
