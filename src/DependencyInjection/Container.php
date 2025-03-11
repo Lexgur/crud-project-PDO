@@ -45,7 +45,7 @@ class Container
         }
 
         if ($id === PDO::class) {
-            global $config; // Assuming $config is global and includes your DB configuration
+            global $config;
             $dsn = "mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}";
             $username = $config['db']['username'];
             $password = $config['db']['password'];
