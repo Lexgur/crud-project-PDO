@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Crud\DependencyInjection;
 
-use ReflectionException;
+use ReflectionClass;
 
 class Container
 {
     private array $services = [];
 
-    public function __construct(private readonly string $baseDir = __DIR__)
+    public function __construct()
     {
-
     }
 
     public function has(string $id): bool
@@ -20,11 +19,11 @@ class Container
         return isset($this->services[$id]);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function get(string $id): object
     {
-
+        if (!$this->has($id)) {
+            $this->services[$id] = new $id();
+        }
+        return $this->services[$id];
     }
 }
