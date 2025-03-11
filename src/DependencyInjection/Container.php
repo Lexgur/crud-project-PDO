@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\DependencyInjection;
 
-use ReflectionClass;
-
 class Container
 {
     private array $services = [];
