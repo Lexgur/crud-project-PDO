@@ -26,6 +26,10 @@ class Container
      */
     public function get(string $id): object
     {
+        if (str_contains($id, 'Model\\')) {
+            throw new ReflectionException("Skipping Model classes: $id");
+        }
+
         if ($this->has($id)) {
             return $this->services[$id];
         }
