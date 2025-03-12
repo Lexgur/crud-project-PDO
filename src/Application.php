@@ -9,6 +9,7 @@ use Crud\Controller\CreateUser;
 use Crud\Controller\DeleteStudent;
 use Crud\Controller\DeleteUser;
 use Crud\Controller\LoginController;
+use Crud\Controller\LogoutController;
 use Crud\Controller\RegisterController;
 use Crud\Controller\UpdateStudent;
 use Crud\Controller\UpdateUser;
@@ -30,6 +31,7 @@ class Application
         'view_user' => ViewUser::class,
         'register_user' => RegisterController::class,
         'login_user' => LoginController::class,
+        'logout_user' => LogoutController::class,
     ];
 
     /**

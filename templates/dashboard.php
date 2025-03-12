@@ -31,7 +31,7 @@ $userEmail = $_SESSION['userEmail'];
             <a href="/index.php?action=update_user&id=<?php echo htmlspecialchars($_SESSION['userId'] ?? ''); ?>" target="_blank" rel="noopener">Atnaujinti profilį</a>
         </button>
         <button class="dlt-btn">
-            <a href="logout_user.php">Atsijungti</a>
+            <a href="/index.php?action=logout_user">Atsijungti</a>
         </button>
     </div>
 
