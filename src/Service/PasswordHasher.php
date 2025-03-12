@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Crud\Service;
 
 use Crud\Exception\IncorrectPasswordException;
-use Crud\Validation\PasswordValidator;
 
 class PasswordHasher
 {
