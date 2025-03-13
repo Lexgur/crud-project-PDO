@@ -12,7 +12,7 @@ use ReflectionParameter;
 
 class Container
 {
-    private array $services = [];
+    private array $services;
     private array $parameters;
 
     public function __construct(array $parameters = [], array $services = [])
