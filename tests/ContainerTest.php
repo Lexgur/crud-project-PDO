@@ -101,7 +101,7 @@ class ContainerTest extends TestCase
 
     private static function getContainer(bool $withParameters = false): Container
     {
-        if ($withParameters === false) {
+        if (!$withParameters) {
             return new Container();
         }
         return new Container([

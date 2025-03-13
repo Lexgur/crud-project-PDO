@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Crud\DependencyInjection;
 
-use Crud\Template;
-use PDO;
+use Crud\Exception\CircularDependencyException;
+use Crud\Exception\MissingDependencyInjectionParameterException;
 use ReflectionClass;
 use ReflectionException;
 
 class Container
 {
-    private array $services;
+    private array $services = [];
     private array $parameters;
 
     public function __construct(array $parameters = [], array $services = [])
@@ -20,87 +20,111 @@ class Container
         $this->services = $services;
     }
 
-    public function has(string $id): bool
+    public function has(string $serviceClass): bool
     {
-        return isset($this->services[$id]);
+        return isset($this->services[$serviceClass]);
     }
 
-    public function bind(string $id, object $service): void
+    public function bind(string $serviceClass, object $service): void
     {
-        $this->services[$id] = $service;
+        $this->services[$serviceClass] = $service;
     }
 
     /**
+     * @throws CircularDependencyException
+     * @throws MissingDependencyInjectionParameterException
      * @throws ReflectionException
      */
-    public function get(string $id): object
+    public function get(string $serviceClass): object
     {
+        static $instantiating = [];
 
-        if (str_starts_with($id, 'Crud\Model')) {
-            throw new ReflectionException("Skipping Model classes: $id");
+        if (str_starts_with($serviceClass, 'Crud\Model')) {
+            throw new ReflectionException("Skipping Model classes: $serviceClass");
         }
 
-        if ($this->has($id)) {
-            return $this->services[$id];
+        if ($this->has($serviceClass)) {
+            return $this->services[$serviceClass];
         }
 
-        if ($id === Template::class) {
-            global $config;
-            $templatePath = $config['templates'];
-
-            return new Template($templatePath);
+        if (isset($instantiating[$serviceClass])) {
+            throw new CircularDependencyException("Circular dependency detected for: $serviceClass");
         }
 
-        if ($id === PDO::class) {
-            global $config;
-            $dsn = "mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}";
-            $username = $config['db']['username'];
-            $password = $config['db']['password'];
-            return new PDO($dsn, $username, $password);
-        }
+        $instantiating[$serviceClass] = true;
 
         try {
-            $reflectionClass = new ReflectionClass($id);
+            $reflectionClass = new ReflectionClass($serviceClass);
+
+            if ($reflectionClass->isAbstract() || $reflectionClass->isInterface()) {
+                throw new ReflectionException("Cannot instantiate abstract class or interface: $serviceClass");
+            }
+
             $constructor = $reflectionClass->getConstructor();
 
-
             if ($constructor === null) {
-                $instance = new $id();
+                $instance = new $serviceClass();
             } else {
-
-                $parameters = $constructor->getParameters();
-                $dependencies = [];
-
-                foreach ($parameters as $parameter) {
-                    $type = $parameter->getType();
-
-                    if ($type === null || $type->isBuiltin()) {
-
-                        if ($parameter->isOptional()) {
-                            $dependencies[] = $parameter->getDefaultValue();
-                        } else {
-                            throw new ReflectionException("Cannot resolve parameter: " . $parameter->getName());
-                        }
-                    } else {
-
-                        $dependencyClass = $type->getName();
-
-
-                        if ($dependencyClass === 'string' && $parameter->getName() === 'templatePath') {
-                            $dependencies[] = $GLOBALS['config']['templates'];
-                        } else {
-                            $dependencies[] = $this->get($dependencyClass);
-                        }
-                    }
-                }
-
+                $dependencies = $this->resolveDependencies($constructor->getParameters());
                 $instance = $reflectionClass->newInstanceArgs($dependencies);
             }
 
-            $this->services[$id] = $instance;
+            $this->services[$serviceClass] = $instance;
+            unset($instantiating[$serviceClass]);
             return $instance;
+
         } catch (ReflectionException $e) {
-            throw new ReflectionException("Cannot instantiate $id: " . $e->getMessage());
+            throw new ReflectionException("Cannot instantiate $serviceClass: " . $e->getMessage());
         }
+    }
+
+    /**
+     * Resolves dependencies for a given set of parameters.
+     *
+     * @param array $parameters
+     * @return array
+     * @throws MissingDependencyInjectionParameterException
+     * @throws CircularDependencyException
+     * @throws ReflectionException
+     */
+    private function resolveDependencies(array $parameters): array
+    {
+        $dependencies = [];
+
+        foreach ($parameters as $parameter) {
+            $type = $parameter->getType();
+            $parameterName = $parameter->getName();
+
+            if ($type === null || $type->isBuiltin()) {
+                $dependencies[] = $this->resolveParameter($parameterName, $parameter);
+            } else {
+                $dependencies[] = $this->get($type->getName());
+            }
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * Resolves a scalar parameter.
+     *
+     * @param string $parameterName
+     * @param \ReflectionParameter $parameter
+     * @return mixed
+     * @throws MissingDependencyInjectionParameterException|ReflectionException
+     */
+    private function resolveParameter(string $parameterName, \ReflectionParameter $parameter): mixed
+    {
+        if (isset($this->parameters[$parameterName])) {
+            return $this->parameters[$parameterName];
+        }
+
+        if ($parameter->isOptional()) {
+            return $parameter->getDefaultValue();
+        }
+
+        throw new MissingDependencyInjectionParameterException(
+            "Cannot resolve parameter: $parameterName"
+        );
     }
 }
