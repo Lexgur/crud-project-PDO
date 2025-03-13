@@ -79,9 +79,9 @@ class Container
             foreach ($arguments as $argument) {
 
                 if($argument->getType()->isBuiltin()){
-                    $dependencies[] = $argument;
+                    $dependencies[] = $this->resolveParameter($argument->getName());
                 } else{
-                    $this->get($argument->getType()->getName());
+                    $dependencies = $this->get($argument->getType()->getName());
                 }
 
             }
