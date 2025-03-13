@@ -73,18 +73,17 @@ class Container
         try {
             $reflectionClass = new ReflectionClass($serviceClass);
 
-            if ($reflectionClass->isAbstract() || $reflectionClass->isInterface()) {
-                throw new ReflectionException("Cannot instantiate abstract class or interface: $serviceClass");
-            }
-
+            $dependencies = [];
             $constructor = $reflectionClass->getConstructor();
+            $arguments = $constructor->getParameters() ?? [];
+            foreach ($arguments as $argument) {
+                $type = $argument->getType();
+                $argumentName = $argument->getName();
 
-            if ($constructor === null) {
-                $instance = new $serviceClass();
-            } else {
-                $dependencies = $this->resolveDependencies($constructor->getParameters());
-                $instance = $reflectionClass->newInstanceArgs($dependencies);
+                $dependencies[] = $argument;
             }
+
+            $instance = $reflectionClass->newInstanceArgs($dependencies);
 
             $this->services[$serviceClass] = $instance;
             unset($instantiating[$serviceClass]);
@@ -130,16 +129,11 @@ class Container
      * @return mixed
      * @throws MissingDependencyInjectionParameterException|ReflectionException
      */
-    private function resolveParameter(string $parameterName, ReflectionParameter $parameter): mixed
+    private function resolveParameter(string $parameterName): string
     {
-        if (isset($this->parameters[$parameterName])) {
-            return $this->parameters[$parameterName];
+        if (!isset($this->parameters[$parameterName])) {
+            throw new MissingDependencyInjectionParameterException("Cannot resolve parameter: $parameterName");
         }
-
-        if ($parameter->isOptional()) {
-            return $parameter->getDefaultValue();
-        }
-
-        throw new MissingDependencyInjectionParameterException("Cannot resolve parameter: $parameterName");
+        return $this->parameters[$parameterName];
     }
 }
