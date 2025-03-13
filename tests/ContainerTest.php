@@ -2,142 +2,212 @@
 
 declare(strict_types=1);
 
+use Crud\Exception\CircularDependencyException;
+use Crud\Exception\MissingDependencyInjectionParameterException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Crud\DependencyInjection\Container;
 
 class ContainerTest extends TestCase
 {
-    private Container $container;
-
-    protected function setUp(): void
+    #[DataProvider('provideTestContainerData')]
+    final public function testContainer(string $serviceClass): void
     {
-        $this->container = new Container();
+        // Initiate new container instance with parameters.
+        $container = static::getContainer(withParameters: true);
+
+        // Test if service is not yet initiated.
+        $this->assertFalse($container->has($serviceClass));
+        // Test if service is initiated successfully - instance exists.
+        $this->assertInstanceOf($serviceClass, $container->get($serviceClass));
+        // Test if service is already initiated.
+        $this->assertTrue($container->has($serviceClass));
     }
 
-    public function testHasWhenServiceIsRegistered(): void
+    public static function provideTestContainerData(): array
     {
-        $this->container->get('ServiceWithNoDependencies');
-
-        $this->assertTrue($this->container->has('ServiceWithNoDependencies'));
+        return [
+            [ServiceWithNoDependencies::class],
+            [ServiceWithNoDependenciesAndNoConstruct::class],
+            [ServiceWithSingleDependency::class],
+            [ServiceWithMultipleDependencies::class],
+            [ServiceWithMultipleDependantDependencies::class],
+            [ServiceWithMultipleDependenciesExtendingAbstractService::class],
+            [ServiceWithSingleParameterDependency::class],
+            [ServiceWithMultipleParameterDependencies::class],
+            [ServiceWithSingleDependencyAndParameterDependency::class],
+            [ServiceWithMultipleDependenciesAndParameterDependencies::class],
+        ];
     }
 
-    public function testGetServiceWithNoDependencies(): void
+    #[DataProvider('provideTestContainerWithoutRequiredParametersData')]
+    final public function testContainerWithoutRequiredParameters(string $serviceClass, bool $expectedException): void
     {
-        $service = $this->container->get('ServiceWithNoDependencies');
+        // Initiate new container instance without parameters.
+        $container = static::getContainer();
+        // Test if service is not yet initialized.
+        $this->assertFalse($container->has($serviceClass));
 
-        $this->assertInstanceOf(ServiceWithNoDependencies::class, $service);
-        $this->assertTrue($service->isInitialized());
+        if ($expectedException) {
+            // Service should throw out MissingDependencyInjectionParameterException.
+            $this->expectException(MissingDependencyInjectionParameterException::class);
+            $container->get($serviceClass);
+        }
+        else {
+            // Test if service is initiated successfully - instance exists.
+            $this->assertInstanceOf($serviceClass, $container->get($serviceClass));
+            // Test if service is already initiated.
+            $this->assertTrue($container->has($serviceClass));
+        }
     }
 
-    public function testGetServiceWithSingleDependency(): void
+    public static function provideTestContainerWithoutRequiredParametersData(): array
     {
-        $service = $this->container->get('ServiceWithSingleDependency');
-
-        $this->assertInstanceOf(ServiceWithSingleDependency::class, $service);
-        $this->assertTrue($service->isInitialized());
+        return [
+            [ServiceWithNoDependencies::class, false],
+            [ServiceWithNoDependenciesAndNoConstruct::class, false],
+            [ServiceWithSingleDependency::class, false],
+            [ServiceWithMultipleDependencies::class, false],
+            [ServiceWithMultipleDependantDependencies::class, false],
+            [ServiceWithMultipleDependenciesExtendingAbstractService::class, false],
+            [ServiceWithSingleParameterDependency::class, true],
+            [ServiceWithMultipleParameterDependencies::class, true],
+            [ServiceWithSingleDependencyAndParameterDependency::class, true],
+            [ServiceWithMultipleDependenciesAndParameterDependencies::class, true],
+        ];
     }
 
-    public function testGetServiceWithMultipleDependencies(): void
+    #[DataProvider('provideTestCircularDependencyInServiceContainer')]
+    final public function testCircularDependencyInServiceContainer(string $serviceClass, bool $containerWithParameters): void
     {
-        $service = $this->container->get('ServiceWithMultipleDependencies');
+        // Initiate new container instance with parameters.
+        $container = static::getContainer(withParameters: $containerWithParameters);
 
-        $this->assertInstanceOf(ServiceWithMultipleDependencies::class, $service);
-        $this->assertTrue($service->isInitialized());
+        // Test if service is not yet initialized.
+        $this->assertFalse($container->has(ServiceWithCircularDependencies::class));
+        // Service should throw out CircularDependencyException.
+        $this->expectException(CircularDependencyException::class);
+        $container->get($serviceClass);
     }
 
-    public function testGetServiceWithMultipleDependantDependencies(): void
+    public static function provideTestCircularDependencyInServiceContainer(): array
     {
-        $service = $this->container->get('ServiceWithMultipleDependantDependencies');
-
-        $this->assertInstanceOf(ServiceWithMultipleDependantDependencies::class, $service);
-        $this->assertTrue($service->isInitialized());
+        return [
+            [ServiceWithCircularDependencies::class, true],
+            [ServiceWithCircularDependantDependenciesAndMissingParameters::class, true],
+            [ServiceWithCircularDependantDependenciesAndMissingParameters::class, false]
+        ];
     }
 
-    public function testGetServiceWithMultipleDependenciesExtendingAbstractService(): void
+    private static function getContainer(bool $withParameters = false): Container
     {
-        $service = $this->container->get('ServiceWithMultipleDependenciesExtendingAbstractService');
+        if ($withParameters === false) {
+            return new Container();
+        }
 
-        $this->assertInstanceOf(ServiceWithMultipleDependenciesExtendingAbstractService::class, $service);
-        $this->assertTrue($service->isInitialized());
-
-        print_r($service);
+        return new Container([
+            'stringParameter' => 'someString',
+            'integerParameter' => 123,
+            'booleanParameter' => true,
+        ]);
     }
 }
 
-class ServiceWithNoDependencies
+readonly class ServiceWithNoDependencies
 {
-    public function __construct()
-    {
-    }
-    public function isInitialized(): bool
-    {
-        return true;
-    }
+    public function __construct() {}
 }
 
-class ServiceWithSingleDependency
+readonly class ServiceWithNoDependenciesAndNoConstruct {}
+
+readonly class ServiceWithSingleDependency
 {
     public function __construct(
-        private readonly ServiceWithNoDependencies $serviceWithNoDependencies
-    ) {
-    }
-
-    public function isInitialized(): bool
-    {
-        return true;
-    }
+        private ServiceWithNoDependencies $serviceWithNoDependencies
+    ) {}
 }
 
-class ServiceWithMultipleDependencies {
+readonly class ServiceWithMultipleDependencies
+{
     public function __construct(
-        private readonly ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
-        private readonly ServiceWithNoDependencies $serviceWithNoDependenciesSecond,
-    ) {
-    }
-
-    public function isInitialized(): bool
-    {
-        return true;
-    }
+        private ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
+        private ServiceWithNoDependencies $serviceWithNoDependenciesSecond,
+    ) {}
 }
 
-class ServiceWithMultipleDependantDependencies {
+readonly class ServiceWithMultipleDependantDependencies
+{
     public function __construct(
-        private readonly ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
-        private readonly ServiceWithSingleDependency $serviceWithSingleDependency,
-        private readonly ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
-    ) {
-    }
-
-    public function isInitialized(): bool
-    {
-        return true;
-    }
+        private ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
+        private ServiceWithSingleDependency $serviceWithSingleDependency,
+        private ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+    ) {}
 }
-abstract class AbstractServiceWithSingleDependency {
+abstract readonly class AbstractServiceWithSingleDependency
+{
     public function __construct(
-        private readonly ServiceWithNoDependencies $serviceWithNoDependencies
-    ) {
-    }
-
-    public function isInitialized(): bool
-    {
-        return true;
-    }
+        private ServiceWithNoDependencies $serviceWithNoDependencies
+    ) {}
 }
 
-class ServiceWithMultipleDependenciesExtendingAbstractService extends AbstractServiceWithSingleDependency {
+readonly class ServiceWithMultipleDependenciesExtendingAbstractService extends AbstractServiceWithSingleDependency
+{
     public function __construct(
-        private readonly ServiceWithNoDependencies $serviceWithNoDependencies,
-        private readonly ServiceWithSingleDependency $serviceWithSingleDependency,
-        private readonly ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
-        private readonly ServiceWithMultipleDependantDependencies $serviceWithMultipleDependenciesSecond,
+        private ServiceWithNoDependencies $serviceWithNoDependencies,
+        private ServiceWithSingleDependency $serviceWithSingleDependency,
+        private ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
+        private ServiceWithMultipleDependantDependencies $serviceWithMultipleDependenciesSecond,
     ) {
         parent::__construct($serviceWithNoDependencies);
     }
+}
 
-    public function isInitialized(): bool
-    {
-        return true;
-    }
+readonly class ServiceWithSingleParameterDependency
+{
+    public function __construct(
+        private string $stringParameter,
+    ) {}
+}
+
+readonly class ServiceWithMultipleParameterDependencies
+{
+    public function __construct(
+        private string $stringParameter,
+        private int $integerParameter,
+        private bool $booleanParameter,
+    ) {}
+}
+
+readonly class ServiceWithSingleDependencyAndParameterDependency
+{
+    public function __construct(
+        private ServiceWithMultipleDependenciesExtendingAbstractService $serviceWithMultipleDependenciesExtendingAbstractService,
+        private string $stringParameter,
+    ) {}
+}
+
+readonly class ServiceWithMultipleDependenciesAndParameterDependencies
+{
+    public function __construct(
+        private ServiceWithMultipleDependenciesExtendingAbstractService $serviceWithMultipleDependenciesExtendingAbstractService,
+        private ServiceWithMultipleParameterDependencies $serviceWithMultipleParameterDependencies,
+        private string $stringParameter,
+        private bool $booleanParameter,
+        private int $integerParameter,
+    ) {}
+}
+
+readonly class ServiceWithCircularDependencies
+{
+    public function __construct(
+        private ServiceWithCircularDependencies $serviceWithCircularDependencies,
+    ) {}
+}
+
+readonly class ServiceWithCircularDependantDependenciesAndMissingParameters
+{
+    public function __construct(
+        private ServiceWithCircularDependencies $serviceWithCircularDependencies,
+        private string $stringParameter,
+    ) {}
 }

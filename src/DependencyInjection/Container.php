@@ -12,7 +12,6 @@ use ReflectionException;
 class Container
 {
     private array $services = [];
-    private array $config;
 
     public function has(string $id): bool
     {
