@@ -77,10 +77,13 @@ class Container
             $constructor = $reflectionClass->getConstructor();
             $arguments = $constructor->getParameters() ?? [];
             foreach ($arguments as $argument) {
-                $type = $argument->getType();
-                $argumentName = $argument->getName();
 
-                $dependencies[] = $argument;
+                if($argument->getType()->isBuiltin()){
+                    $dependencies[] = $argument;
+                } else{
+                    $this->get($argument->getType()->getName());
+                }
+
             }
 
             $instance = $reflectionClass->newInstanceArgs($dependencies);
