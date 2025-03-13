@@ -14,6 +14,7 @@ class Container
 {
     private array $services;
     private array $parameters;
+    private array $instantiating = [];
 
     public function __construct(array $parameters = [], array $services = [])
     {
@@ -54,7 +55,7 @@ class Container
      */
     public function get(string $serviceClass): object
     {
-        static $instantiating = [];
+
 
         if (str_starts_with($serviceClass, 'Crud\Model')) {
             throw new ReflectionException("Skipping Model classes: $serviceClass");
@@ -64,11 +65,11 @@ class Container
             return $this->services[$serviceClass];
         }
 
-        if (isset($instantiating[$serviceClass])) {
+        if (isset($this->instantiating[$serviceClass])) {
             throw new CircularDependencyException("Circular dependency detected for: $serviceClass");
         }
 
-        $instantiating[$serviceClass] = true;
+        $this->instantiating[$serviceClass] = true;
 
         try {
             $reflectionClass = new ReflectionClass($serviceClass);
@@ -89,7 +90,7 @@ class Container
             $instance = $reflectionClass->newInstanceArgs($dependencies);
 
             $this->services[$serviceClass] = $instance;
-            unset($instantiating[$serviceClass]);
+            unset($this->instantiating[$serviceClass]);
             return $instance;
 
         } catch (ReflectionException $e) {
