@@ -104,7 +104,6 @@ class ContainerTest extends TestCase
         if ($withParameters === false) {
             return new Container();
         }
-
         return new Container([
             'stringParameter' => 'someString',
             'integerParameter' => 123,

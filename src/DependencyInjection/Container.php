@@ -11,7 +11,14 @@ use ReflectionException;
 
 class Container
 {
-    private array $services = [];
+    private array $services;
+    private array $parameters;
+
+    public function __construct(array $parameters = [], array $services = [])
+    {
+        $this->parameters = $parameters;
+        $this->services = $services;
+    }
 
     public function has(string $id): bool
     {
