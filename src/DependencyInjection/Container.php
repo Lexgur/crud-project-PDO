@@ -8,6 +8,7 @@ use Crud\Exception\CircularDependencyException;
 use Crud\Exception\MissingDependencyInjectionParameterException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionParameter;
 
 class Container
 {
@@ -24,10 +25,12 @@ class Container
     {
         return isset($this->services[$serviceClass]);
     }
+
     public function hasParameter(string $name): bool
     {
         return isset($this->parameters[$name]);
     }
+
     /**
      * @throws MissingDependencyInjectionParameterException
      */
@@ -123,11 +126,11 @@ class Container
      * Resolves a scalar parameter.
      *
      * @param string $parameterName
-     * @param \ReflectionParameter $parameter
+     * @param ReflectionParameter $parameter
      * @return mixed
      * @throws MissingDependencyInjectionParameterException|ReflectionException
      */
-    private function resolveParameter(string $parameterName, \ReflectionParameter $parameter): mixed
+    private function resolveParameter(string $parameterName, ReflectionParameter $parameter): mixed
     {
         if (isset($this->parameters[$parameterName])) {
             return $this->parameters[$parameterName];
