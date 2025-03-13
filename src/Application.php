@@ -48,12 +48,17 @@ class Application
         //Database
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
+        $parameters = [
+            'dsn' => $dsn,
+            'username' => $dbconfig['username'],
+            'password' => $dbconfig['password'],
+            'templatePath' => $config['templates'],
+        ];
+
         $database = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
-        $connection = $database->connect();
+        $database->connect();
 
-        $template = new Template($config['templates']);
-
-        $container = new Container();
+        $container = new Container($parameters);
 
         $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
         $action = $request['action'] ?? null;

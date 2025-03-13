@@ -24,6 +24,20 @@ class Container
     {
         return isset($this->services[$serviceClass]);
     }
+    public function hasParameter(string $name): bool
+    {
+        return isset($this->parameters[$name]);
+    }
+    /**
+     * @throws MissingDependencyInjectionParameterException
+     */
+    public function getParameter(string $name): mixed
+    {
+        if (!$this->hasParameter($name)) {
+            throw new MissingDependencyInjectionParameterException("Missing parameter: $name");
+        }
+        return $this->parameters[$name];
+    }
 
     public function bind(string $serviceClass, object $service): void
     {
@@ -123,8 +137,6 @@ class Container
             return $parameter->getDefaultValue();
         }
 
-        throw new MissingDependencyInjectionParameterException(
-            "Cannot resolve parameter: $parameterName"
-        );
+        throw new MissingDependencyInjectionParameterException("Cannot resolve parameter: $parameterName");
     }
 }
