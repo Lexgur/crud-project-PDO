@@ -99,39 +99,11 @@ class Container
     }
 
     /**
-     * Resolves dependencies for a given set of parameters.
-     *
-     * @param array $parameters
-     * @return array
-     * @throws MissingDependencyInjectionParameterException
-     * @throws CircularDependencyException
-     * @throws ReflectionException
-     */
-    private function resolveDependencies(array $parameters): array
-    {
-        $dependencies = [];
-
-        foreach ($parameters as $parameter) {
-            $type = $parameter->getType();
-            $parameterName = $parameter->getName();
-
-            if ($type === null || $type->isBuiltin()) {
-                $dependencies[] = $this->resolveParameter($parameterName, $parameter);
-            } else {
-                $dependencies[] = $this->get($type->getName());
-            }
-        }
-
-        return $dependencies;
-    }
-
-    /**
      * Resolves a scalar parameter.
      *
      * @param string $parameterName
-     * @param ReflectionParameter $parameter
      * @return mixed
-     * @throws MissingDependencyInjectionParameterException|ReflectionException
+     * @throws MissingDependencyInjectionParameterException
      */
     private function resolveParameter(string $parameterName): string
     {
