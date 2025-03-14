@@ -75,8 +75,6 @@ class ContainerTest extends TestCase
             [ServiceWithMultipleParameterDependencies::class, true],
             [ServiceWithSingleDependencyAndParameterDependency::class, true],
             [ServiceWithMultipleDependenciesAndParameterDependencies::class, true],
-            [ConnectionServiceWithParamatersAndDependencies::class, true],
-            [TemplateServiceWithParamatersAndDependencies::class, true],
         ];
     }
 
@@ -114,21 +112,21 @@ class ContainerTest extends TestCase
 
         $container = new Container($parameters);
 
-        $this->assertFalse($container->has(ConnectionServiceWithParamatersAndDependencies::class));
-        $this->assertFalse($container->has(TemplateServiceWithParamatersAndDependencies::class));
+        $this->assertFalse($container->has(Connection::class));
+        $this->assertFalse($container->has(Template::class));
 
-        $connectionService = $container->get(ConnectionServiceWithParamatersAndDependencies::class);
-        $this->assertInstanceOf(ConnectionServiceWithParamatersAndDependencies::class, $connectionService);
+        $connectionService = $container->get(Connection::class);
+        $this->assertInstanceOf(Connection::class, $connectionService);
 
-        $templateService = $container->get(TemplateServiceWithParamatersAndDependencies::class);
-        $this->assertInstanceOf(TemplateServiceWithParamatersAndDependencies::class, $templateService);
+        $templateService = $container->get(Template::class);
+        $this->assertInstanceOf(Template::class, $templateService);
     }
 
     public static function provideTestWithConnectionAndTemplateServices(): array
     {
         return [
-            [ConnectionServiceWithParamatersAndDependencies::class],
-            [TemplateServiceWithParamatersAndDependencies::class],
+            [Connection::class],
+            [Template::class],
         ];
     }
 
@@ -259,7 +257,7 @@ readonly class ServiceWithCircularDependantDependenciesAndMissingParameters
     }
 }
 
-class ConnectionServiceWithParamatersAndDependencies
+class Connection
 {
 
     private string $dsn;
@@ -280,9 +278,9 @@ class ConnectionServiceWithParamatersAndDependencies
     }
 }
 
-class TemplateServiceWithParamatersAndDependencies
+readonly class Template
 {
-    public function __construct(private readonly string $templatePath)
+    public function __construct(private string $templatePath)
     {
 
     }
