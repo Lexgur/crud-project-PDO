@@ -100,7 +100,8 @@ class ContainerTest extends TestCase
         ];
     }
 
-    final public function testWithConnectionAndTemplateServices(): void
+    #[DataProvider('provideTestWithConnectionAndTemplateServices')]
+    final public function testWithConnectionAndTemplateServices(string $serviceClass): void
     {
         $parameters = [
             'dsn' => 'mysql:host=localhost;dbname=crud_operation_test',
@@ -111,14 +112,16 @@ class ContainerTest extends TestCase
 
         $container = new Container($parameters);
 
-        $this->assertFalse($container->has(Connection::class));
-        $this->assertFalse($container->has(Template::class));
+        $this->assertFalse($container->has($serviceClass));
+        $this->assertInstanceOf($serviceClass, $container->get($serviceClass));
+    }
 
-        $connectionService = $container->get(Connection::class);
-        $this->assertInstanceOf(Connection::class, $connectionService);
-
-        $templateService = $container->get(Template::class);
-        $this->assertInstanceOf(Template::class, $templateService);
+    public static function provideTestWithConnectionAndTemplateServices(): array
+    {
+        return [
+            [Template::class],
+            [Connection::class],
+        ];
     }
 
     private static function getContainer(bool $withParameters = false): Container
