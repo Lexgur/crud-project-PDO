@@ -2,10 +2,16 @@
 
 declare(strict_types=1);
 
+use Crud\Connection;
+use Crud\Controller\LoginController;
+use Crud\Controller\ViewUser;
 use Crud\Exception\CircularDependencyException;
 use Crud\Exception\IllegalTemplatePathException;
 use Crud\Exception\MissingDependencyInjectionParameterException;
 use Crud\Exception\TemplateNotFoundException;
+use Crud\Model\Student;
+use Crud\Model\User;
+use Crud\Template;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Crud\DependencyInjection\Container;
@@ -115,6 +121,7 @@ class ContainerTest extends TestCase
 
         $this->assertFalse($container->has($serviceClass));
         $this->assertInstanceOf($serviceClass, $container->get($serviceClass));
+        $this->assertTrue($container->has($serviceClass));
     }
 
     public static function provideTestWithConnectionAndTemplateServices(): array
@@ -122,7 +129,30 @@ class ContainerTest extends TestCase
         return [
             [Template::class],
             [Connection::class],
-            [ViewUser::class],
+            [viewUser::class],
+            [LoginController::class]
+        ];
+    }
+
+    #[DataProvider('provideTestWithModels')]
+    final public function testIfFailsWithModels(string $serviceClass): void
+    {
+
+        $container = new Container();
+
+        $this->assertFalse($container->has($serviceClass));
+
+        $this->expectException(ReflectionException::class);
+
+        $this->assertInstanceOf($serviceClass, $container->get($serviceClass));
+        $this->assertTrue($container->has($serviceClass));
+    }
+
+    public static function provideTestWithModels(): array
+    {
+        return [
+            [User::class],
+            [Student::class]
         ];
     }
 
@@ -253,68 +283,4 @@ readonly class ServiceWithCircularDependantDependenciesAndMissingParameters
     }
 }
 
-class Connection
-{
 
-    private string $dsn;
-    private string $username;
-    private string $password;
-
-    public function __construct(string $dsn, string $username, string $password)
-    {
-        $this->dsn = $dsn;
-        $this->username = $username;
-        $this->password = $password;
-
-    }
-
-    public function connect(): PDO
-    {
-        return new PDO($this->dsn, $this->username, $this->password);
-    }
-}
-
-readonly class Template
-{
-    public function __construct(private string $templatePath)
-    {
-
-    }
-
-    public function render(string $template, array $parameters = []): string
-    {
-        if (str_starts_with($template, '.') || str_starts_with($template, '/')) {
-            throw new IllegalTemplatePathException('No hola for you');
-        }
-
-        $templatePath = $this->templatePath . $template;
-
-        if (file_exists($templatePath)) {
-            extract($parameters);
-            ob_start();
-            include $templatePath;
-            return ob_get_clean();
-        } else {
-            throw new TemplateNotFoundException('template not found: ' . $templatePath);
-        }
-    }
-}
-
-class ViewUser
-{
-    protected UserRepositoryTest $userRepositoryTest;
-    public function __invoke(): void
-    {
-
-        $userId = $_GET['id'] ?? null;
-
-        $user = $this->userRepositoryTest->viewUser((int) $userId);
-
-        if (!$user) {
-            echo "User not found.";
-            return;
-        }
-
-        echo $this->render('view_user.php', ['user' => $user]);
-    }
-}
