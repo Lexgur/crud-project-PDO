@@ -76,7 +76,7 @@ class Container
 
             $dependencies = [];
             $constructor = $reflectionClass->getConstructor();
-            $arguments = $constructor ? $constructor->getParameters() : [];
+            $arguments = $constructor?->getParameters() ?? [];
             foreach ($arguments as $argument) {
 
                 if ($argument->getType()->isBuiltin()) {

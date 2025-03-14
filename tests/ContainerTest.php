@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Crud\Exception\CircularDependencyException;
+use Crud\Exception\IllegalTemplatePathException;
 use Crud\Exception\MissingDependencyInjectionParameterException;
+use Crud\Exception\TemplateNotFoundException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Crud\DependencyInjection\Container;
@@ -14,7 +16,7 @@ class ContainerTest extends TestCase
     final public function testContainer(string $serviceClass): void
     {
         // Initiate new container instance with parameters.
-        $container = static::getContainer(withParameters: true);
+        $container = static::getContainer( withParameters: true);
 
         // Test if service is not yet initiated.
         $this->assertFalse($container->has($serviceClass));
@@ -52,8 +54,7 @@ class ContainerTest extends TestCase
             // Service should throw out MissingDependencyInjectionParameterException.
             $this->expectException(MissingDependencyInjectionParameterException::class);
             $container->get($serviceClass);
-        }
-        else {
+        } else {
             // Test if service is initiated successfully - instance exists.
             $this->assertInstanceOf($serviceClass, $container->get($serviceClass));
             // Test if service is already initiated.
@@ -74,6 +75,8 @@ class ContainerTest extends TestCase
             [ServiceWithMultipleParameterDependencies::class, true],
             [ServiceWithSingleDependencyAndParameterDependency::class, true],
             [ServiceWithMultipleDependenciesAndParameterDependencies::class, true],
+            [ConnectionServiceWithParamatersAndDependencies::class, true],
+            [TemplateServiceWithParamatersAndDependencies::class, true],
         ];
     }
 
@@ -99,6 +102,36 @@ class ContainerTest extends TestCase
         ];
     }
 
+    #[DataProvider('provideTestWithConnectionAndTemplateServices')]
+    final public function testWithConnectionAndTemplateServices(string $serviceClass): void
+    {
+        $parameters = [
+            'dsn' => 'mysql:host=localhost;dbname=crud_operation_test',
+            'username' => 'root',
+            'password' => 'root123',
+            'templatePath' => __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR,
+        ];
+
+        $container = new Container($parameters);
+
+        $this->assertFalse($container->has(ConnectionServiceWithParamatersAndDependencies::class));
+        $this->assertFalse($container->has(TemplateServiceWithParamatersAndDependencies::class));
+
+        $connectionService = $container->get(ConnectionServiceWithParamatersAndDependencies::class);
+        $this->assertInstanceOf(ConnectionServiceWithParamatersAndDependencies::class, $connectionService);
+
+        $templateService = $container->get(TemplateServiceWithParamatersAndDependencies::class);
+        $this->assertInstanceOf(TemplateServiceWithParamatersAndDependencies::class, $templateService);
+    }
+
+    public static function provideTestWithConnectionAndTemplateServices(): array
+    {
+        return [
+            [ConnectionServiceWithParamatersAndDependencies::class],
+            [TemplateServiceWithParamatersAndDependencies::class],
+        ];
+    }
+
     private static function getContainer(bool $withParameters = false): Container
     {
         if ($withParameters === false) {
@@ -115,16 +148,21 @@ class ContainerTest extends TestCase
 
 readonly class ServiceWithNoDependencies
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }
 
-readonly class ServiceWithNoDependenciesAndNoConstruct {}
+readonly class ServiceWithNoDependenciesAndNoConstruct
+{
+}
 
 readonly class ServiceWithSingleDependency
 {
     public function __construct(
         private ServiceWithNoDependencies $serviceWithNoDependencies
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithMultipleDependencies
@@ -132,7 +170,8 @@ readonly class ServiceWithMultipleDependencies
     public function __construct(
         private ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
         private ServiceWithNoDependencies $serviceWithNoDependenciesSecond,
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithMultipleDependantDependencies
@@ -141,13 +180,15 @@ readonly class ServiceWithMultipleDependantDependencies
         private ServiceWithNoDependencies $serviceWithNoDependenciesFirst,
         private ServiceWithSingleDependency $serviceWithSingleDependency,
         private ServiceWithMultipleDependencies $serviceWithMultipleDependencies,
-    ) {}
+    ) {
+    }
 }
 abstract readonly class AbstractServiceWithSingleDependency
 {
     public function __construct(
         private ServiceWithNoDependencies $serviceWithNoDependencies
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithMultipleDependenciesExtendingAbstractService extends AbstractServiceWithSingleDependency
@@ -166,7 +207,8 @@ readonly class ServiceWithSingleParameterDependency
 {
     public function __construct(
         private string $stringParameter,
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithMultipleParameterDependencies
@@ -175,7 +217,8 @@ readonly class ServiceWithMultipleParameterDependencies
         private string $stringParameter,
         private int $integerParameter,
         private bool $booleanParameter,
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithSingleDependencyAndParameterDependency
@@ -183,7 +226,8 @@ readonly class ServiceWithSingleDependencyAndParameterDependency
     public function __construct(
         private ServiceWithMultipleDependenciesExtendingAbstractService $serviceWithMultipleDependenciesExtendingAbstractService,
         private string $stringParameter,
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithMultipleDependenciesAndParameterDependencies
@@ -194,14 +238,16 @@ readonly class ServiceWithMultipleDependenciesAndParameterDependencies
         private string $stringParameter,
         private bool $booleanParameter,
         private int $integerParameter,
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithCircularDependencies
 {
     public function __construct(
         private ServiceWithCircularDependencies $serviceWithCircularDependencies,
-    ) {}
+    ) {
+    }
 }
 
 readonly class ServiceWithCircularDependantDependenciesAndMissingParameters
@@ -209,5 +255,53 @@ readonly class ServiceWithCircularDependantDependenciesAndMissingParameters
     public function __construct(
         private ServiceWithCircularDependencies $serviceWithCircularDependencies,
         private string $stringParameter,
-    ) {}
+    ) {
+    }
+}
+
+class ConnectionServiceWithParamatersAndDependencies
+{
+
+    private string $dsn;
+    private string $username;
+    private string $password;
+
+    public function __construct(string $dsn, string $username, string $password)
+    {
+        $this->dsn = $dsn;
+        $this->username = $username;
+        $this->password = $password;
+
+    }
+
+    public function connect(): PDO
+    {
+        return new PDO($this->dsn, $this->username, $this->password);
+    }
+}
+
+class TemplateServiceWithParamatersAndDependencies
+{
+    public function __construct(private readonly string $templatePath)
+    {
+
+    }
+
+    public function render(string $template, array $parameters = []): string
+    {
+        if (str_starts_with($template, '.') || str_starts_with($template, '/')) {
+            throw new IllegalTemplatePathException('No hola for you');
+        }
+
+        $templatePath = $this->templatePath . $template;
+
+        if (file_exists($templatePath)) {
+            extract($parameters);
+            ob_start();
+            include $templatePath;
+            return ob_get_clean();
+        } else {
+            throw new TemplateNotFoundException('template not found: ' . $templatePath);
+        }
+    }
 }
