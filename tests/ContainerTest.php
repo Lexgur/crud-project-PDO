@@ -137,13 +137,11 @@ class ContainerTest extends TestCase
 
         $container = static::getContainer();
 
-        $this->assertFalse($container->has(NonExistantService::class));
+        $this->assertFalse($container->has('NonExistentService'));
 
         $this->expectException(ReflectionException::class);
 
-        $NonExistentService = $container->get(NonExistantService::class);
-        $this->assertInstanceOf($NonExistentService, NonExistantService::class);
-        $this->assertTrue($container->has(NonExistantService::class));
+        $container->get('NonExistentService');
     }
 
     #[DataProvider('provideContainerModelReflectionClassExceptionData')]

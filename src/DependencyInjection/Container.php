@@ -6,10 +6,11 @@ namespace Crud\DependencyInjection;
 
 use Crud\Exception\CircularDependencyException;
 use Crud\Exception\MissingDependencyInjectionParameterException;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
 
-class Container
+class Container implements ContainerInterface
 {
     private array $services;
     private array $parameters;
