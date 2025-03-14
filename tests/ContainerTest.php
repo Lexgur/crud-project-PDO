@@ -89,6 +89,7 @@ class ContainerTest extends TestCase
         // Service should throw out CircularDependencyException.
         $this->expectException(CircularDependencyException::class);
         $container->get($serviceClass);
+        $this->assertTrue($container->has($serviceClass));
     }
 
     public static function provideTestCircularDependencyInServiceContainer(): array
@@ -121,6 +122,7 @@ class ContainerTest extends TestCase
         return [
             [Template::class],
             [Connection::class],
+            [ViewUser::class],
         ];
     }
 
@@ -295,5 +297,24 @@ readonly class Template
         } else {
             throw new TemplateNotFoundException('template not found: ' . $templatePath);
         }
+    }
+}
+
+class ViewUser
+{
+    protected UserRepositoryTest $userRepositoryTest;
+    public function __invoke(): void
+    {
+
+        $userId = $_GET['id'] ?? null;
+
+        $user = $this->userRepositoryTest->viewUser((int) $userId);
+
+        if (!$user) {
+            echo "User not found.";
+            return;
+        }
+
+        echo $this->render('view_user.php', ['user' => $user]);
     }
 }
