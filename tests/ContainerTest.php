@@ -6,9 +6,7 @@ use Crud\Connection;
 use Crud\Controller\LoginController;
 use Crud\Controller\ViewUser;
 use Crud\Exception\CircularDependencyException;
-use Crud\Exception\IllegalTemplatePathException;
 use Crud\Exception\MissingDependencyInjectionParameterException;
-use Crud\Exception\TemplateNotFoundException;
 use Crud\Model\Student;
 use Crud\Model\User;
 use Crud\Template;
@@ -107,8 +105,8 @@ class ContainerTest extends TestCase
         ];
     }
 
-    #[DataProvider('provideTestWithConnectionAndTemplateServices')]
-    final public function testWithConnectionAndTemplateServices(string $serviceClass): void
+    #[DataProvider('provideTestContainerApplicationServices')]
+    final public function testContainerApplicationServices(string $serviceClass): void
     {
         $parameters = [
             'dsn' => 'mysql:host=localhost;dbname=crud_operation_test',
@@ -124,12 +122,12 @@ class ContainerTest extends TestCase
         $this->assertTrue($container->has($serviceClass));
     }
 
-    public static function provideTestWithConnectionAndTemplateServices(): array
+    public static function provideTestContainerApplicationServices(): array
     {
         return [
             [Template::class],
             [Connection::class],
-            [viewUser::class],
+            [ViewUser::class],
             [LoginController::class]
         ];
     }

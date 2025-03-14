@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
-use PDO;
+use Crud\Connection;
 
 class BaseRepositoryClass
 {
-    protected PDO $connection;
+    protected Connection $connection;
 
-    public function __construct(PDO $pdo)
+    public function __construct(Connection $connection)
     {
-        $this->connection = $pdo;
+        $this->connection = $connection;
     }
 }

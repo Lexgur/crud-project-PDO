@@ -11,6 +11,7 @@ use PDO;
 
 class UserModelRepository extends BaseRepositoryClass implements UserModelInterface
 {
+
     public function save(User $user): User
     {
         if ($user->getUserId() === null) {
