@@ -82,7 +82,7 @@ class ContainerTest extends TestCase
         ];
     }
 
-    #[DataProvider('provideTestCircularDependencyInServiceContainer')]
+    #[DataProvider('provideTestCircularDependencyInServiceContainerData')]
     final public function testCircularDependencyInServiceContainer(string $serviceClass, bool $containerWithParameters): void
     {
         // Initiate new container instance with parameters.
@@ -96,7 +96,7 @@ class ContainerTest extends TestCase
         $this->assertTrue($container->has($serviceClass));
     }
 
-    public static function provideTestCircularDependencyInServiceContainer(): array
+    public static function provideTestCircularDependencyInServiceContainerData(): array
     {
         return [
             [ServiceWithCircularDependencies::class, true],
@@ -105,7 +105,7 @@ class ContainerTest extends TestCase
         ];
     }
 
-    #[DataProvider('provideTestContainerApplicationServices')]
+    #[DataProvider('provideTestContainerApplicationServicesData')]
     final public function testContainerApplicationServices(string $serviceClass): void
     {
         $parameters = [
@@ -122,7 +122,7 @@ class ContainerTest extends TestCase
         $this->assertTrue($container->has($serviceClass));
     }
 
-    public static function provideTestContainerApplicationServices(): array
+    public static function provideTestContainerApplicationServicesData(): array
     {
         return [
             [Template::class],
@@ -132,8 +132,22 @@ class ContainerTest extends TestCase
         ];
     }
 
-    #[DataProvider('provideTestWithModels')]
-    final public function testIfFailsWithModels(string $serviceClass): void
+    final public function testContainerThrowsReflectionClassExceptionWithNonExistentService(): void
+    {
+
+        $container = static::getContainer();
+
+        $this->assertFalse($container->has(NonExistantService::class));
+
+        $this->expectException(ReflectionException::class);
+
+        $NonExistentService = $container->get(NonExistantService::class);
+        $this->assertInstanceOf($NonExistentService, NonExistantService::class);
+        $this->assertTrue($container->has(NonExistantService::class));
+    }
+
+    #[DataProvider('provideContainerModelReflectionClassExceptionData')]
+    final public function testContainerModelReflectionClassException(string $serviceClass): void
     {
 
         $container = new Container();
@@ -146,7 +160,7 @@ class ContainerTest extends TestCase
         $this->assertTrue($container->has($serviceClass));
     }
 
-    public static function provideTestWithModels(): array
+    public static function provideContainerModelReflectionClassExceptionData(): array
     {
         return [
             [User::class],
