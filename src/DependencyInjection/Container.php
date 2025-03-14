@@ -82,7 +82,7 @@ class Container
                 if ($argument->getType()->isBuiltin()) {
                     $dependencies[] = $this->resolveParameter($argument->getName());
                 } else {
-                    $dependencies = $this->get($argument->getType()->getName());
+                    $dependencies[] = $this->get($argument->getType()->getName());
                 }
 
             }
