@@ -101,7 +101,7 @@ class ContainerTest extends TestCase
     }
 
     #[DataProvider('provideTestWithConnectionAndTemplateServices')]
-    final public function testWithConnectionAndTemplateServices(string $serviceClass): void
+    final public function testWithConnectionAndTemplateServices(): void
     {
         $parameters = [
             'dsn' => 'mysql:host=localhost;dbname=crud_operation_test',
