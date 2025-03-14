@@ -76,7 +76,7 @@ class Container
 
             $dependencies = [];
             $constructor = $reflectionClass->getConstructor();
-            $arguments = $constructor->getParameters() ?? [];
+            $arguments = $constructor ? $constructor->getParameters() : [];
             foreach ($arguments as $argument) {
 
                 if ($argument->getType()->isBuiltin()) {
@@ -105,7 +105,7 @@ class Container
      * @return mixed
      * @throws MissingDependencyInjectionParameterException
      */
-    private function resolveParameter(string $parameterName): string
+    private function resolveParameter(string $parameterName): mixed
     {
         if (!isset($this->parameters[$parameterName])) {
             throw new MissingDependencyInjectionParameterException("Cannot resolve parameter: $parameterName");
