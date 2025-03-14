@@ -100,7 +100,6 @@ class ContainerTest extends TestCase
         ];
     }
 
-    #[DataProvider('provideTestWithConnectionAndTemplateServices')]
     final public function testWithConnectionAndTemplateServices(): void
     {
         $parameters = [
@@ -120,14 +119,6 @@ class ContainerTest extends TestCase
 
         $templateService = $container->get(Template::class);
         $this->assertInstanceOf(Template::class, $templateService);
-    }
-
-    public static function provideTestWithConnectionAndTemplateServices(): array
-    {
-        return [
-            [Connection::class],
-            [Template::class],
-        ];
     }
 
     private static function getContainer(bool $withParameters = false): Container
