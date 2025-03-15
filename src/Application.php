@@ -44,7 +44,6 @@ class Application
         $configPath = __DIR__ . '/../config.php';
         $config = include $configPath;
 
-
         //Database
         $dbconfig = $config['db'];
         $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['dbname']}";
@@ -54,9 +53,6 @@ class Application
             'password' => $dbconfig['password'],
             'templatePath' => $config['templates'],
         ];
-
-        $database = new Connection($dsn, $dbconfig['username'], $dbconfig['password']);
-        $database->connect();
 
         $container = new Container($parameters);
 
