@@ -56,8 +56,7 @@ class Application
 
         $container = new Container($parameters);
 
-        $request = filter_var_array($_GET, ['action' => FILTER_SANITIZE_ENCODED]);
-        $action = $request['action'] ?? null;
+        $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $controllerClass = $this->actions[$action] ?? null;
         if ($controllerClass === null) {

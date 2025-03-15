@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Crud\Connection;
 use Crud\Exception\IncorrectIdException;
 use Crud\Model\User;
 use Crud\Repository\UserModelRepository;
@@ -12,15 +13,20 @@ class UserRepositoryTest extends TestCase
     public function setUp(): void
     {
         $this->testDbPath = __DIR__ . '/crud-test.sqlite';
-        $this->dbh = new PDO('sqlite:' . $this->testDbPath);
+        $dsn = 'sqlite:' . $this->testDbPath;
+        $username = null;
+        $password = null;
+
+        $this->dbh = new Connection($dsn, (string)$username, (string)$password);
         $this->repository = new UserModelRepository($this->dbh);
-        $this->dbh->exec("
+
+        $this->dbh->connect()->exec("
         CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL,
-        password TEXT NOT NULL
-    )
-");
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL,
+            password TEXT NOT NULL
+        )
+    ");
     }
 
     public function testIfInsertingNewSavesUser(): void
@@ -38,16 +44,16 @@ class UserRepositoryTest extends TestCase
 
     public function testIfFetchesById(): void
     {
-        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
+        $statement = $this->dbh->connect()->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
         $statement->execute();
-        $userId = (int)$this->dbh->lastInsertId();
+        $userId = (int)$this->dbh->connect()->lastInsertId();
         $user = $this->repository->fetchById($userId);
 
         $this->assertEquals($userId, $user->getUserId());
     }
     public function testIfFindByEmail(): void
     {
-        $statement = $this->dbh->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
+        $statement = $this->dbh->connect()->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
         $statement->execute();
 
         $user = $this->repository->findByEmail('Test@test.com');
@@ -59,7 +65,7 @@ class UserRepositoryTest extends TestCase
     {
         $this->expectException(PDOException::class);
 
-        $statement = $this->dbh->prepare("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
+        $statement = $this->dbh->connect()->prepare("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
         $statement->execute();
         $userId= (int)$this->dbh->lastInsertId();
         $this->repository->fetchById($userId);
@@ -137,6 +143,6 @@ class UserRepositoryTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->dbh->exec('DROP TABLE IF EXISTS users');
+        $this->dbh->connect()->exec('DROP TABLE IF EXISTS users');
     }
 }
