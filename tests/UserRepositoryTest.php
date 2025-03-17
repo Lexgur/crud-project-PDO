@@ -23,10 +23,10 @@ class UserRepositoryTest extends TestCase
 
         $this->container = new Container($parameters);
 
-        $this->pdo = $this->container->get(Connection::class);
+        $this->database = $this->container->get(Connection::class);
         $this->repository = $this->container->get(UserModelRepository::class);
 
-        $this->pdo->connect()->exec("
+        $this->database->connect()->exec("
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 email TEXT NOT NULL UNIQUE,
@@ -50,9 +50,9 @@ class UserRepositoryTest extends TestCase
 
     public function testIfFetchesById(): void
     {
-        // Insert test user directly
-        $this->pdo->connect()->exec("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
-        $userId = (int)$this->pdo->connect()->lastInsertId();
+
+        $this->database->connect()->exec("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
+        $userId = (int)$this->database->connect()->lastInsertId();
         $user = $this->repository->fetchById($userId);
 
         $this->assertEquals($userId, $user->getUserId());
@@ -60,8 +60,8 @@ class UserRepositoryTest extends TestCase
 
     public function testIfFindByEmail(): void
     {
-        // Insert test user directly
-        $this->pdo->connect()->exec("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
+
+        $this->database->connect()->exec("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
 
         $user = $this->repository->findByEmail('Test@test.com');
 
@@ -73,8 +73,8 @@ class UserRepositoryTest extends TestCase
         $this->expectException(PDOException::class);
 
         // Insert a row with an invalid ID
-        $this->pdo->connect()->exec("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
-        $userId = (int)$this->pdo->connect()->lastInsertId();
+        $this->database->connect()->exec("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
+        $userId = (int)$this->database->connect()->lastInsertId();
         $this->repository->fetchById($userId);
     }
 
@@ -150,6 +150,6 @@ class UserRepositoryTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->pdo->connect()->exec('DROP TABLE IF EXISTS users');
+        $this->database->connect()->exec('DROP TABLE IF EXISTS users');
     }
 }
