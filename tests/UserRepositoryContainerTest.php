@@ -11,29 +11,33 @@ use PHPUnit\Framework\TestCase;
 
 class UserRepositoryContainerTest extends TestCase
 {
+    private string $testDbPath;
+    private Connection $pdo;
+    private UserModelRepository $repository;
+
     public function setUp(): void
     {
         $this->testDbPath = __DIR__ . '/crud-test.sqlite';
         $dsn = 'sqlite:' . $this->testDbPath;
         $parameters = [
             'dsn' => $dsn,
-            'username' => 'username',
-            'password' => 'password',
+            'username' => '',
+            'password' => '',
         ];
 
         $this->container = new Container($parameters);
 
         $this->pdo = $this->container->get(Connection::class);
-
         $this->repository = $this->container->get(UserModelRepository::class);
 
+        // Corrected Table Creation
         $this->pdo->connect()->exec("
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT NOT NULL,
-            password TEXT NOT NULL
-        )
-    ");
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL
+            )
+        ");
     }
 
     public function testIfInsertingNewSavesUser(): void
@@ -51,8 +55,8 @@ class UserRepositoryContainerTest extends TestCase
 
     public function testIfFetchesById(): void
     {
-        $statement = $this->pdo->connect()->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
-        $statement->execute();
+        // Insert test user directly
+        $this->pdo->connect()->exec("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
         $userId = (int)$this->pdo->connect()->lastInsertId();
         $user = $this->repository->fetchById($userId);
 
@@ -61,8 +65,8 @@ class UserRepositoryContainerTest extends TestCase
 
     public function testIfFindByEmail(): void
     {
-        $statement = $this->pdo->connect()->prepare("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
-        $statement->execute();
+        // Insert test user directly
+        $this->pdo->connect()->exec("INSERT INTO users (email, password) VALUES ('Test@test.com', 'User12345')");
 
         $user = $this->repository->findByEmail('Test@test.com');
 
@@ -73,9 +77,9 @@ class UserRepositoryContainerTest extends TestCase
     {
         $this->expectException(PDOException::class);
 
-        $statement = $this->pdo->connect()->prepare("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
-        $statement->execute();
-        $userId = (int)$this->pdo->lastInsertId();
+        // Insert a row with an invalid ID
+        $this->pdo->connect()->exec("INSERT INTO users (email, password, id) VALUES ('test@test.com', 'tesT12345', 'fail')");
+        $userId = (int)$this->pdo->connect()->lastInsertId();
         $this->repository->fetchById($userId);
     }
 
