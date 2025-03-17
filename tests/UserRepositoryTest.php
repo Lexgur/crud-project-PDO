@@ -26,7 +26,6 @@ class UserRepositoryTest extends TestCase
         $this->pdo = $this->container->get(Connection::class);
         $this->repository = $this->container->get(UserModelRepository::class);
 
-        // Corrected Table Creation
         $this->pdo->connect()->exec("
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
