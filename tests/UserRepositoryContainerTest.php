@@ -15,18 +15,15 @@ class UserRepositoryContainerTest extends TestCase
     {
         $this->testDbPath = __DIR__ . '/crud-test.sqlite';
         $dsn = 'sqlite:' . $this->testDbPath;
-        $username = null;
-        $password = null;
-
-        $this->dbh = new Connection($dsn, (string)$username, (string)$password);
-        $this->container = new Container([
+        $parameters = [
             'dsn' => $dsn,
-            'username' => $username,
-            'password' => $password,
-        ]);
+            'username' => 'username',
+            'password' => 'password',
+        ];
 
-        $this->container->bind(Connection::class, $this->dbh);
-        $this->container->bind(UserModelRepository::class, new UserModelRepository($this->dbh));
+        $this->container = new Container($parameters);
+
+        $this->dbh = $this->container->get(Connection::class);
 
         $this->repository = $this->container->get(UserModelRepository::class);
 
