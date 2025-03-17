@@ -33,7 +33,7 @@ class Connection
                 throw new PDOException("Database connection failed: " . $e->getMessage());
             }
         }
-        return $this->connect();
+        return $this->pdo;
     }
 
 }

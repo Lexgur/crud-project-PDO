@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Crud\Connection;
+use Crud\DependencyInjection\Container;
 use Crud\Exception\IncorrectIdException;
 use Crud\Model\Student;
 use Crud\Repository\StudentModelRepository;
@@ -10,18 +11,23 @@ use PHPUnit\Framework\TestCase;
 
 class StudentRepositoryTest extends TestCase
 {
-    private Connection $dbh;
-    private StudentModelRepository $repository;
-    private string $testDbPath;
+
     public function setUp(): void
     {
         $this->testDbPath = __DIR__ . '/crud-test.sqlite';
         $dsn = 'sqlite:' . $this->testDbPath;
-        $this->dbh = new Connection($dsn, '', '');
+        $parameters = [
+            'dsn' => $dsn,
+            'username' => '',
+            'password' => '',
+        ];
 
-        $this->repository = new StudentModelRepository($this->dbh);
+        $this->container = new Container($parameters);
 
-        $this->dbh->connect()->exec("
+        $this->pdo = $this->container->get(Connection::class);
+        $this->repository = $this->container->get(StudentModelRepository::class);
+
+        $this->pdo->connect()->exec("
             CREATE TABLE students (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 firstname TEXT NOT NULL,
@@ -69,9 +75,9 @@ class StudentRepositoryTest extends TestCase
 
     public function testIfFetchesById(): void
     {
-        $statement = $this->dbh->connect()->prepare("INSERT INTO students (firstname, lastname, age) VALUES ('Test', 'Student', 25)");
+        $statement = $this->pdo->connect()->prepare("INSERT INTO students (firstname, lastname, age) VALUES ('Test', 'Student', 25)");
         $statement->execute();
-        $studentId = (int)$this->dbh->connect()->lastInsertId();
+        $studentId = (int)$this->pdo->connect()->lastInsertId();
         $student = $this->repository->fetchById($studentId);
 
         $this->assertEquals($studentId, $student->getId());
@@ -81,9 +87,9 @@ class StudentRepositoryTest extends TestCase
     {
         $this->expectException(PDOException::class);
 
-        $statement = $this->dbh->connect()->prepare("INSERT INTO students (firstname, lastname, age, id) VALUES ('Test', 'Student', 25, 'kamehameha')");
+        $statement = $this->pdo->connect()->prepare("INSERT INTO students (firstname, lastname, age, id) VALUES ('Test', 'Student', 25, 'kamehameha')");
         $statement->execute();
-        $studentId = (int)$this->dbh->lastInsertId();
+        $studentId = (int)$this->pdo->lastInsertId();
         $this->repository->fetchById($studentId);
     }
 
@@ -214,6 +220,6 @@ class StudentRepositoryTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->dbh->connect()->exec('DROP TABLE IF EXISTS students');
+        $this->pdo->connect()->exec('DROP TABLE IF EXISTS students');
     }
 }
