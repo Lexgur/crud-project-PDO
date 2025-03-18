@@ -16,14 +16,12 @@ use AllowDynamicProperties;
 
 
     public function __construct(string $firstName, string $lastName, int $age, ?int $id = null)
-
     {
         $this->firstname = $firstName;
         $this->lastname = $lastName;
         $this->age = $age;
         $this->id = $id;
     }
-
     public function getFirstName(): string
     {
         return $this->firstname;

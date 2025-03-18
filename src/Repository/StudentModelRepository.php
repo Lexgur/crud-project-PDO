@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
+use AllowDynamicProperties;
 use Crud\Connection;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\StudentFactory;
 use Crud\Model\Student;
 use PDO;
 
-class StudentModelRepository extends BaseRepositoryClass implements StudentModelInterface
+#[AllowDynamicProperties] class StudentModelRepository extends BaseRepositoryClass implements StudentModelInterface
 {
-    private PDO $pdo;
 
     public function __construct(Connection $connection)
     {
         parent::__construct($connection);
-        $this->pdo = $connection->connect();
+        $this->database = $connection->connect();
     }
     public function save(Student $student): Student
     {
@@ -30,14 +30,14 @@ class StudentModelRepository extends BaseRepositoryClass implements StudentModel
 
     public function insert(Student $student): Student
     {
-        $statement = $this->pdo->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
+        $statement = $this->database->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
         $statement->bindValue(':firstname', $student->getFirstName());
         $statement->bindValue(':lastname', $student->getLastName());
         $statement->bindValue(':age', $student->getAge());
 
         $statement->execute();
 
-        $newId = (int)$this->pdo->lastInsertId();
+        $newId = (int)$this->database->lastInsertId();
 
         return $this->fetchById($newId);
 
@@ -45,7 +45,7 @@ class StudentModelRepository extends BaseRepositoryClass implements StudentModel
 
     public function fetchById(int $studentId): ?Student
     {
-        $statement = $this->pdo->prepare('SELECT * FROM students WHERE id = :id');
+        $statement = $this->database->prepare('SELECT * FROM students WHERE id = :id');
         $statement->execute([':id' => $studentId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -57,7 +57,7 @@ class StudentModelRepository extends BaseRepositoryClass implements StudentModel
 
     public function update(Student $student): Student
     {
-        $statement = $this->pdo->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
+        $statement = $this->database->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
         $statement->bindValue(':firstname', $student->getFirstName());
         $statement->bindValue(':lastname', $student->getLastName());
         $statement->bindValue(':age', $student->getAge());
@@ -70,7 +70,7 @@ class StudentModelRepository extends BaseRepositoryClass implements StudentModel
 
     public function delete(int $studentId): bool
     {
-        $statement = $this->pdo->prepare('DELETE FROM students WHERE id = :id');
+        $statement = $this->database->prepare('DELETE FROM students WHERE id = :id');
         $statement->bindValue(':id', $studentId);
         $statement->execute();
         return true;
@@ -78,7 +78,7 @@ class StudentModelRepository extends BaseRepositoryClass implements StudentModel
 
     public function viewStudents(): array
     {
-        $statement = $this->pdo->prepare('SELECT * FROM students');
+        $statement = $this->database->prepare('SELECT * FROM students');
         $statement->execute();
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 

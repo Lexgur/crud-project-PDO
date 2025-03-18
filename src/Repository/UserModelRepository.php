@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
+use AllowDynamicProperties;
 use Crud\Connection;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\UserFactory;
 use Crud\Model\User;
 use PDO;
 
-class UserModelRepository extends BaseRepositoryClass implements UserModelInterface
+#[AllowDynamicProperties] class UserModelRepository extends BaseRepositoryClass implements UserModelInterface
 {
-    private PDO $pdo;
 
     public function __construct(Connection $connection)
     {
         parent::__construct($connection);
-        $this->pdo = $connection->connect();
+        $this->database = $connection->connect();
     }
 
     public function save(User $user): User
@@ -31,7 +31,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
     public function insert(User $user): User
     {
         try {
-            $statement = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
+            $statement = $this->database->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
             $statement->bindValue(':email', $user->getUserEmail());
             $statement->bindValue(':password', $user->getUserPassword());
             $statement->execute();
@@ -40,13 +40,13 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
             throw new \Exception('Error inserting user: ' . $e->getMessage());
         }
 
-        $newId = (int)$this->pdo->lastInsertId();
+        $newId = (int)$this->database->lastInsertId();
         return $this->fetchById($newId);
     }
 
     public function fetchById(int $userId): ?User
     {
-        $statement = $this->pdo->prepare('SELECT * FROM users WHERE id = :id');
+        $statement = $this->database->prepare('SELECT * FROM users WHERE id = :id');
         $statement->execute([':id' => $userId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -58,7 +58,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
 
     public function findByEmail(string $userEmail): ?User
     {
-        $statement = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+        $statement = $this->database->prepare('SELECT * FROM users WHERE email = :email');
         $statement->execute([':email' => $userEmail]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -72,7 +72,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
     public function update(User $user): User
     {
         try {
-            $statement = $this->pdo->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE id = :id');
+            $statement = $this->database->prepare('UPDATE `users` SET `email` = :email, `password` = :password WHERE id = :id');
             $statement->bindValue(':email', $user->getUserEmail());
             $statement->bindValue(':password', $user->getUserPassword());
             $statement->bindValue(':id', $user->getUserId());
@@ -87,7 +87,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
 
     public function delete(int $userId): bool
     {
-        $statement = $this->pdo->prepare('DELETE FROM users WHERE id = :id');
+        $statement =$this->database->prepare('DELETE FROM users WHERE id = :id');
         $statement->bindValue(':id', $userId);
         $statement->execute();
 
@@ -96,7 +96,7 @@ class UserModelRepository extends BaseRepositoryClass implements UserModelInterf
 
     public function viewUser(int $userId): ?User
     {
-        $statement = $this->pdo->prepare('SELECT * FROM users WHERE id = :id');
+        $statement = $this->database->prepare('SELECT * FROM users WHERE id = :id');
         $statement->execute([':id' => $userId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
