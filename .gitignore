@@ -1,6 +1,7 @@
 # CakePHP 3
 /vendor/*
 /config/app.php
+phpstan.neon
 
 
 /tests/crud-test.sqlite
