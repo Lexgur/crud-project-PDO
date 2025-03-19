@@ -1,4 +1,0 @@
-parameters:
-  level: max   # Set the analysis level (0-8)
-  paths:
-    - src    # Add the directories or files to analyze (e.g., src/)
