@@ -11,13 +11,12 @@ use Crud\Factory\StudentFactory;
 use Crud\Model\Student;
 use PDO;
 
-#[AllowDynamicProperties] class StudentModelRepository extends BaseRepositoryClass implements StudentModelInterface
+class StudentModelRepository extends BaseRepositoryClass implements StudentModelInterface
 {
 
     public function __construct(Connection $connection)
     {
         parent::__construct($connection);
-        $this->database = $connection->connect();
     }
     public function save(Student $student): Student
     {
@@ -30,14 +29,14 @@ use PDO;
 
     public function insert(Student $student): Student
     {
-        $statement = $this->database->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
+        $statement = $this->connection->connect()->prepare('INSERT INTO `students` (`firstname`, `lastname`, `age`) VALUES (:firstname, :lastname, :age)');
         $statement->bindValue(':firstname', $student->getFirstName());
         $statement->bindValue(':lastname', $student->getLastName());
         $statement->bindValue(':age', $student->getAge());
 
         $statement->execute();
 
-        $newId = (int)$this->database->lastInsertId();
+        $newId = (int)$this->connection->connect()->lastInsertId();
 
         return $this->fetchById($newId);
 
@@ -45,7 +44,7 @@ use PDO;
 
     public function fetchById(int $studentId): ?Student
     {
-        $statement = $this->database->prepare('SELECT * FROM students WHERE id = :id');
+        $statement = $this->connection->connect()->prepare('SELECT * FROM students WHERE id = :id');
         $statement->execute([':id' => $studentId]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -57,7 +56,7 @@ use PDO;
 
     public function update(Student $student): Student
     {
-        $statement = $this->database->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
+        $statement = $this->connection->connect()->prepare('UPDATE `students` SET `firstname` = :firstname, `lastname` = :lastname, `age` = :age WHERE `id` = :id');
         $statement->bindValue(':firstname', $student->getFirstName());
         $statement->bindValue(':lastname', $student->getLastName());
         $statement->bindValue(':age', $student->getAge());
@@ -70,7 +69,7 @@ use PDO;
 
     public function delete(int $studentId): bool
     {
-        $statement = $this->database->prepare('DELETE FROM students WHERE id = :id');
+        $statement = $this->connection->connect()->prepare('DELETE FROM students WHERE id = :id');
         $statement->bindValue(':id', $studentId);
         $statement->execute();
         return true;
@@ -78,7 +77,7 @@ use PDO;
 
     public function viewStudents(): array
     {
-        $statement = $this->database->prepare('SELECT * FROM students');
+        $statement = $this->connection->connect()->prepare('SELECT * FROM students');
         $statement->execute();
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
