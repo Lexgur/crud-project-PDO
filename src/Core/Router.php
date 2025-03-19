@@ -7,7 +7,7 @@ use Exception;
 
 class Router
 {
-    public function getController(string $path): object
+    public function getController(string $routePath): object
     {
         throw new Exception('pyzdiec');
     }

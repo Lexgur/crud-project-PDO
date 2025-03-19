@@ -9,9 +9,12 @@ use Crud\Core\Router;
 class RouterTest extends TestCase
 {
     #[DataProvider('provideTestValidRouteReturnsExpectedControllerData')]
-    final public function testValidRouteReturnsExpectedController(string $path): void
+    final public function testValidRouteReturnsExpectedController(string $routePath, string $expectedController): void
     {
         $router = new Router();
+        $controller = $router->getController($routePath);
+
+        $this->assertSame($expectedController, $controller);
     }
 
     public static function provideTestValidRouteReturnsExpectedControllerData(): array
