@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
-use Crud\Connection;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\UserFactory;
 use Crud\Model\User;
 use PDO;
 
-class UserModelRepository extends BaseRepositoryClass implements UserModelInterface
+class UserModelRepository extends BaseRepository implements UserModelRepositoryInterface
 {
-    public function __construct(Connection $connection)
-    {
-        parent::__construct($connection);
-    }
     public function save(User $user): User
     {
         if ($user->getUserId() === null) {

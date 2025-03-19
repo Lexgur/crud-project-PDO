@@ -6,9 +6,10 @@ namespace Crud\Repository;
 
 use Crud\Model\User;
 
-interface UserModelInterface
+interface UserModelRepositoryInterface
 {
     public function save(User $user): User;
+
     public function insert(User $user): User;
 
     public function fetchById(int $userId): ?User;

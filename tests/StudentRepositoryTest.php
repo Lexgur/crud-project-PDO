@@ -13,8 +13,7 @@ class StudentRepositoryTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->testDbPath = __DIR__ . '/crud-test.sqlite';
-        $dsn = 'sqlite:' . $this->testDbPath;
+        $dsn = 'sqlite:' . __DIR__ . '/crud-test.sqlite';
         $parameters = [
             'dsn' => $dsn,
             'username' => '',

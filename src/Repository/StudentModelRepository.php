@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
-use Crud\Connection;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\StudentFactory;
 use Crud\Model\Student;
 use PDO;
 
-class StudentModelRepository extends BaseRepositoryClass implements StudentModelInterface
+class StudentModelRepository extends BaseRepository implements StudentModelRepositoryInterface
 {
-
-    public function __construct(Connection $connection)
-    {
-        parent::__construct($connection);
-    }
     public function save(Student $student): Student
     {
         if ($student->getId() === null) {

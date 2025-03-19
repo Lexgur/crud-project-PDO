@@ -6,9 +6,10 @@ namespace Crud\Repository;
 
 use Crud\Model\Student;
 
-interface StudentModelInterface
+interface StudentModelRepositoryInterface
 {
     public function save(Student $student): Student;
+
     public function insert(Student $student): Student;
 
     public function fetchById(int $studentId): ?Student;
