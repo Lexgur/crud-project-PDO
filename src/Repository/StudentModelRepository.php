@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Crud\Repository;
 
-use AllowDynamicProperties;
 use Crud\Connection;
 use Crud\Exception\IncorrectIdException;
 use Crud\Factory\StudentFactory;
