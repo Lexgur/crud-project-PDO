@@ -29,11 +29,11 @@ class RouterTest extends TestCase
     public static function provideTestGetControllerData(): array
     {
         return [
-            ['/users' => ViewUsersController::class],
-            ['/user/create' => CreateUserController::class],
-            ['/user/:id' => ViewUserController::class],
-            ['/user/:id/edit' => UpdateUserController::class],
-            ['/user/:id/delete' => DeleteUserController::class]
+            ['/users', ViewUsersController::class],
+            ['/user/create', CreateUserController::class],
+            ['/user/:id', ViewUserController::class],
+            ['/user/:id/edit', UpdateUserController::class],
+            ['/user/:id/delete', DeleteUserController::class]
         ];
     }
 }
