@@ -7,10 +7,10 @@ namespace Crud\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Path
+readonly class Path
 {
     public function __construct(
-        private readonly string $path
+        private string $path
     ) {
 
     }
