@@ -21,12 +21,6 @@ class PathAttributeTest extends TestCase
 }
 
 #[Path('/something/create')]
-class CreateSomethingController
-{
-
-}
-
-#[Path('/something/create')]
 class Route
 {
 
