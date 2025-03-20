@@ -27,7 +27,7 @@ class Router
                 try {
                     $reflectionClass = new ReflectionClass($className);
                 } catch (\ReflectionException $e) {
-                    throw new \RuntimeException('Failed to reflect class $fullyQualifiedClassName: ' . $e->getMessage());
+                    throw new \RuntimeException('Failed to reflect class $className: ' . $e->getMessage());
                 }
 
                 $classAttributes = $reflectionClass->getAttributes(Path::class);
