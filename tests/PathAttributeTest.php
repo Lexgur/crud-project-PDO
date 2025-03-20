@@ -9,19 +9,14 @@ class PathAttributeTest extends TestCase
 {
     public function testGetPath(): void
     {
-        $class = new ReflectionClass(Route::class);
-        $attributes = $class->getAttributes();
-
-        $this->assertIsArray($attributes);
-
-        $attributeNames = array_map(fn ($attribute) => $attribute->getName(), $attributes);
-        $this->assertEquals([Path::class], $attributeNames);
-        print_r($attributeNames);
+        $class = new ReflectionClass(SomethingCreateController::class);
+        $attributes = $class->getAttributes(Path::class);
+        $this->assertEquals('/something/create', $attributes[0]->newInstance()->getPath());
     }
 }
 
 #[Path('/something/create')]
-class Route
+class SomethingCreateController
 {
 
 }
