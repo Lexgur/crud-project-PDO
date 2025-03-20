@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Attribute\Path;
 use Crud\Service\PasswordHasher;
 use Crud\Validation\PasswordValidator;
 
+#[Path('/user/:id/edit')]
 class UpdateUser extends AbstractUserController
 {
     public function __invoke(): string
