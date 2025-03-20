@@ -14,7 +14,7 @@ class PathAttributeTest extends TestCase
 
         $this->assertIsArray($attributes);
 
-        $attributeNames = array_map(fn($attribute) => $attribute->getName(), $attributes);
+        $attributeNames = array_map(fn ($attribute) => $attribute->getName(), $attributes);
         $this->assertEquals([Path::class], $attributeNames);
         print_r($attributeNames);
     }
