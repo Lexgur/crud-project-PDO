@@ -13,6 +13,8 @@ use Crud\Core\Router;
 
 class RouterTest extends TestCase
 {
+    private Router $router;
+
     protected function setUp(): void
     {
         $this->router = new Router();
