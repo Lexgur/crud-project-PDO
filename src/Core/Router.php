@@ -20,10 +20,6 @@ class Router
     {
         $this->controllerDir = $controllerDir;
 
-        if (!is_dir($controllerDir)) {
-            throw new \RuntimeException("Controller directory does not exist: $controllerDir");
-        }
-
         $files = glob($controllerDir . '/*.php');
         $files = array_merge($files, glob($controllerDir . '/*/*.php'));
 

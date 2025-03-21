@@ -3,7 +3,14 @@
 declare(strict_types=1);
 
 use Crud\Attribute\Path;
+use Crud\Controller\CreateUser;
+use Crud\Controller\DeleteUser;
+use Crud\Controller\UpdateUser;
+use Crud\Controller\ViewUser;
 use Crud\Exception\IncorrectRoutePathException;
+use Crud\Repository\UserModelRepository;
+use Crud\Template;
+use Crud\Validation\UserValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Crud\Core\Router;
@@ -22,7 +29,7 @@ class RouterTest extends TestCase
 
         $controller = $this->router->getController($routePath);
 
-        $this->assertInstanceOf($expectedController, $controller[0]);
+        $this->assertInstanceOf($expectedController, $controller);
     }
     final public function testIncorrectPathThrowsIncorrectRoutePathException(): void
     {
@@ -67,32 +74,12 @@ class RouterTest extends TestCase
     public static function provideTestGetControllerData(): array
     {
         return [
-            ['/users', ViewUsersController::class],
-            ['/user/create', CreateUserController::class],
-            ['/user/:id', ViewUserController::class],
-            ['/user/:id/edit', UpdateUserController::class],
-            ['/user/:id/delete', DeleteUserController::class]
+            ['/user/create', CreateUser::class],
+            ['/user/:id', ViewUser::class],
+            ['/user/:id/edit', UpdateUser::class],
+            ['/user/:id/delete', DeleteUser::class],
         ];
     }
-}
-#[Path('/users')]
-class ViewUsersController
-{
-}
-#[Path('/user/create')]
-class CreateUserController
-{
-}
-#[Path('/user/:id')]
-class ViewUserController
-{
-}
-#[Path('/user/:id/edit')]
-class UpdateUserController
-{
-}
-#[Path('/user/:id/delete')]
-class DeleteUserController
-{
+
 }
 
