@@ -15,6 +15,7 @@ use Crud\Controller\UpdateStudent;
 use Crud\Controller\UpdateUser;
 use Crud\Controller\ViewStudents;
 use Crud\Controller\ViewUser;
+use Crud\Core\Router;
 use Exception;
 use Crud\DependencyInjection\Container;
 
@@ -55,6 +56,8 @@ class Application
         ];
 
         $container = new Container($parameters);
+
+        $router = new Router();
 
         $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 

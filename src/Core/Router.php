@@ -6,6 +6,8 @@ namespace Crud\Core;
 
 use Crud\Attribute\Path;
 use Crud\Exception\IncorrectRoutePathException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
 use RuntimeException;
 use Throwable;
@@ -22,15 +24,22 @@ class Router
     public function registerControllers(string $controllerDir): void
     {
         $this->controllerDir = $controllerDir;
+        $phpFiles = [];
 
-        $files = glob($controllerDir . '/*.php');
-        $files = array_merge($files, glob($controllerDir . '/*/*.php'));
+        $directoryIterator = new RecursiveDirectoryIterator($controllerDir);
+        $iterator = new RecursiveIteratorIterator($directoryIterator);
 
-        if (empty($files)) {
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                $phpFiles[] = $file->getRealPath();
+            }
+        }
+
+        if (empty($phpFiles)) {
             error_log("No controller files found in: $controllerDir");
         }
 
-        foreach ($files as $file) {
+        foreach ($phpFiles as $file) {
             $className = $this->getFullClassName($file);
 
             if ($className) {
@@ -79,7 +88,7 @@ class Router
         if (!class_exists($controllerClass)) {
             throw new RuntimeException("Controller class '$controllerClass' does not exist.");
         }
-        return new $controllerClass();
+        return $controllerClass;
     }
 
     public function getRoutes(): array
