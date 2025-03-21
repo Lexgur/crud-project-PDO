@@ -9,34 +9,24 @@ use Crud\Exception\IncorrectRoutePathException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
+use RegexIterator;
 use RuntimeException;
 use Throwable;
 
 class Router
 {
     private array $routes = [];
-
-    private string $controllerDir = __DIR__ . '/../Controller';
+    private const CONTROLLER_DIR = __DIR__ . '/../Controller';
 
     /**
      * @throws IncorrectRoutePathException
      */
-    public function registerControllers(string $controllerDir): void
+    public function registerControllers(): void
     {
-        $this->controllerDir = $controllerDir;
-        $phpFiles = [];
-
-        $directoryIterator = new RecursiveDirectoryIterator($controllerDir);
-        $iterator = new RecursiveIteratorIterator($directoryIterator);
-
-        foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getExtension() === 'php') {
-                $phpFiles[] = $file->getRealPath();
-            }
-        }
+        $phpFiles = $this->getPhpFiles();
 
         if (empty($phpFiles)) {
-            error_log("No controller files found in: $controllerDir");
+            throw new IncorrectRoutePathException("No controller files found in: " . self::CONTROLLER_DIR);
         }
 
         foreach ($phpFiles as $file) {
@@ -56,6 +46,19 @@ class Router
                 }
             }
         }
+    }
+    private function getPhpFiles(): array
+    {
+        $directoryIterator = new RecursiveDirectoryIterator(self::CONTROLLER_DIR);
+        $iterator = new RecursiveIteratorIterator($directoryIterator);
+
+        $regexIterator = new RegexIterator($iterator, '/\.php$/');
+
+        $phpFiles = iterator_to_array($regexIterator);
+        return array_map(
+            fn (\SplFileInfo $file) => $file->getRealPath(),
+            array_filter($phpFiles, fn (\SplFileInfo $file) => $file->isFile())
+        );
     }
 
     public function getFullClassName(string $filePath): ?string
@@ -95,4 +98,5 @@ class Router
     {
         return $this->routes;
     }
+
 }

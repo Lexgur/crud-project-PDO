@@ -18,7 +18,7 @@ class RouterTest extends TestCase
     protected function setUp(): void
     {
         $this->router = new Router();
-        $this->router->registerControllers(__DIR__ . '/../src/Controller');
+        $this->router->registerControllers();
     }
     #[DataProvider('provideTestGetControllerData')]
     final public function testGetController(string $routePath, string $expectedController): void
@@ -47,9 +47,6 @@ class RouterTest extends TestCase
 
     final public function testRegisterControllers(): void
     {
-        $controllerDir = __DIR__ . '/../src/Controller';
-
-        $this->router->registerControllers($controllerDir);
         $routes = $this->router->getRoutes();
 
         $this->assertNotEmpty($routes, 'No routes were registered. Ensure controllers have #[Path] attributes.');
