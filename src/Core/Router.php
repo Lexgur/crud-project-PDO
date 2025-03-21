@@ -11,31 +11,43 @@ use ReflectionClass;
 class Router
 {
     private array $routes = [];
+    private string $controllerDir = __DIR__ . '/../Controller';
 
     /**
      * @throws IncorrectRoutePathException
      */
-    public function registerControllers(): void
+    public function registerControllers(string $controllerDir): void
     {
-        $controllerDir = __DIR__ . '/Controller';
+        $this->controllerDir = $controllerDir;
+
+        if (!is_dir($controllerDir)) {
+            throw new \RuntimeException("Controller directory does not exist: $controllerDir");
+        }
 
         $files = glob($controllerDir . '/*.php');
         $files = array_merge($files, glob($controllerDir . '/*/*.php'));
+
+        if (empty($files)) {
+            error_log("No controller files found in: $controllerDir"); // Debugging output
+        }
 
         foreach ($files as $file) {
             $className = $this->getFullClassName($file);
 
             if ($className) {
                 try {
-                    $reflectionClass = new ReflectionClass($className);
+                    $reflectionClass = new \ReflectionClass($className);
                 } catch (\Throwable $e) {
-                    throw new \RuntimeException('Failed to reflect class $className: ' . $e->getMessage());
+                    throw new \RuntimeException("Failed to reflect class $className: " . $e->getMessage());
                 }
 
                 $classAttributes = $reflectionClass->getAttributes(Path::class);
-                if ($classAttributes) {
+                if (!empty($classAttributes)) {
                     $routePath = $classAttributes[0]->newInstance()->getPath();
                     $this->routes[$routePath] = $className;
+                    error_log("Registered route: $routePath => $className");
+                } else {
+                    error_log("No #[Path] attribute found in: $className");
                 }
             }
         }

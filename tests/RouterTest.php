@@ -48,13 +48,20 @@ class RouterTest extends TestCase
         $controllerDir = __DIR__ . '/../src/Controller';
 
         $this->router->registerControllers($controllerDir);
-
         $routes = $this->router->getRoutes();
 
-        $this->assertArrayHasKey('/user/create', $routes);
-        $this->assertArrayHasKey('/user/:id', $routes);
-        $this->assertArrayHasKey('/user/:id/edit', $routes);
-        $this->assertArrayHasKey('/user/:id/delete', $routes);
+        $this->assertNotEmpty($routes, 'No routes were registered. Ensure controllers have #[Path] attributes.');
+
+        $expectedRoutes = [
+            '/user/create',
+            '/user/:id',
+            '/user/:id/edit',
+            '/user/:id/delete'
+        ];
+
+        foreach ($expectedRoutes as $route) {
+            $this->assertArrayHasKey($route, $routes, "Route '$route' was not registered.");
+        }
     }
 
     public static function provideTestGetControllerData(): array
@@ -71,41 +78,21 @@ class RouterTest extends TestCase
 #[Path('/users')]
 class ViewUsersController
 {
-    public function __invoke()
-    {
-        return 'View Users';
-    }
 }
 #[Path('/user/create')]
 class CreateUserController
 {
-    public function __invoke()
-    {
-        return 'Create User';
-    }
 }
 #[Path('/user/:id')]
 class ViewUserController
 {
-    public function __invoke()
-    {
-        return 'View User';
-    }
 }
 #[Path('/user/:id/edit')]
 class UpdateUserController
 {
-    public function __invoke()
-    {
-        return 'Update User';
-    }
 }
 #[Path('/user/:id/delete')]
 class DeleteUserController
 {
-    public function __invoke()
-    {
-        return 'Delete User';
-    }
 }
 
