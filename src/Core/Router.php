@@ -25,12 +25,8 @@ class Router
     {
         $phpFiles = $this->getPhpFiles();
 
-        if (empty($phpFiles)) {
-            throw new IncorrectRoutePathException("No controller files found in: " . self::CONTROLLER_DIR);
-        }
-
-        try {
-            foreach ($phpFiles as $file) {
+        foreach ($phpFiles as $file) {
+            try {
                 $filePath = $file->getPathname();
                 $className = $this->getFullClassName($filePath);
                 $reflectionClass = new ReflectionClass($className);
@@ -40,11 +36,12 @@ class Router
                     $routePath = $classAttributes[0]->newInstance()->getPath();
                     $this->routes[$routePath] = $className;
                 }
+            } catch (Throwable $e) {
+                throw new RuntimeException("An error occurred while registering controllers: " . $e->getMessage());
             }
-        } catch (Throwable $e) {
-            throw new RuntimeException("An error occurred while registering controllers: " . $e->getMessage());
         }
     }
+
 
     public function getPhpFiles(): RegexIterator
     {

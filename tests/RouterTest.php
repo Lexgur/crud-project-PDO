@@ -15,6 +15,9 @@ class RouterTest extends TestCase
 {
     private Router $router;
 
+    /**
+     * @throws IncorrectRoutePathException
+     */
     protected function setUp(): void
     {
         $this->router = new Router();

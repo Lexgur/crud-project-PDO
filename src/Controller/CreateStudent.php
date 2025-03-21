@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Attribute\Path;
 use Crud\Factory\StudentFactory;
 
+#[Path('/student/create')]
 class CreateStudent extends AbstractStudentController
 {
 
