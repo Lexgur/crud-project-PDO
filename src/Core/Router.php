@@ -11,6 +11,7 @@ use ReflectionClass;
 class Router
 {
     private array $routes = [];
+
     private string $controllerDir = __DIR__ . '/../Controller';
 
     /**
@@ -32,7 +33,7 @@ class Router
 
             if ($className) {
                 try {
-                    $reflectionClass = new \ReflectionClass($className);
+                    $reflectionClass = new ReflectionClass($className);
                 } catch (\Throwable $e) {
                     throw new \RuntimeException("Failed to reflect class $className: " . $e->getMessage());
                 }
@@ -41,9 +42,6 @@ class Router
                 if (!empty($classAttributes)) {
                     $routePath = $classAttributes[0]->newInstance()->getPath();
                     $this->routes[$routePath] = $className;
-                    error_log("Registered route: $routePath => $className");
-                } else {
-                    error_log("No #[Path] attribute found in: $className");
                 }
             }
         }

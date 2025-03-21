@@ -2,15 +2,11 @@
 
 declare(strict_types=1);
 
-use Crud\Attribute\Path;
 use Crud\Controller\CreateUser;
 use Crud\Controller\DeleteUser;
 use Crud\Controller\UpdateUser;
 use Crud\Controller\ViewUser;
 use Crud\Exception\IncorrectRoutePathException;
-use Crud\Repository\UserModelRepository;
-use Crud\Template;
-use Crud\Validation\UserValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Crud\Core\Router;
@@ -20,13 +16,12 @@ class RouterTest extends TestCase
     protected function setUp(): void
     {
         $this->router = new Router();
+
+        $this->router->registerControllers(__DIR__ . '/../src/Controller');
     }
     #[DataProvider('provideTestGetControllerData')]
     final public function testGetController(string $routePath, string $expectedController): void
     {
-        $controllerDir = __DIR__ . '/../src/Controller';
-        $this->router->registerControllers($controllerDir);
-
         $controller = $this->router->getController($routePath);
 
         $this->assertInstanceOf($expectedController, $controller);
@@ -74,10 +69,10 @@ class RouterTest extends TestCase
     public static function provideTestGetControllerData(): array
     {
         return [
-            ['/user/create', CreateUser::class],
-            ['/user/:id', ViewUser::class],
-            ['/user/:id/edit', UpdateUser::class],
-            ['/user/:id/delete', DeleteUser::class],
+            ['/user/create' => CreateUser::class],
+            ['/user/:id' => ViewUser::class],
+            ['/user/:id/edit' => UpdateUser::class],
+            ['/user/:id/delete' => DeleteUser::class],
         ];
     }
 
