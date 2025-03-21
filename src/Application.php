@@ -42,7 +42,6 @@ class Application
     {
         global $config;
         $configPath = __DIR__ . '/../config.php';
-        $controllerDir = __DIR__ . '/Controller';
         $config = include $configPath;
 
         //Database

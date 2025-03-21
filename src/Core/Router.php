@@ -15,8 +15,10 @@ class Router
     /**
      * @throws IncorrectRoutePathException
      */
-    public function registerControllers(string $controllerDir): void
+    public function registerControllers(): void
     {
+        $controllerDir = __DIR__ . '/Controller';
+
         $files = glob($controllerDir . '/*.php');
         $files = array_merge($files, glob($controllerDir . '/*/*.php'));
 
@@ -26,7 +28,7 @@ class Router
             if ($className) {
                 try {
                     $reflectionClass = new ReflectionClass($className);
-                } catch (\ReflectionException $e) {
+                } catch (\Throwable $e) {
                     throw new \RuntimeException('Failed to reflect class $className: ' . $e->getMessage());
                 }
 
@@ -41,6 +43,10 @@ class Router
     public function getFullClassName(string $filePath): ?string
     {
         $content = file_get_contents($filePath);
+        if (!$content) {
+            throw new \RuntimeException("Failed to read file: $filePath");
+        }
+
         $namespace = null;
         if (preg_match('/namespace\s+(.+);/', $content, $namespaceMatch)) {
             $namespace = trim($namespaceMatch[1]);
@@ -53,18 +59,19 @@ class Router
         throw new IncorrectRoutePathException('Class not found: ' . $filePath);
     }
 
-    public function getController(string $routePath): array
+    public function getController(string $routePath): object
     {
         if (!array_key_exists($routePath, $this->routes)) {
             throw new IncorrectRoutePathException("Route path '$routePath' not found.");
         }
-        $controllerInfo = $this->routes[$routePath];
-        if (is_array($controllerInfo)) {
-            [$controllerClass, $methodName] = $controllerInfo;
-            return [new $controllerClass(), $methodName];
-        } else {
-            return [new $controllerInfo(), '__invoke'];
+
+        $controllerClass = $this->routes[$routePath];
+
+        if (!class_exists($controllerClass)) {
+            throw new \RuntimeException("Controller class '$controllerClass' does not exist.");
         }
+
+        return new $controllerClass();
     }
     public function getRoutes(): array
     {
