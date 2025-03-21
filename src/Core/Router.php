@@ -31,9 +31,8 @@ class Router
                 $className = $this->getFullClassName($filePath);
                 $reflectionClass = new ReflectionClass($className);
                 $classAttributes = $reflectionClass->getAttributes(Path::class);
-
-                if (!empty($classAttributes)) {
-                    $routePath = $classAttributes[0]->newInstance()->getPath();
+                $routePath = $classAttributes[0]?->newInstance()->getPath();
+                if ($routePath){
                     $this->routes[$routePath] = $className;
                 }
             } catch (Throwable $e) {
