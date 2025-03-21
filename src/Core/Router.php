@@ -30,7 +30,8 @@ class Router
         }
 
         foreach ($phpFiles as $file) {
-            $className = $this->getFullClassName($file);
+            $filePath = $file->getPathname();
+            $className = $this->getFullClassName($filePath);
 
             if ($className) {
                 try {
@@ -47,18 +48,14 @@ class Router
             }
         }
     }
-    private function getPhpFiles(): array
+    public function getPhpFiles(): RegexIterator
     {
         $directoryIterator = new RecursiveDirectoryIterator(self::CONTROLLER_DIR);
         $iterator = new RecursiveIteratorIterator($directoryIterator);
 
         $regexIterator = new RegexIterator($iterator, '/\.php$/');
 
-        $phpFiles = iterator_to_array($regexIterator);
-        return array_map(
-            fn (\SplFileInfo $file) => $file->getRealPath(),
-            array_filter($phpFiles, fn (\SplFileInfo $file) => $file->isFile())
-        );
+        return $regexIterator;
     }
 
     public function getFullClassName(string $filePath): ?string

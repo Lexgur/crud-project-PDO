@@ -24,7 +24,7 @@ class RouterTest extends TestCase
     final public function testGetController(string $routePath, string $expectedController): void
     {
         $controller = $this->router->getController($routePath);
-        $this->assertInstanceOf($expectedController, $controller);
+        $this->assertSame($expectedController, $controller);
     }
     final public function testIncorrectPathThrowsIncorrectRoutePathException(): void
     {
