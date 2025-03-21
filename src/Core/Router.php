@@ -29,25 +29,23 @@ class Router
             throw new IncorrectRoutePathException("No controller files found in: " . self::CONTROLLER_DIR);
         }
 
-        foreach ($phpFiles as $file) {
-            $filePath = $file->getPathname();
-            $className = $this->getFullClassName($filePath);
-
-            if ($className) {
-                try {
-                    $reflectionClass = new ReflectionClass($className);
-                } catch (Throwable $e) {
-                    throw new RuntimeException("Failed to reflect class $className: " . $e->getMessage());
-                }
-
+        try {
+            foreach ($phpFiles as $file) {
+                $filePath = $file->getPathname();
+                $className = $this->getFullClassName($filePath);
+                $reflectionClass = new ReflectionClass($className);
                 $classAttributes = $reflectionClass->getAttributes(Path::class);
+
                 if (!empty($classAttributes)) {
                     $routePath = $classAttributes[0]->newInstance()->getPath();
                     $this->routes[$routePath] = $className;
                 }
             }
+        } catch (Throwable $e) {
+            throw new RuntimeException("An error occurred while registering controllers: " . $e->getMessage());
         }
     }
+
     public function getPhpFiles(): RegexIterator
     {
         $directoryIterator = new RecursiveDirectoryIterator(self::CONTROLLER_DIR);
