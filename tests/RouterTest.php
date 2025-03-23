@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Crud\Controller\CreateUser;
+use Crud\Controller\DeleteStudent;
 use Crud\Controller\DeleteUser;
+use Crud\Controller\UpdateStudent;
 use Crud\Controller\UpdateUser;
 use Crud\Controller\ViewUser;
 use Crud\Exception\IncorrectRoutePathException;
@@ -70,9 +72,14 @@ class RouterTest extends TestCase
     {
         return [
             ['/user/create', CreateUser::class],
-            ['/user/:id', ViewUser::class],
-            ['/user/:id/edit', UpdateUser::class],
-            ['/user/:id/delete', DeleteUser::class],
+            ['/user/17', ViewUser::class],
+            ['/user/36/edit', UpdateUser::class],
+            ['/user/27/delete', DeleteUser::class],
+            ['/user/61/edit', UpdateUser::class],
+            ['/user/22/edit', UpdateUser::class],
+            ['/student/61/edit', UpdateStudent::class],
+            ['/student/22/edit', UpdateStudent::class],
+            ['/student/99/delete', DeleteStudent::class],
         ];
     }
 

@@ -32,7 +32,7 @@ class Router
                 $reflectionClass = new ReflectionClass($className);
                 $classAttributes = $reflectionClass->getAttributes(Path::class);
                 $routePath = $classAttributes[0]?->newInstance()->getPath();
-                if ($routePath){
+                if ($routePath) {
                     $this->routes[$routePath] = $className;
                 }
             } catch (Throwable $e) {
@@ -73,16 +73,17 @@ class Router
 
     public function getController(string $routePath): string
     {
-        if (!array_key_exists($routePath, $this->routes)) {
-            throw new IncorrectRoutePathException("Route path '$routePath' not found.");
+        foreach ($this->routes as $routePattern => $controllerClass) {
+
+            $regexPattern = preg_replace('/:(\w+)/', '(?P<$1>[^/]+)', $routePattern);
+            $regexPattern = '#^' . $regexPattern . '$#';
+
+            if (preg_match($regexPattern, $routePath)) {
+                return $controllerClass;
+            }
         }
 
-        $controllerClass = $this->routes[$routePath];
-
-        if (!class_exists($controllerClass)) {
-            throw new RuntimeException("Controller class '$controllerClass' does not exist.");
-        }
-        return $controllerClass;
+        throw new IncorrectRoutePathException("Route path '$routePath' not found.");
     }
 
     public function getRoutes(): array
