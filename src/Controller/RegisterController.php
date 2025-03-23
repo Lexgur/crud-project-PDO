@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Attribute\Path;
 use Crud\Factory\UserFactory;
 use Crud\Service\PasswordHasher;
 use Crud\Validation\PasswordValidator;
-
+#[Path('/register')]
 class RegisterController extends AbstractUserController
 {
     public function __invoke(): string

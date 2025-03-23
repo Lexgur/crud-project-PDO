@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Attribute\Path;
 use Crud\Service\PasswordHasher;
 use Crud\Service\PasswordVerifier;
 use Crud\Validation\PasswordValidator;
-
+#[Path('/login')]
 class LoginController extends AbstractUserController
 {
     public function __invoke(string $userEmail = ''): string

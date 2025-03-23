@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Crud\Controller;
 
+use Crud\Attribute\Path;
 use JetBrains\PhpStorm\NoReturn;
-
+#[Path('/logout')]
 class LogoutController extends AbstractUserController
 {
     #[NoReturn]

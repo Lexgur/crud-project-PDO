@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace Crud\Controller;
+use Crud\Attribute\Path;
 
+#[Path('/student/:id/delete')]
 class DeleteStudent extends AbstractStudentController
 {
 
