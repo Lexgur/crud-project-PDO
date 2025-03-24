@@ -2,6 +2,9 @@
 /vendor/*
 /config/app.php
 /phpstan.neon
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+
 
 
 /tests/crud-test.sqlite
