@@ -75,7 +75,7 @@ class Router
     {
         foreach ($this->routes as $routePattern => $controllerClass) {
 
-            $regexPattern = preg_replace('/:(\w+)/', '(?P<$1>[^/]+)', $routePattern);
+            $regexPattern = preg_replace('/:(\w+)/', '(?P<$1>\d+)', $routePattern);
             $regexPattern = '#^' . $regexPattern . '$#';
 
             if (preg_match($regexPattern, $routePath)) {

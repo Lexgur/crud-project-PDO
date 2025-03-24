@@ -25,12 +25,23 @@ class RouterTest extends TestCase
         $this->router = new Router();
         $this->router->registerControllers();
     }
+
     #[DataProvider('provideTestGetControllerData')]
     final public function testGetController(string $routePath, string $expectedController): void
     {
         $controller = $this->router->getController($routePath);
         $this->assertSame($expectedController, $controller);
     }
+
+    #[DataProvider('provideTestGetControllerThrowIncorrectRoutePathException')]
+    final public function testGetControllerThrowIncorrectRoutePathException(string $routePath, string $expectedController): void
+    {
+        $this->expectException(IncorrectRoutePathException::class);
+
+        $controller = $this->router->getController($routePath);
+        $this->assertSame($expectedController, $controller);
+    }
+
     final public function testIncorrectPathThrowsIncorrectRoutePathException(): void
     {
         $this->expectException(IncorrectRoutePathException::class);
@@ -80,6 +91,18 @@ class RouterTest extends TestCase
             ['/student/61/edit', UpdateStudent::class],
             ['/student/22/edit', UpdateStudent::class],
             ['/student/99/delete', DeleteStudent::class],
+        ];
+    }
+
+    public static function provideTestGetControllerThrowIncorrectRoutePathException(): array
+    {
+        return [
+            ['/student/senas/delete', DeleteStudent::class],
+            ['/student/#7758/delete', DeleteStudent::class],
+            ['/student/^21^/delete', DeleteStudent::class],
+            ['/student//delete', DeleteStudent::class],
+            ['/student/  /delete', DeleteStudent::class],
+            ['/student/112*/delete', DeleteStudent::class],
         ];
     }
 
