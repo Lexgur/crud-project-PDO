@@ -13,4 +13,5 @@ config.php
 *.sqlite
 *.sql
 
+*.php-cs-fixer.cache
 *.cache
