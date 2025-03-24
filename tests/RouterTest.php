@@ -33,8 +33,8 @@ class RouterTest extends TestCase
         $this->assertSame($expectedController, $controller);
     }
 
-    #[DataProvider('provideTestGetControllerThrowIncorrectRoutePathException')]
-    final public function testGetControllerThrowIncorrectRoutePathException(string $routePath, string $expectedController): void
+    #[DataProvider('provideTestGetControllerThrowsIncorrectRoutePathException')]
+    final public function testGetControllerThrowsIncorrectRoutePathException(string $routePath, string $expectedController): void
     {
         $this->expectException(IncorrectRoutePathException::class);
 
@@ -56,10 +56,6 @@ class RouterTest extends TestCase
 
         $this->assertSame('Crud\Controller\RegisterController', $result);
     }
-
-    /**
-     * @throws IncorrectRoutePathException
-     */
 
     final public function testRegisterControllers(): void
     {
@@ -94,7 +90,7 @@ class RouterTest extends TestCase
         ];
     }
 
-    public static function provideTestGetControllerThrowIncorrectRoutePathException(): array
+    public static function provideTestGetControllerThrowsIncorrectRoutePathException(): array
     {
         return [
             ['/student/senas/delete', DeleteStudent::class],
