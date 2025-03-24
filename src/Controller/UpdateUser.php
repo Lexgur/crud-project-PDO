@@ -32,7 +32,7 @@ class UpdateUser extends AbstractUserController
 
                 $user = $this->userRepository->save($user);
 
-                echo "Your user {$user->getUserEmail()} has been updated! Here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>";
+                echo "Your user {$user->getUserEmail()} has been updated! Here is a link to control your profile: <a class='upd-btn' href='/user/{$user->getUserId()}/edit'>View</a>";
             } catch (\Throwable $throwable) {
                 return $this->render('update_user_form.php', [
                     'error' => $throwable->getMessage()

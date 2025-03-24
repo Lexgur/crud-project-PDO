@@ -22,7 +22,7 @@
     </table>
 
     <!-- Update Form -->
-    <form action="/index.php?action=update_user&id=<?= $user->getUserId() ?>" method="post">
+    <form action="/user/<?= $user->getUserId()?>/edit" method="post">
         <label for="email">New Email:</label>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getUserEmail()) ?>" required>
         <br>
@@ -33,7 +33,7 @@
     </form>
 
     <!-- Delete Button -->
-    <form action="/index.php?action=delete_user&id=<?= $user->getUserId() ?>" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+    <form action="/user/<?= $user->getUserId() ?>/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
         <button type="submit" class="dlt-btn">Delete</button>
     </form>
 

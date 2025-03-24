@@ -20,7 +20,7 @@ class LogoutController extends AbstractUserController
         session_unset();
         session_destroy();
 
-        header("Location: /index.php?action=login_user");
+        header("Location: /login");
         exit();
     }
 }

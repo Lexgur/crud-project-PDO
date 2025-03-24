@@ -20,7 +20,7 @@ class DeleteStudent extends AbstractStudentController
 
                 $this->studentRepository->delete($studentId);
 
-                echo "Student {$studentId} has been deleted! here is a link to create a new student: <button class='add-btn'><a href='/index.php?action=create_student'>CREATE</a></button>'";
+                echo "Student {$studentId} has been deleted! here is a link to create a new student: <button class='add-btn'><a href='/student/create'>CREATE</a></button>'";
 
             } catch (\Throwable $throwable) {
                 return $this->render('delete_student_form.php', [

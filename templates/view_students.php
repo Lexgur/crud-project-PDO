@@ -32,10 +32,10 @@
                 <td><?= $student->getId() ?></td>
                 <td>
                     <button class="dlt-btn">
-                        <a href="/index.php?action=delete_student&id=<?= $student->getId() ?>" target="_blank" rel="noopener">DELETE</a>
+                        <a href="/student/<?= $student->getId() ?>/delete" target="_blank" rel="noopener">DELETE</a>
                     </button>
                     <button class="upd-btn">
-                        <a href="/index.php?action=update_student&id=<?= $student->getId() ?>" target="_blank" rel="noopener">UPDATE</a>
+                        <a href="/student/<?= $student->getId() ?>/edit" target="_blank" rel="noopener">UPDATE</a>
                     </button>
                 </td>
             </tr>

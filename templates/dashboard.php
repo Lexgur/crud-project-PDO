@@ -25,13 +25,13 @@ $userEmail = $_SESSION['userEmail'];
     <!-- Navigation Buttons -->
     <div class="dashboard-actions">
         <button class="add-btn">
-            <a href="/index.php?action=view_students" target="_blank" rel="noopener">Peržiūrėti studentus</a>
+            <a href="/students" target="_blank" rel="noopener">Peržiūrėti studentus</a>
         </button>
         <button class="upd-btn">
-            <a href="/index.php?action=update_user&id=<?php echo htmlspecialchars($_SESSION['userId'] ?? ''); ?>" target="_blank" rel="noopener">Atnaujinti profilį</a>
+            <a href="/user/:id/edit" target="_blank" rel="noopener">Atnaujinti profilį</a>
         </button>
         <button class="dlt-btn">
-            <a href="/index.php?action=logout_user">Atsijungti</a>
+            <a href="/logout">Atsijungti</a>
         </button>
     </div>
 
