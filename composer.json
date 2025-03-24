@@ -16,7 +16,8 @@
     "phpmd/phpmd" : "@stable",
     "phpstan/phpstan": "^2.1",
     "friendsofphp/php-cs-fixer": "^3.68",
-    "squizlabs/php_codesniffer": "^3.12"
+    "squizlabs/php_codesniffer": "^3.12",
+    "phpstan/phpstan-strict-rules": "^2.0"
   },
 
   "require": {
