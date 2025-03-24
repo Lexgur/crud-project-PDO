@@ -4,37 +4,12 @@ declare(strict_types=1);
 
 namespace Crud;
 
-use Crud\Controller\CreateStudent;
-use Crud\Controller\CreateUser;
-use Crud\Controller\DeleteStudent;
-use Crud\Controller\DeleteUser;
-use Crud\Controller\LoginController;
-use Crud\Controller\LogoutController;
-use Crud\Controller\RegisterController;
-use Crud\Controller\UpdateStudent;
-use Crud\Controller\UpdateUser;
-use Crud\Controller\ViewStudents;
-use Crud\Controller\ViewUser;
 use Crud\Core\Router;
 use Exception;
 use Crud\DependencyInjection\Container;
 
 class Application
 {
-    private array $actions = [
-        'create_student' => CreateStudent::class,
-        'update_student' => UpdateStudent::class,
-        'delete_student' => DeleteStudent::class,
-        'view_students' => ViewStudents::class,
-        'create_user' => CreateUser::class,
-        'update_user' => UpdateUser::class,
-        'delete_user' => DeleteUser::class,
-        'view_user' => ViewUser::class,
-        'register_user' => RegisterController::class,
-        'login_user' => LoginController::class,
-        'logout_user' => LogoutController::class,
-    ];
-
     /**
      * @throws \ReflectionException
      * @throws Exception
@@ -58,13 +33,13 @@ class Application
         $container = new Container($parameters);
 
         $router = new Router();
+        $router->registerControllers();
 
-        $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $baseUri = 'http://localhost:8000';
+        $routePath = str_replace($baseUri, '', $requestUri);
 
-        $controllerClass = $this->actions[$action] ?? null;
-        if ($controllerClass === null) {
-            throw new Exception("Controller not found for action: " . htmlspecialchars($action));
-        }
+        $controllerClass = $router->getController($routePath);
 
         $controller = $container->get($controllerClass);
 
