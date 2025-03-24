@@ -27,7 +27,6 @@ class UserModelRepository extends BaseRepository implements UserModelRepositoryI
             $statement->bindValue(':password', $user->getUserPassword());
             $statement->execute();
         } catch (\PDOException $e) {
-
             throw new \Exception('Error inserting user: ' . $e->getMessage());
         }
 
@@ -70,7 +69,6 @@ class UserModelRepository extends BaseRepository implements UserModelRepositoryI
 
             $statement->execute();
         } catch (\PDOException $e) {
-
             throw new \Exception('Error inserting user: ' . $e->getMessage());
         }
         return $this->fetchById($user->getUserId());

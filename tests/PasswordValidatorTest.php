@@ -1,6 +1,5 @@
 <?php
 
-
 use Crud\Exception\IncorrectPasswordException;
 use Crud\Validation\PasswordValidator;
 use PHPUnit\Framework\TestCase;

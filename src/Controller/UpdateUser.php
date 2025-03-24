@@ -19,7 +19,6 @@ class UpdateUser extends AbstractUserController
             $email = $data['email'];
 
             try {
-
                 $userId = (int)($_GET['id']);
                 $user = $this->userRepository->fetchById($userId);
 

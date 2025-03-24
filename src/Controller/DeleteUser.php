@@ -15,7 +15,6 @@ class DeleteUser extends AbstractUserController
             $userId = (int)($_GET['id']);
 
             try {
-
                 $this->userRepository->fetchById($userId);
                 $this->userRepository->delete($userId);
 

@@ -31,5 +31,4 @@ class StudentTest extends TestCase
         $age = 12;
         $student = new Student($studentId, $firstName, $lastName, $age);
     }
-
 }

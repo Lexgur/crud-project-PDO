@@ -101,5 +101,4 @@ class RouterTest extends TestCase
             ['/student/112*/delete', DeleteStudent::class],
         ];
     }
-
 }

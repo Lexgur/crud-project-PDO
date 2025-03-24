@@ -10,7 +10,6 @@ class UserFactory
 {
     public function __construct()
     {
-
     }
 
     public static function create(array $data): User

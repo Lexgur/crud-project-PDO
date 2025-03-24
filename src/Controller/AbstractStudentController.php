@@ -18,14 +18,13 @@ abstract class AbstractStudentController
     protected Template $template;
 
     public function __construct(
-        StudentValidator       $studentValidator,
+        StudentValidator $studentValidator,
         StudentModelRepository $studentRepository,
-        Template               $template,
+        Template $template,
     ) {
         $this->studentValidator = $studentValidator;
         $this->studentRepository = $studentRepository;
         $this->template = $template;
-
     }
 
     protected function isPostRequest(): bool

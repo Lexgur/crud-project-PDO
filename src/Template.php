@@ -9,7 +9,6 @@ class Template
 {
     public function __construct(private readonly string $templatePath)
     {
-
     }
 
     public function render(string $template, array $parameters = []): string

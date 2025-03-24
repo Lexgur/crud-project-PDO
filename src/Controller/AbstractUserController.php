@@ -17,9 +17,9 @@ abstract class AbstractUserController
     protected Template $template;
 
     public function __construct(
-        UserValidator       $userValidator,
+        UserValidator $userValidator,
         UserModelRepository $userRepository,
-        Template            $template,
+        Template $template,
     ) {
         $this->userValidator = $userValidator;
         $this->userRepository = $userRepository;

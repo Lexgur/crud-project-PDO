@@ -37,5 +37,4 @@ class StudentValidator
             throw new AgeIsEmptyOrExceedsTheRangeException('Age must be between 1-99 and not empty');
         }
     }
-
 }

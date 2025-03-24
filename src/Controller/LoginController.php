@@ -19,7 +19,6 @@ class LoginController extends AbstractUserController
             $password = $_POST['password'];
 
             try {
-
                 PasswordValidator::validate($password);
                 $hashedPassword = PasswordHasher::hash($password);
 

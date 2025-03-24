@@ -19,7 +19,6 @@ class RegisterController extends AbstractUserController
             $password = $data['password'];
 
             try {
-
                 PasswordValidator::validate($password);
 
                 $user = UserFactory::create($data);
@@ -32,7 +31,6 @@ class RegisterController extends AbstractUserController
                 $user = $this->userRepository->save($user);
 
                 echo "Your user {$user->getUserEmail()} has been created! here is a link to control your profile: <a class='upd-btn' href='/index.php?action=view_user&id={$user->getUserId()}'>View</a>'";
-
             } catch (\Throwable $throwable) {
                 return $this->render('create_user_form.php', [
                     'error' => $throwable->getMessage()

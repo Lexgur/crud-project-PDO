@@ -46,7 +46,6 @@ class StudentValidatorTest extends TestCase
         $validator = new StudentValidator();
         $age = 110;
         $validator->validateAge($age);
-
     }
 
     public function testIfFailsWithEmptyAge(): void
@@ -56,6 +55,5 @@ class StudentValidatorTest extends TestCase
         $validator = new StudentValidator();
         $age = 0;
         $validator->validateAge($age);
-
     }
 }

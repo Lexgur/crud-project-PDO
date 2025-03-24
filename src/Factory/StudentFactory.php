@@ -10,7 +10,6 @@ class StudentFactory
 {
     public function __construct()
     {
-
     }
 
     public static function create(array $data): Student

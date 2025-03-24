@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "5803abaa487e1595567a2491c2a1813b",
+  "content-hash": "8b12bd9d721fe0e9f8f719dd08e945ff",
   "packages": [
     {
       "name": "psr/container",
@@ -461,16 +461,16 @@
     },
     {
       "name": "friendsofphp/php-cs-fixer",
-      "version": "v3.72.0",
+      "version": "v3.73.1",
       "source": {
         "type": "git",
         "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-        "reference": "900389362c43d116fee1ffc51f7878145fa61b57"
+        "reference": "ffcb8200a42045e65049af7910cfd022f631b064"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/900389362c43d116fee1ffc51f7878145fa61b57",
-        "reference": "900389362c43d116fee1ffc51f7878145fa61b57",
+        "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/ffcb8200a42045e65049af7910cfd022f631b064",
+        "reference": "ffcb8200a42045e65049af7910cfd022f631b064",
         "shasum": ""
       },
       "require": {
@@ -478,6 +478,7 @@
         "composer/semver": "^3.4",
         "composer/xdebug-handler": "^3.0.3",
         "ext-filter": "*",
+        "ext-hash": "*",
         "ext-json": "*",
         "ext-tokenizer": "*",
         "fidry/cpu-core-counter": "^1.2",
@@ -552,7 +553,7 @@
       ],
       "support": {
         "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-        "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.72.0"
+        "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.73.1"
       },
       "funding": [
         {
@@ -560,7 +561,7 @@
           "type": "github"
         }
       ],
-      "time": "2025-03-13T11:25:37+00:00"
+      "time": "2025-03-19T23:42:16+00:00"
     },
     {
       "name": "myclabs/deep-copy",
@@ -946,16 +947,16 @@
     },
     {
       "name": "phpstan/phpstan",
-      "version": "2.1.8",
+      "version": "2.1.11",
       "source": {
         "type": "git",
         "url": "https://github.com/phpstan/phpstan.git",
-        "reference": "f9adff3b87c03b12cc7e46a30a524648e497758f"
+        "reference": "8ca5f79a8f63c49b2359065832a654e1ec70ac30"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f9adff3b87c03b12cc7e46a30a524648e497758f",
-        "reference": "f9adff3b87c03b12cc7e46a30a524648e497758f",
+        "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8ca5f79a8f63c49b2359065832a654e1ec70ac30",
+        "reference": "8ca5f79a8f63c49b2359065832a654e1ec70ac30",
         "shasum": ""
       },
       "require": {
@@ -1000,7 +1001,7 @@
           "type": "github"
         }
       ],
-      "time": "2025-03-09T09:30:48+00:00"
+      "time": "2025-03-24T13:45:00+00:00"
     },
     {
       "name": "phpunit/php-code-coverage",
@@ -1327,16 +1328,16 @@
     },
     {
       "name": "phpunit/phpunit",
-      "version": "11.5.13",
+      "version": "11.5.15",
       "source": {
         "type": "git",
         "url": "https://github.com/sebastianbergmann/phpunit.git",
-        "reference": "3bbb8d54b3a6718e51fd48cd478079f5f49b82bd"
+        "reference": "4b6a4ee654e5e0c5e1f17e2f83c0f4c91dee1f9c"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3bbb8d54b3a6718e51fd48cd478079f5f49b82bd",
-        "reference": "3bbb8d54b3a6718e51fd48cd478079f5f49b82bd",
+        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4b6a4ee654e5e0c5e1f17e2f83c0f4c91dee1f9c",
+        "reference": "4b6a4ee654e5e0c5e1f17e2f83c0f4c91dee1f9c",
         "shasum": ""
       },
       "require": {
@@ -1356,7 +1357,7 @@
         "phpunit/php-text-template": "^4.0.1",
         "phpunit/php-timer": "^7.0.1",
         "sebastian/cli-parser": "^3.0.2",
-        "sebastian/code-unit": "^3.0.2",
+        "sebastian/code-unit": "^3.0.3",
         "sebastian/comparator": "^6.3.1",
         "sebastian/diff": "^6.0.2",
         "sebastian/environment": "^7.2.0",
@@ -1408,7 +1409,7 @@
       "support": {
         "issues": "https://github.com/sebastianbergmann/phpunit/issues",
         "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-        "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.13"
+        "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.15"
       },
       "funding": [
         {
@@ -1424,7 +1425,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-03-18T13:41:57+00:00"
+      "time": "2025-03-23T16:02:11+00:00"
     },
     {
       "name": "psr/event-dispatcher",
@@ -2977,6 +2978,90 @@
         }
       ],
       "time": "2024-10-09T05:16:32+00:00"
+    },
+    {
+      "name": "squizlabs/php_codesniffer",
+      "version": "3.12.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
+        "reference": "2d1b63db139c3c6ea0c927698e5160f8b3b8d630"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/2d1b63db139c3c6ea0c927698e5160f8b3b8d630",
+        "reference": "2d1b63db139c3c6ea0c927698e5160f8b3b8d630",
+        "shasum": ""
+      },
+      "require": {
+        "ext-simplexml": "*",
+        "ext-tokenizer": "*",
+        "ext-xmlwriter": "*",
+        "php": ">=5.4.0"
+      },
+      "require-dev": {
+        "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.3.4"
+      },
+      "bin": [
+        "bin/phpcbf",
+        "bin/phpcs"
+      ],
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-master": "3.x-dev"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "BSD-3-Clause"
+      ],
+      "authors": [
+        {
+          "name": "Greg Sherwood",
+          "role": "Former lead"
+        },
+        {
+          "name": "Juliette Reinders Folmer",
+          "role": "Current lead"
+        },
+        {
+          "name": "Contributors",
+          "homepage": "https://github.com/PHPCSStandards/PHP_CodeSniffer/graphs/contributors"
+        }
+      ],
+      "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+      "homepage": "https://github.com/PHPCSStandards/PHP_CodeSniffer",
+      "keywords": [
+        "phpcs",
+        "standards",
+        "static analysis"
+      ],
+      "support": {
+        "issues": "https://github.com/PHPCSStandards/PHP_CodeSniffer/issues",
+        "security": "https://github.com/PHPCSStandards/PHP_CodeSniffer/security/policy",
+        "source": "https://github.com/PHPCSStandards/PHP_CodeSniffer",
+        "wiki": "https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/PHPCSStandards",
+          "type": "github"
+        },
+        {
+          "url": "https://github.com/jrfnl",
+          "type": "github"
+        },
+        {
+          "url": "https://opencollective.com/php_codesniffer",
+          "type": "open_collective"
+        },
+        {
+          "url": "https://thanks.dev/u/gh/phpcsstandards",
+          "type": "thanks_dev"
+        }
+      ],
+      "time": "2025-03-18T05:04:51+00:00"
     },
     {
       "name": "staabm/side-effects-detector",

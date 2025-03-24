@@ -32,7 +32,6 @@ class StudentModelRepository extends BaseRepository implements StudentModelRepos
         $newId = (int)$this->connection->connect()->lastInsertId();
 
         return $this->fetchById($newId);
-
     }
 
     public function fetchById(int $studentId): ?Student

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 use Crud\Exception\IncorrectPasswordException;
 use Crud\Service\PasswordHasher;
 use PHPUnit\Framework\TestCase;

@@ -33,7 +33,6 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflection->hasProperty('name'));
 
         $this->assertTrue($reflectionChild->hasProperty('id')); //the child inherits
-
     }
 
     public function testReflectionGetAttributes(): void

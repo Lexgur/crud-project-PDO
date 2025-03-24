@@ -16,7 +16,6 @@ class UpdateStudent extends AbstractStudentController
             $studentId = (int)($_GET['id']);
 
             try {
-
                 $student = $this->studentRepository->fetchById($studentId);
 
                 $student->setFirstName($data['name']);

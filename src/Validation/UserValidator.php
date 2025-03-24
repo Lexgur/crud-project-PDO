@@ -62,5 +62,4 @@ class UserValidator
 
         return true;
     }
-
 }

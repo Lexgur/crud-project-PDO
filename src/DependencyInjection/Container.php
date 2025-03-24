@@ -78,13 +78,11 @@ class Container implements ContainerInterface
             $constructor = $reflectionClass->getConstructor();
             $arguments = $constructor?->getParameters() ?? [];
             foreach ($arguments as $argument) {
-
                 if ($argument->getType()->isBuiltin()) {
                     $dependencies[] = $this->resolveParameter($argument->getName());
                 } else {
                     $dependencies[] = $this->get($argument->getType()->getName());
                 }
-
             }
 
             $instance = $reflectionClass->newInstanceArgs($dependencies);
@@ -92,7 +90,6 @@ class Container implements ContainerInterface
             $this->services[$serviceClass] = $instance;
             unset($this->instantiating[$serviceClass]);
             return $instance;
-
         } catch (ReflectionException $e) {
             throw new ReflectionException("Cannot instantiate $serviceClass: " . $e->getMessage());
         }

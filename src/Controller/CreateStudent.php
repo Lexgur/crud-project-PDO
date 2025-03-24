@@ -17,7 +17,6 @@ class CreateStudent extends AbstractStudentController
             $data = $_POST;
 
             try {
-
                 $student = StudentFactory::create($data);
 
                 $this->studentValidator->validate($student);
@@ -25,7 +24,6 @@ class CreateStudent extends AbstractStudentController
                 $student = $this->studentRepository->save($student);
 
                 echo "Student {$student->getFirstName()} has been created! here is a link to update his profile: <a class='upd-btn' href='/student/{$student->getId()}/edit'>Update</a>'";
-
             } catch (\Throwable $throwable) {
                 return $this->render('create_student_form.php', [
                     'error' => $throwable->getMessage()

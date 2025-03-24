@@ -12,7 +12,6 @@ readonly class Path
     public function __construct(
         private string $path
     ) {
-
     }
     public function getPath(): string
     {
