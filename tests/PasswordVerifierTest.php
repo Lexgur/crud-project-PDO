@@ -8,13 +8,13 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordVerifierTest extends TestCase
 {
-    public function testIfPasswordVerifies():void
+    public function testIfPasswordVerifies(): void
     {
         $passwordHasher = new PasswordHasher();
         $passwordVerifier = new PasswordVerifier();
         $password = 'testPassword1230';
         $hashedPassword = $passwordHasher->hash($password);
-        $verifiedPassword = $passwordVerifier->verify($password, $hashedPassword,);
+        $verifiedPassword = $passwordVerifier->verify($password, $hashedPassword, );
 
         $this->assertTrue($verifiedPassword);
     }

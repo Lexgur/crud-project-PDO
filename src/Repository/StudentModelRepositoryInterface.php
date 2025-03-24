@@ -18,5 +18,3 @@ interface StudentModelRepositoryInterface
 
     public function delete(int $studentId): bool;
 }
-
-

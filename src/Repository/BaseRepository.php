@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crud\Repository;
 
 use Crud\Connection;
+
 class BaseRepository
 {
     protected Connection $connection;

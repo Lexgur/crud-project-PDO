@@ -8,6 +8,7 @@ use Crud\Attribute\Path;
 use Crud\Service\PasswordHasher;
 use Crud\Service\PasswordVerifier;
 use Crud\Validation\PasswordValidator;
+
 #[Path('/login')]
 class LoginController extends AbstractUserController
 {

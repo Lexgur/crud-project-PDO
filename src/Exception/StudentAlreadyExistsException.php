@@ -6,5 +6,4 @@ namespace Crud\Exception;
 
 class StudentAlreadyExistsException extends \Exception
 {
-
 }

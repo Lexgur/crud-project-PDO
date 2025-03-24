@@ -20,5 +20,3 @@ interface UserModelRepositoryInterface
 
     public function delete(int $userId): bool;
 }
-
-

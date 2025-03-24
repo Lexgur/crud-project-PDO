@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordHasherTest extends TestCase
 {
-    public function testIfPasswordHashes():void
+    public function testIfPasswordHashes(): void
     {
         $passwordHasher = new PasswordHasher();
         $password = 'testPassword1230';
@@ -17,7 +17,7 @@ class PasswordHasherTest extends TestCase
 
         $this->assertNotEquals($password, $hashedPassword);
     }
-    public function testWithEmptyPassword():void
+    public function testWithEmptyPassword(): void
     {
         $this->expectException(IncorrectPasswordException::class);
 

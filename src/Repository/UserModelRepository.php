@@ -78,7 +78,7 @@ class UserModelRepository extends BaseRepository implements UserModelRepositoryI
 
     public function delete(int $userId): bool
     {
-        $statement =$this->connection->connect()->prepare('DELETE FROM users WHERE id = :id');
+        $statement = $this->connection->connect()->prepare('DELETE FROM users WHERE id = :id');
         $statement->bindValue(':id', $userId);
         $statement->execute();
 

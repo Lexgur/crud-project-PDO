@@ -9,7 +9,6 @@ use Crud\Attribute\Path;
 #[Path('/user/:id/delete')]
 class DeleteUser extends AbstractUserController
 {
-
     public function __invoke(): string
     {
         if ($this->isPostRequest()) {

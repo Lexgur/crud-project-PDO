@@ -20,7 +20,7 @@ class ContainerTest extends TestCase
     final public function testContainer(string $serviceClass): void
     {
         // Initiate new container instance with parameters.
-        $container = static::getContainer( withParameters: true);
+        $container = static::getContainer(withParameters: true);
 
         // Test if service is not yet initiated.
         $this->assertFalse($container->has($serviceClass));
@@ -292,5 +292,3 @@ readonly class ServiceWithCircularDependantDependenciesAndMissingParameters
     ) {
     }
 }
-
-

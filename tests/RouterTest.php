@@ -103,4 +103,3 @@ class RouterTest extends TestCase
     }
 
 }
-

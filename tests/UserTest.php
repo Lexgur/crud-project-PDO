@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Crud\Model\User;
-
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase

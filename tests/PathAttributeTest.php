@@ -18,5 +18,4 @@ class PathAttributeTest extends TestCase
 #[Path('/something/create')]
 class SomethingCreateController
 {
-
 }

@@ -8,6 +8,7 @@ use Crud\Attribute\Path;
 use Crud\Factory\UserFactory;
 use Crud\Service\PasswordHasher;
 use Crud\Validation\PasswordValidator;
+
 #[Path('/user/create')]
 class CreateUser extends AbstractUserController
 {

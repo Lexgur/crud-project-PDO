@@ -6,5 +6,4 @@ namespace Crud\Exception;
 
 class MissingDependencyInjectionParameterException extends \Exception
 {
-
 }

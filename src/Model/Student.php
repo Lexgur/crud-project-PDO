@@ -8,7 +8,6 @@ use AllowDynamicProperties;
 
 #[AllowDynamicProperties] class Student
 {
-
     private ?int $id = null;
     private string $firstname;
     private string $lastname;

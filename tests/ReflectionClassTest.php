@@ -44,7 +44,7 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue(is_array($attributes));
 
         $this->assertCount(2, $attributes);
-        print_r(array_map(fn($attribute) => $attribute->getName(), $attributes));
+        print_r(array_map(fn ($attribute) => $attribute->getName(), $attributes));
     }
 
     public function testReflectionGetAttributeWithInstanceOf(): void
@@ -55,7 +55,7 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue(is_array($attributes));
         $this->assertCount(1, $attributes);
 
-        print_r(array_map(fn($attribute) => $attribute->getName(), $attributes));
+        print_r(array_map(fn ($attribute) => $attribute->getName(), $attributes));
     }
 
     public function testIsPrivateProperty(): void
@@ -73,29 +73,24 @@ class SampleClass
 
 class SampleClassTwo extends SampleClass
 {
-
 }
 
 interface Color
 {
-
 }
 
 #[Attribute]
 class Red
 {
-
 }
 
 #[Attribute]
 class Blue implements Color
 {
-
 }
 
 #[Red]
 #[Blue]
 class Pill
 {
-
 }

@@ -10,7 +10,6 @@ use Crud\Factory\StudentFactory;
 #[Path('/student/create')]
 class CreateStudent extends AbstractStudentController
 {
-
     public function __invoke(): string
     {
 

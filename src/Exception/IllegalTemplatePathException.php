@@ -6,5 +6,4 @@ namespace Crud\Exception;
 
 class IllegalTemplatePathException extends \Exception
 {
-
 }
